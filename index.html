@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SEO · GEO Prompt Research Tool</title>
 <meta name="description" content="GA4 & GSC Daten analysieren und Decision-Prompts für KI-Suche generieren.">
+<link rel="icon" type="image/webp" href="images/hexagon.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -62,9 +63,9 @@
     <div class="form-group" style="margin-bottom:12px">
       <label>Provider</label>
       <select id="inp-provider" data-persist>
+        <option value="manual" selected>Manuell (Prompt kopieren)</option>
         <option value="gemini">Google Gemini</option>
         <option value="anthropic">Anthropic Claude</option>
-        <option value="manual">Manuell (Prompt kopieren)</option>
       </select>
     </div>
     <div class="hint" id="api-status">ⓘ API-Keys werden serverseitig über Vercel Environment Variables verwaltet. Konfiguration: <span style="font-family:var(--mono)">GEMINI_API_KEY</span> · <span style="font-family:var(--mono)">ANTHROPIC_API_KEY</span></div>
