@@ -45,6 +45,7 @@ const STOP_WORDS = new Set([
 ]);
 
 let GA4 = null, GSC = null, ANALYSIS = null, PROMPTS = null;
+let APP_PASSWORD_REQUIRED = false;  // wird von loadProviderStatus gesetzt
 
 // ══════════════════════════════════════════════════════════════════════════
 // HELPERS
@@ -195,8 +196,9 @@ function toggleAuthValue() {
 }
 function toggleProviderUI() {
   const p = document.getElementById('inp-provider').value;
-  document.getElementById('password-wrap').style.display = p === 'manual' ? 'none' : '';
   document.getElementById('api-status').style.display = p === 'manual' ? 'none' : '';
+  document.getElementById('password-wrap').style.display =
+    (APP_PASSWORD_REQUIRED && p !== 'manual') ? '' : 'none';
 }
 function setMode(mode) {
   document.getElementById('mode-api').classList.toggle('active', mode==='api');
@@ -689,7 +691,7 @@ function resetAll() {
   document.querySelectorAll('[data-persist]').forEach(el => {
     if (el.id==='inp-region') el.value='Wien';
     else if (el.id==='inp-auth') el.value='none';
-    else if (el.id==='inp-provider') el.value='gemini';
+    else if (el.id==='inp-provider') el.value='manual';
     else el.value='';
   });
   document.getElementById('inp-auth-value').value = '';
@@ -714,6 +716,75 @@ function openContextModal() {
 function closeModal() { document.getElementById('modal-bg').classList.remove('show'); }
 
 // ══════════════════════════════════════════════════════════════════════════
+// PROVIDER STATUS — lädt vom Server welche API-Keys konfiguriert sind
+// ══════════════════════════════════════════════════════════════════════════
+async function loadProviderStatus() {
+  try {
+    const res = await fetch(CONFIG.API_ENDPOINT, { method: 'GET' });
+    if (!res.ok) throw new Error('Status-Endpoint nicht erreichbar');
+    const status = await res.json();
+    APP_PASSWORD_REQUIRED = !!status.hasAppPassword;
+
+    const select = document.getElementById('inp-provider');
+    [...select.options].forEach(opt => {
+      if (opt.value === 'gemini') {
+        if (!status.gemini) {
+          opt.disabled = true;
+          opt.textContent = 'Google Gemini — nicht konfiguriert';
+        } else {
+          opt.disabled = false;
+          opt.textContent = 'Google Gemini';
+        }
+      } else if (opt.value === 'anthropic') {
+        if (!status.anthropic) {
+          opt.disabled = true;
+          opt.textContent = 'Anthropic Claude — nicht konfiguriert';
+        } else {
+          opt.disabled = false;
+          opt.textContent = 'Anthropic Claude';
+        }
+      }
+    });
+
+    // Wenn aktuell ausgewählter Provider nicht (mehr) verfügbar → auf manual zurück
+    if ((select.value === 'gemini'    && !status.gemini) ||
+        (select.value === 'anthropic' && !status.anthropic)) {
+      select.value = 'manual';
+      toggleProviderUI();
+      savePersistedState();
+    }
+
+    // Status-Hinweis aktualisieren
+    const hint = document.getElementById('api-status');
+    if (hint) {
+      const active = [
+        status.gemini    ? 'Gemini'    : null,
+        status.anthropic ? 'Anthropic' : null,
+      ].filter(Boolean).join(' · ');
+      const pwNote = status.hasAppPassword ? ' · Endpoint passwortgeschützt' : '';
+      hint.innerHTML = active
+        ? `ⓘ Aktive Provider: <strong style="color:var(--text)">${active}</strong>${pwNote}`
+        : 'ⓘ Keine KI-Provider konfiguriert. Im Vercel Dashboard <span style="font-family:var(--mono)">GEMINI_API_KEY</span> oder <span style="font-family:var(--mono)">ANTHROPIC_API_KEY</span> setzen, oder Modus „Manuell" nutzen.';
+    }
+
+    // Sichtbarkeit des Password-Felds zentral über toggleProviderUI
+    toggleProviderUI();
+
+  } catch (e) {
+    console.warn('Provider-Status konnte nicht geladen werden:', e.message);
+    // Endpoint nicht erreichbar (z.B. statisches Hosting ohne Function)
+    // → manuell-only Hinweis
+    const hint = document.getElementById('api-status');
+    if (hint) {
+      hint.innerHTML = '⚠ Status-Endpoint nicht erreichbar — nur Modus „Manuell" verfügbar.';
+      hint.style.background = '#f0a50012';
+      hint.style.borderColor = '#f0a50030';
+      hint.style.color = 'var(--amber)';
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
@@ -721,6 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleAuthValue();
   toggleProviderUI();
   updateProgress();
+  loadProviderStatus();
   document.querySelectorAll('[data-tab]').forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
   document.querySelectorAll('[data-goto]').forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.goto)));
   document.getElementById('inp-auth').addEventListener('change', toggleAuthValue);
