@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO · GEO Prompt Research Tool</title>
+<meta name="description" content="GA4 & GSC Daten analysieren und Decision-Prompts für KI-Suche generieren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:      #0b0d12;
+  --s1:      #111318;
+  --s2:      #181c26;
+  --border:  #1e2231;
+  --b2:      #252b3d;
+  --accent:  #00c9a7;
+  --amber:   #f0a500;
+  --blue:    #4f9cf9;
+  --red:     #ef4444;
+  --text:    #e8eaf0;
+  --dim:     #8892a4;
+  --muted:   #4e5566;
+  --mono:    'DM Mono', monospace;
+  --sans:    'Bricolage Grotesque', sans-serif;
+  --r:       8px;
+  --rl:      12px;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
+
+/* ── LAYOUT ── */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── HEADER ── */
+header {
+  background: var(--s1); border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 54px;
+  display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 50;
+}
+.logo { font-family: var(--mono); font-size: 11px; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
+.header-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.header-sep { color: var(--border); font-size: 18px; }
+.status-badges { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.badge { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; }
+.badge-accent { background: #00c9a715; border: 1px solid #00c9a730; color: var(--accent); }
+.badge-blue { background: #4f9cf915; border: 1px solid #4f9cf930; color: var(--blue); }
+.badge-muted { background: var(--s2); border: 1px solid var(--border); color: var(--muted); }
+
+/* ── TABS ── */
+.tabs {
+  background: var(--s1); border-bottom: 1px solid var(--border);
+  padding: 0 24px; display: flex; gap: 2px;
+}
+.tab {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 10px 16px; border: 1px solid transparent;
+  border-bottom: none; border-radius: 5px 5px 0 0;
+  background: transparent; color: var(--muted); cursor: pointer;
+  position: relative; bottom: -1px; transition: all .15s;
+}
+.tab.active { background: var(--bg); color: var(--accent); border-color: var(--border); }
+.tab:not(.active):hover { color: var(--dim); }
+.tab-content { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; width: 100%; }
+.tab-content.active { display: block; }
+
+/* ── CARDS ── */
+.card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rl); padding: 20px; margin-bottom: 16px; }
+.card-title { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* ── GRID ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.grid6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 20px; }
+
+/* ── FORM ── */
+label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+input, select, textarea {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 8px 12px; color: var(--text);
+  font-family: var(--mono); font-size: 12px; outline: none;
+  transition: border-color .15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--b2); }
+textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+select option { background: var(--bg); }
+.form-row { margin-bottom: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+
+/* ── BUTTONS ── */
+.btn { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; border: none; border-radius: var(--r); padding: 9px 18px; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+.btn-primary { background: var(--accent); color: #0b0d12; font-weight: 500; }
+.btn-primary:hover { opacity: .85; }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+.btn-amber { background: var(--amber); color: #0b0d12; font-weight: 500; }
+.btn-amber:hover { opacity: .85; }
+.btn-amber:disabled { opacity: .4; cursor: not-allowed; }
+.btn-ghost { background: transparent; color: var(--dim); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: var(--b2); }
+.btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+
+/* ── MODE TOGGLE ── */
+.mode-toggle { display: flex; gap: 4px; margin-bottom: 16px; }
+.mode-btn { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 6px 14px; background: var(--s2); border: 1px solid var(--border); color: var(--muted); border-radius: var(--r); cursor: pointer; transition: all .15s; }
+.mode-btn.active { background: #00c9a712; border-color: #00c9a740; color: var(--accent); }
+
+/* ── TABLES ── */
+.tbl-wrap { overflow-x: auto; margin-top: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead th { padding: 8px 10px; text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--s2); white-space: nowrap; }
+tbody td { padding: 7px 10px; border-bottom: 1px solid #1e22310d; vertical-align: middle; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+tbody tr:hover { background: #ffffff04; }
+tbody tr:last-child td { border-bottom: none; }
+
+/* ── STAT BOXES ── */
+.stat { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; text-align: center; }
+.stat-n { font-family: var(--mono); font-size: 24px; font-weight: 500; color: var(--accent); }
+.stat-l { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── POSITION BADGE ── */
+.pos { font-family: var(--mono); font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; display: inline-block; }
+.pos-top { background: #22c55e18; color: #22c55e; }
+.pos-good { background: #00c9a715; color: var(--accent); }
+.pos-qw { background: #f0a50018; color: var(--amber); }
+.pos-low { background: #ef444415; color: var(--red); }
+
+/* ── PROGRESS BAR ── */
+.bar-wrap { background: var(--s2); border-radius: 3px; height: 5px; width: 70px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--amber); border-radius: 3px; }
+
+/* ── PROMPT CARDS ── */
+.prompt-cat { margin-bottom: 20px; }
+.prompt-cat-title { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.prompt-item { background: var(--bg); border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--r); padding: 10px 14px; margin-bottom: 8px; }
+.prompt-text { font-style: italic; color: var(--text); margin-bottom: 4px; font-size: 13px; }
+.prompt-basis { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+
+/* ── QW TABLE ── */
+.qw-score { font-family: var(--mono); font-size: 13px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+
+/* ── HINT / ERROR ── */
+.hint { background: #00c9a710; border: 1px solid #00c9a725; border-radius: var(--r); padding: 10px 14px; font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 14px; }
+.error-box { background: #ef444412; border: 1px solid #ef444430; border-radius: var(--r); padding: 10px 14px; font-size: 12px; color: var(--red); margin-bottom: 14px; }
+.empty-state { text-align: center; padding: 48px 20px; }
+.empty-state .icon { font-size: 36px; margin-bottom: 12px; }
+.empty-state p { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+
+/* ── LOADING SPINNER ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { width: 14px; height: 14px; border: 2px solid #0b0d12; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
+
+/* ── MINI PREVIEW ── */
+.preview-info { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .grid2, .grid4, .grid6 { grid-template-columns: 1fr 1fr; }
+  .grid3 { grid-template-columns: 1fr; }
+  header { padding: 0 14px; }
+  .tabs { padding: 0 12px; }
+  .tab-content { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<header>
+  <span class="logo">SEO · GEO</span>
+  <span class="header-sep">|</span>
+  <span class="header-title">Prompt Research Tool</span>
+  <div class="status-badges">
+    <span class="badge badge-muted" id="badge-ga4">GA4 –</span>
+    <span class="badge badge-muted" id="badge-gsc">GSC –</span>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('setup')">01 Setup</button>
+  <button class="tab" onclick="showTab('daten')">02 Daten</button>
+  <button class="tab" onclick="showTab('analyse')">03 Analyse</button>
+  <button class="tab" onclick="showTab('prompts')">04 Prompts</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- TAB 01: SETUP -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="tab-setup" class="tab-content active">
+
+  <div class="card">
+    <div class="card-title">◈ Projekt-Info</div>
+    <div class="grid3">
+      <div class="form-group">
+        <label>Domain / Unternehmen</label>
+        <input type="text" id="inp-domain" placeholder="z.B. meinefirma.at">
+      </div>
+      <div class="form-group">
+        <label>Branche</label>
+        <input type="text" id="inp-branche" placeholder="z.B. Installateur, Anwalt, Agentur">
+      </div>
+      <div class="form-group">
+        <label>Region</label>
+        <input type="text" id="inp-region" value="Wien" placeholder="z.B. Wien, DACH">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙ Authentifizierung</div>
+    <div class="grid2" style="margin-bottom:12px">
+      <div class="form-group">
+        <label>Methode</label>
+        <select id="inp-auth" onchange="toggleAuthValue()">
+          <option value="none">Kein Auth</option>
+          <option value="bearer">Bearer Token (Authorization Header)</option>
+          <option value="apikey">API Key (X-API-Key Header)</option>
+          <option value="queryparam">API Key (Query Parameter ?api_key=)</option>
+        </select>
+      </div>
+      <div class="form-group" id="auth-value-wrap" style="display:none">
+        <label>Token / API Key</label>
+        <input type="password" id="inp-auth-value" placeholder="Dein Token oder Key">
+      </div>
+    </div>
+    <div class="hint">ⓘ Auth-Methode unbekannt? Alle Varianten testen. CORS-Fehler → Tab "02 Daten" → JSON Paste nutzen.</div>
+    <button class="btn btn-primary" onclick="showTab('daten')">Weiter → Daten laden →</button>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- TAB 02: DATEN -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="tab-daten" class="tab-content">
+
+  <div id="error-daten" class="error-box" style="display:none"></div>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="mode-api" onclick="setMode('api')">API-Fetch</button>
+    <button class="mode-btn" id="mode-json" onclick="setMode('json')">JSON Paste</button>
+  </div>
+
+  <!-- GA4 -->
+  <div class="card">
+    <div class="card-title">
+      <span style="color:#4ade80">▲</span> GA4 — Landingpages
+      <span id="ga4-loaded-badge" style="margin-left:auto;display:none" class="badge badge-accent"></span>
+    </div>
+
+    <div id="ga4-api-wrap">
+      <div class="form-row">
+        <label>API Endpoint URL</label>
+        <input type="url" id="inp-ga4-url" placeholder="https://dein-dashboard.at/api/ga4/landingpages">
+      </div>
+      <button class="btn btn-primary" onclick="fetchData('ga4')">
+        <span id="ga4-spinner" style="display:none" class="spinner"></span>
+        GA4 Fetch
+      </button>
+    </div>
+
+    <div id="ga4-json-wrap" style="display:none">
+      <div class="form-row">
+        <label>GA4 JSON einfügen</label>
+        <textarea id="inp-ga4-json" placeholder='[{"page":"/leistungen","sessions":1200,"conversions":45,"engagementRate":0.68}]' rows="6"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="loadJson('ga4')">GA4 laden</button>
+    </div>
+
+    <div id="ga4-preview" style="display:none">
+      <p class="preview-info" id="ga4-preview-info"></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Seite</th><th>Sessions</th><th>Engagement</th><th>Conversions</th></tr></thead>
+          <tbody id="ga4-preview-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSC -->
+  <div class="card">
+    <div class="card-title">
+      <span style="color:#4f9cf9">◈</span> GSC — Suchanfragen
+      <span id="gsc-loaded-badge" style="margin-left:auto;display:none" class="badge badge-blue"></span>
+    </div>
+
+    <div id="gsc-api-wrap">
+      <div class="form-row">
+        <label>API Endpoint URL</label>
+        <input type="url" id="inp-gsc-url" placeholder="https://dein-dashboard.at/api/gsc/queries">
+      </div>
+      <button class="btn btn-primary" onclick="fetchData('gsc')">
+        <span id="gsc-spinner" style="display:none" class="spinner"></span>
+        GSC Fetch
+      </button>
+    </div>
+
+    <div id="gsc-json-wrap" style="display:none">
+      <div class="form-row">
+        <label>GSC JSON einfügen</label>
+        <textarea id="inp-gsc-json" placeholder='[{"query":"installateur wien","clicks":320,"impressions":4200,"ctr":7.6,"position":3.2}]' rows="6"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="loadJson('gsc')">GSC laden</button>
+    </div>
+
+    <div id="gsc-preview" style="display:none">
+      <p class="preview-info" id="gsc-preview-info"></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Query</th><th>Klicks</th><th>Impressionen</th><th>CTR</th><th>Position</th></tr></thead>
+          <tbody id="gsc-preview-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="analyse-btn-wrap" style="display:none">
+    <button class="btn btn-primary" style="padding:11px 24px;font-size:12px" onclick="runAnalysis()">▶ Analyse starten →</button>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- TAB 03: ANALYSE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="tab-analyse" class="tab-content">
+
+  <div id="analyse-empty" class="empty-state">
+    <div class="icon">◈</div>
+    <p>Noch keine Analyse — zuerst GA4 + GSC in Tab 02 laden.</p>
+    <button class="btn btn-ghost" onclick="showTab('daten')">→ Zu Daten</button>
+  </div>
+
+  <div id="analyse-content" style="display:none">
+
+    <!-- Stats -->
+    <div class="grid6" id="analyse-stats"></div>
+
+    <!-- Quick Wins -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge badge-accent" style="font-size:10px">Quick Win</span>
+        GSC — Position 5–20 (Sofortpotenzial)
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Query</th><th>Position</th><th>Impressionen</th><th>Klicks</th><th>CTR</th><th>Potenzial</th></tr></thead>
+          <tbody id="qw-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Buy Intent -->
+    <div class="card" id="buy-card">
+      <div class="card-title">
+        <span class="badge badge-accent" style="font-size:10px">Kaufintent</span>
+        Queries mit Kaufabsicht
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Query</th><th>Klicks</th><th>Position</th><th>CTR</th></tr></thead>
+          <tbody id="buy-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Low Eng + No Conv -->
+    <div class="grid2">
+      <div class="card" id="noconv-card">
+        <div class="card-title"><span class="badge" style="background:#ef444415;border:1px solid #ef444430;color:var(--red)">0 Conv</span> Traffic ohne Abschluss</div>
+        <div id="noconv-list"></div>
+      </div>
+      <div class="card" id="loweng-card">
+        <div class="card-title"><span class="badge" style="background:#f0a50015;border:1px solid #f0a50030;color:var(--amber)">Niedrig</span> Geringe Engagement-Rate</div>
+        <div id="loweng-list"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:8px">
+      <button class="btn btn-amber" style="padding:11px 24px;font-size:12px" onclick="generatePrompts()" id="gen-btn">
+        <span id="gen-spinner" style="display:none" class="spinner"></span>
+        ⚡ Decision-Prompts generieren →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- TAB 04: PROMPTS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="tab-prompts" class="tab-content">
+
+  <div id="prompts-empty" class="empty-state">
+    <div class="icon">⚡</div>
+    <p>Noch keine Prompts — erst Analyse in Tab 03 ausführen und "Prompts generieren" klicken.</p>
+    <button class="btn btn-ghost" onclick="showTab('analyse')">→ Zu Analyse</button>
+  </div>
+
+  <div id="prompts-content" style="display:none">
+
+    <!-- Quick Win Ranking -->
+    <div class="card">
+      <div class="card-title"><span class="badge" style="background:#f0a50015;border:1px solid #f0a50030;color:var(--amber)">Quick Win</span> Top Prompts — Score-Ranking</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Score</th><th>KI-Prompt</th><th>Kategorie</th><th>GSC-Basis</th><th>Maßnahme</th></tr></thead>
+          <tbody id="qw-prompts-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5 Kategorien -->
+    <div class="grid2" id="cats-grid"></div>
+
+    <div class="hint">ⓘ Nächster Schritt: Prompts in ChatGPT / Perplexity / Gemini testen und Baseline dokumentieren.</div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+let GA4 = null, GSC = null, ANALYSIS = null;
+
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  const idx = ['setup','daten','analyse','prompts'].indexOf(id);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+}
+
+function toggleAuthValue() {
+  const m = document.getElementById('inp-auth').value;
+  document.getElementById('auth-value-wrap').style.display = m === 'none' ? 'none' : 'block';
+}
+
+function setMode(mode) {
+  document.getElementById('mode-api').classList.toggle('active', mode === 'api');
+  document.getElementById('mode-json').classList.toggle('active', mode === 'json');
+  ['ga4','gsc'].forEach(t => {
+    document.getElementById(t+'-api-wrap').style.display  = mode === 'api'  ? '' : 'none';
+    document.getElementById(t+'-json-wrap').style.display = mode === 'json' ? '' : 'none';
+  });
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function fmt(n) {
+  if (n === undefined || n === null || isNaN(n)) return '–';
+  return n >= 1000 ? (n/1000).toFixed(1)+'k' : String(Math.round(n));
+}
+function fmtPct(n) {
+  if (!n && n !== 0) return '–';
+  const v = parseFloat(n);
+  return (v > 1 ? v : v * 100).toFixed(1) + '%';
+}
+function trunc(s, n=50) { return s && s.length > n ? s.slice(0,n)+'…' : (s||''); }
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = '⚠ ' + msg;
+  el.style.display = 'block';
+}
+function hideErr(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+function posBadge(pos) {
+  const cls = pos <= 3 ? 'pos-top' : pos <= 10 ? 'pos-good' : pos <= 20 ? 'pos-qw' : 'pos-low';
+  return `<span class="pos ${cls}">${Math.round(pos*10)/10}</span>`;
+}
+function scoreBadge(s) {
+  const bg = s > 70 ? '#22c55e18' : s > 40 ? '#f0a50018' : '#4f9cf915';
+  const col = s > 70 ? '#22c55e' : s > 40 ? 'var(--amber)' : 'var(--blue)';
+  return `<span class="qw-score" style="background:${bg};color:${col}">${s}</span>`;
+}
+
+// ── AUTH HEADERS ───────────────────────────────────────────────────────────
+function buildHeaders() {
+  const method = document.getElementById('inp-auth').value;
+  const val = document.getElementById('inp-auth-value')?.value || '';
+  const h = { 'Content-Type': 'application/json' };
+  if (method === 'bearer') h['Authorization'] = 'Bearer ' + val;
+  if (method === 'apikey') h['X-API-Key'] = val;
+  return h;
+}
+function buildUrl(base) {
+  const method = document.getElementById('inp-auth').value;
+  const val = document.getElementById('inp-auth-value')?.value || '';
+  if (method === 'queryparam' && val) return base + (base.includes('?') ? '&' : '?') + 'api_key=' + val;
+  return base;
+}
+
+// ── DATA PARSING ───────────────────────────────────────────────────────────
+function parseGA4(raw) {
+  let rows = Array.isArray(raw) ? raw : raw.rows || raw.data || raw.landingPages || raw.result || [];
+  return rows.map(r => {
+    if (r.dimensionValues && r.metricValues) {
+      const d = r.dimensionValues.map(x => x.value);
+      const m = r.metricValues.map(x => parseFloat(x.value) || 0);
+      return { page:d[0]||'', sessions:m[0], users:m[1], engagementRate:m[2], avgEngTime:m[3], conversions:m[4], convRate:m[5] };
+    }
+    return {
+      page: r.page||r.landingPage||r.pagePath||r.url||r.landing_page||'',
+      sessions: +( r.sessions||0 ),
+      users: +( r.users||r.activeUsers||0 ),
+      engagementRate: +( r.engagementRate||r.engagement_rate||0 ),
+      avgEngTime: +( r.avgEngagementTime||r.averageEngagementTime||r.avg_engagement_time||0 ),
+      conversions: +( r.conversions||r.keyEvents||r.key_events||r.goals||0 ),
+      convRate: +( r.conversionRate||r.sessionConversionRate||r.conversion_rate||0 ),
+    };
+  }).filter(r => r.page && r.page !== '(not set)');
+}
+
+function parseGSC(raw) {
+  let rows = Array.isArray(raw) ? raw : raw.rows || raw.data || raw.queries || raw.result || [];
+  return rows.map(r => {
+    if (r.keys) return {
+      query: r.keys[0]||'', page: r.keys[1]||'',
+      clicks: +r.clicks||0, impressions: +r.impressions||0,
+      ctr: parseFloat(r.ctr||0) * (parseFloat(r.ctr) < 1 ? 100 : 1),
+      position: +r.position||0
+    };
+    return {
+      query: r.query||r.keyword||'', page: r.page||r.url||'',
+      clicks: +( r.clicks||0 ), impressions: +( r.impressions||0 ),
+      ctr: +( r.ctr||r.click_through_rate||0 ),
+      position: +( r.position||r.avgPosition||r.avg_position||0 ),
+    };
+  }).filter(r => r.query && r.query !== '(not set)');
+}
+
+// ── FETCH / LOAD ───────────────────────────────────────────────────────────
+async function fetchData(type) {
+  const urlEl = document.getElementById('inp-' + type + '-url');
+  if (!urlEl.value) { showErr('error-daten', 'Bitte API-URL eingeben.'); return; }
+  hideErr('error-daten');
+  document.getElementById(type + '-spinner').style.display = 'inline-block';
+  try {
+    const res = await fetch(buildUrl(urlEl.value), { headers: buildHeaders() });
+    if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + res.statusText);
+    const data = await res.json();
+    storeData(type, type === 'ga4' ? parseGA4(data) : parseGSC(data));
+  } catch(e) {
+    showErr('error-daten', type.toUpperCase() + ': ' + e.message + ' — CORS? → JSON Paste nutzen.');
+  }
+  document.getElementById(type + '-spinner').style.display = 'none';
+}
+
+function loadJson(type) {
+  hideErr('error-daten');
+  try {
+    const raw = JSON.parse(document.getElementById('inp-' + type + '-json').value);
+    storeData(type, type === 'ga4' ? parseGA4(raw) : parseGSC(raw));
+  } catch(e) {
+    showErr('error-daten', 'JSON-Fehler (' + type.toUpperCase() + '): ' + e.message);
+  }
+}
+
+function storeData(type, rows) {
+  if (type === 'ga4') {
+    GA4 = rows;
+    document.getElementById('badge-ga4').textContent = 'GA4 ✓ ' + rows.length;
+    document.getElementById('badge-ga4').className = 'badge badge-accent';
+    document.getElementById('ga4-loaded-badge').textContent = '✓ ' + rows.length + ' Rows';
+    document.getElementById('ga4-loaded-badge').style.display = '';
+    renderPreview('ga4', rows);
+  } else {
+    GSC = rows;
+    document.getElementById('badge-gsc').textContent = 'GSC ✓ ' + rows.length;
+    document.getElementById('badge-gsc').className = 'badge badge-blue';
+    document.getElementById('gsc-loaded-badge').textContent = '✓ ' + rows.length + ' Rows';
+    document.getElementById('gsc-loaded-badge').style.display = '';
+    renderPreview('gsc', rows);
+  }
+  if (GA4 && GSC) document.getElementById('analyse-btn-wrap').style.display = '';
+}
+
+function renderPreview(type, rows) {
+  const wrap = document.getElementById(type + '-preview');
+  const info = document.getElementById(type + '-preview-info');
+  const body = document.getElementById(type + '-preview-body');
+  wrap.style.display = '';
+  info.textContent = rows.length + ' Zeilen geladen — Vorschau: erste 6';
+  body.innerHTML = '';
+  rows.slice(0,6).forEach((r,i) => {
+    const tr = document.createElement('tr');
+    if (type === 'ga4') {
+      tr.innerHTML = `<td title="${r.page}">${trunc(r.page,55)}</td><td>${fmt(r.sessions)}</td><td>${fmtPct(r.engagementRate)}</td><td>${r.conversions > 0 ? '<span class="badge badge-accent">'+r.conversions+'</span>' : '<span style="color:var(--muted)">0</span>'}</td>`;
+    } else {
+      tr.innerHTML = `<td title="${r.query}">${trunc(r.query,55)}</td><td>${fmt(r.clicks)}</td><td>${fmt(r.impressions)}</td><td>${fmtPct(r.ctr > 1 ? r.ctr/100 : r.ctr)}</td><td>${posBadge(r.position)}</td>`;
+    }
+    body.appendChild(tr);
+  });
+}
+
+// ── ANALYSIS ───────────────────────────────────────────────────────────────
+function runAnalysis() {
+  if (!GA4 || !GSC) return;
+
+  const quickWins = GSC.filter(r => r.position >= 5 && r.position <= 20 && r.impressions >= 30)
+    .sort((a,b) => b.impressions - a.impressions).slice(0,25);
+
+  const topPages = [...GA4].sort((a,b) => b.sessions - a.sessions).slice(0,15);
+
+  const noConv = GA4.filter(r => r.sessions > 30 && r.conversions === 0)
+    .sort((a,b) => b.sessions - a.sessions).slice(0,8);
+
+  const lowEng = GA4.filter(r => r.sessions > 20 && r.engagementRate > 0 && r.engagementRate < 0.45)
+    .sort((a,b) => b.sessions - a.sessions).slice(0,8);
+
+  const buyIntent = GSC.filter(r =>
+    /kauf|preis|kosten|anfrag|termin|kontakt|beste|empfehl|vergleich|buchen|bestell|günstig|angebot/i.test(r.query)
+  ).sort((a,b) => b.clicks - a.clicks).slice(0,15);
+
+  ANALYSIS = { quickWins, topPages, noConv, lowEng, buyIntent };
+
+  // Stats
+  document.getElementById('analyse-stats').innerHTML = [
+    { n: GA4.length,          l: 'GA4 Seiten' },
+    { n: GSC.length,          l: 'GSC Queries' },
+    { n: quickWins.length,    l: 'Quick Wins' },
+    { n: buyIntent.length,    l: 'Buy-Intent' },
+    { n: noConv.length,       l: '0 Conversions' },
+    { n: lowEng.length,       l: 'Niedrig Eng.' },
+  ].map(s => `<div class="stat"><div class="stat-n">${s.n}</div><div class="stat-l">${s.l}</div></div>`).join('');
+
+  // Quick Wins table
+  const maxImp = quickWins[0]?.impressions || 1;
+  document.getElementById('qw-body').innerHTML = quickWins.map((r,i) => `
+    <tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td title="${r.query}">${trunc(r.query,50)}</td>
+      <td>${posBadge(r.position)}</td>
+      <td>${fmt(r.impressions)}</td>
+      <td>${fmt(r.clicks)}</td>
+      <td>${fmtPct(r.ctr > 1 ? r.ctr/100 : r.ctr)}</td>
+      <td><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((r.impressions/maxImp)*100)}%"></div></div></td>
+    </tr>`).join('');
+
+  // Buy Intent
+  document.getElementById('buy-body').innerHTML = buyIntent.map(r => `
+    <tr>
+      <td title="${r.query}">${trunc(r.query,55)}</td>
+      <td>${fmt(r.clicks)}</td>
+      <td>${posBadge(r.position)}</td>
+      <td>${fmtPct(r.ctr > 1 ? r.ctr/100 : r.ctr)}</td>
+    </tr>`).join('');
+  document.getElementById('buy-card').style.display = buyIntent.length ? '' : 'none';
+
+  // No Conv list
+  document.getElementById('noconv-list').innerHTML = noConv.map(r => `
+    <div style="padding:6px 0;border-bottom:1px solid #1e22310d;font-size:11px">
+      <div style="color:var(--dim);margin-bottom:2px">${trunc(r.page,48)}</div>
+      <div style="color:var(--muted)">${fmt(r.sessions)} Sessions · CTA fehlt?</div>
+    </div>`).join('') || '<span style="color:var(--muted);font-size:12px">Keine gefunden</span>';
+
+  // Low Eng list
+  document.getElementById('loweng-list').innerHTML = lowEng.map(r => `
+    <div style="padding:6px 0;border-bottom:1px solid #1e22310d;font-size:11px">
+      <div style="color:var(--dim);margin-bottom:2px">${trunc(r.page,48)}</div>
+      <div style="color:var(--muted)">${fmtPct(r.engagementRate)} Eng. · ${fmt(r.sessions)} Sessions</div>
+    </div>`).join('') || '<span style="color:var(--muted);font-size:12px">Keine gefunden</span>';
+
+  document.getElementById('analyse-empty').style.display = 'none';
+  document.getElementById('analyse-content').style.display = '';
+  showTab('analyse');
+}
+
+// ── PROMPT GENERATION ──────────────────────────────────────────────────────
+async function generatePrompts() {
+  if (!ANALYSIS) return;
+  const btn = document.getElementById('gen-btn');
+  const spinner = document.getElementById('gen-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'inline-block';
+
+  const domain  = document.getElementById('inp-domain').value  || 'unbekannt';
+  const branche = document.getElementById('inp-branche').value || 'unbekannt';
+  const region  = document.getElementById('inp-region').value  || 'Österreich';
+
+  const topQ = (GSC||[]).slice(0,40).map(r => `${r.query} (${r.clicks} Klicks, Pos.${Math.round(r.position*10)/10})`).join('\n');
+  const qwList = ANALYSIS.quickWins.slice(0,12).map(r => `${r.query} (Pos.${Math.round(r.position*10)/10}, ${r.impressions} Imp.)`).join('\n');
+  const buyList = ANALYSIS.buyIntent.map(r => r.query).join(', ') || 'keine erkannt';
+
+  const userPrompt = `Du bist ein SEO & GEO Experte für den DACH-Raum.
+
+**Domain:** ${domain}
+**Branche:** ${branche}
+**Region:** ${region}
+
+**Reale GSC-Suchanfragen (Top 40):**
+${topQ}
+
+**Quick-Win-Kandidaten Pos. 5–20:**
+${qwList}
+
+**Kaufintent-Queries:**
+${buyList}
+
+Generiere Decision-Prompts basierend auf ECHTEN GSC-Daten. Formuliere wie echte Nutzer in KI-Systemen schreiben.
+
+Antworte NUR als valides JSON ohne Markdown-Backticks:
+{
+  "anbieterVergleich": [{"prompt":"...","basis":"..."}],
+  "validierung": [{"prompt":"...","basis":"..."}],
+  "spezifikation": [{"prompt":"...","basis":"..."}],
+  "preis": [{"prompt":"...","basis":"..."}],
+  "action": [{"prompt":"...","basis":"..."}],
+  "quickWinPrompts": [{"prompt":"...","kategorie":"...","gscQuery":"...","massnahme":"...","score":0}]
+}
+Jeweils 3–4 Prompts pro Kategorie. quickWinPrompts: Top 8 sortiert nach score (0–100).`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'Du bist SEO & GEO Experte. Antworte ausschließlich als valides JSON, kein Text davor oder danach, keine Markdown-Backticks.',
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content||[]).map(c => c.text||'').join('');
+    const clean = text.replace(/```json|```/g,'').trim();
+    renderPrompts(JSON.parse(clean));
+    showTab('prompts');
+  } catch(e) {
+    alert('Fehler: ' + e.message);
+  }
+  btn.disabled = false;
+  spinner.style.display = 'none';
+}
+
+function renderPrompts(data) {
+  const catColors = ['var(--accent)', 'var(--blue)', '#8b5cf6', 'var(--amber)', '#ec4899'];
+  const catMeta = [
+    { key:'anbieterVergleich', label:'Anbieter-Vergleich', icon:'⚖' },
+    { key:'validierung',       label:'Validierung',        icon:'✓' },
+    { key:'spezifikation',     label:'Spezifikation',      icon:'◈' },
+    { key:'preis',             label:'Preis / Kosten',     icon:'€' },
+    { key:'action',            label:'Action / Kontakt',   icon:'→' },
+  ];
+
+  // Quick Win table
+  const qwSorted = [...(data.quickWinPrompts||[])].sort((a,b)=>b.score-a.score);
+  document.getElementById('qw-prompts-body').innerHTML = qwSorted.map(r => `
+    <tr>
+      <td>${scoreBadge(r.score)}</td>
+      <td style="font-style:italic;color:var(--text)" title="${r.prompt}">„${trunc(r.prompt,55)}"</td>
+      <td><span class="badge badge-accent" style="font-size:10px">${r.kategorie||'–'}</span></td>
+      <td style="color:var(--muted)" title="${r.gscQuery}">${trunc(r.gscQuery,35)}</td>
+      <td style="color:var(--dim)" title="${r.massnahme}">${trunc(r.massnahme,45)}</td>
+    </tr>`).join('');
+
+  // 5 categories grid
+  document.getElementById('cats-grid').innerHTML = catMeta.map((cat, ci) => {
+    const items = data[cat.key] || [];
+    const cards = items.map(item => `
+      <div class="prompt-item" style="border-left-color:${catColors[ci]}">
+        <div class="prompt-text">„${item.prompt||item}"</div>
+        ${item.basis ? `<div class="prompt-basis">↳ Basis: ${item.basis}</div>` : ''}
+      </div>`).join('');
+    return `
+      <div class="card" style="border-top:2px solid ${catColors[ci]}">
+        <div class="prompt-cat-title" style="color:${catColors[ci]}">${cat.icon} ${cat.label}</div>
+        ${cards}
+      </div>`;
+  }).join('');
+
+  document.getElementById('prompts-empty').style.display = 'none';
+  document.getElementById('prompts-content').style.display = '';
+}
+</script>
+</body>
+</html>
