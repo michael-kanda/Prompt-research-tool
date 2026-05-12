@@ -19,6 +19,7 @@
   --amber:   #f0a500;
   --blue:    #4f9cf9;
   --red:     #ef4444;
+  --green:   #22c55e;
   --text:    #e8eaf0;
   --dim:     #8892a4;
   --muted:   #4e5566;
@@ -32,6 +33,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); font
 
 /* ── LAYOUT ── */
 .app { display: flex; flex-direction: column; min-height: 100vh; }
+main { flex: 1; }
 
 /* ── HEADER ── */
 header {
@@ -46,6 +48,8 @@ header {
 .badge { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; }
 .badge-accent { background: #00c9a715; border: 1px solid #00c9a730; color: var(--accent); }
 .badge-blue { background: #4f9cf915; border: 1px solid #4f9cf930; color: var(--blue); }
+.badge-amber { background: #f0a50015; border: 1px solid #f0a50030; color: var(--amber); }
+.badge-red { background: #ef444415; border: 1px solid #ef444430; color: var(--red); }
 .badge-muted { background: var(--s2); border: 1px solid var(--border); color: var(--muted); }
 
 /* ── TABS ── */
@@ -59,9 +63,11 @@ header {
   border-bottom: none; border-radius: 5px 5px 0 0;
   background: transparent; color: var(--muted); cursor: pointer;
   position: relative; bottom: -1px; transition: all .15s;
+  display: flex; align-items: center; gap: 7px;
 }
 .tab.active { background: var(--bg); color: var(--accent); border-color: var(--border); }
 .tab:not(.active):hover { color: var(--dim); }
+.tab-check { color: var(--green); font-size: 10px; }
 .tab-content { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; width: 100%; }
 .tab-content.active { display: block; }
 
@@ -99,6 +105,7 @@ select option { background: var(--bg); }
 .btn-amber:disabled { opacity: .4; cursor: not-allowed; }
 .btn-ghost { background: transparent; color: var(--dim); border: 1px solid var(--border); }
 .btn-ghost:hover { color: var(--text); border-color: var(--b2); }
+.btn-tiny { font-size: 10px; padding: 4px 9px; }
 .btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
 
 /* ── MODE TOGGLE ── */
@@ -121,7 +128,7 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* ── POSITION BADGE ── */
 .pos { font-family: var(--mono); font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; display: inline-block; }
-.pos-top { background: #22c55e18; color: #22c55e; }
+.pos-top { background: #22c55e18; color: var(--green); }
 .pos-good { background: #00c9a715; color: var(--accent); }
 .pos-qw { background: #f0a50018; color: var(--amber); }
 .pos-low { background: #ef444415; color: var(--red); }
@@ -131,11 +138,13 @@ tbody tr:last-child td { border-bottom: none; }
 .bar-fill { height: 100%; background: var(--amber); border-radius: 3px; }
 
 /* ── PROMPT CARDS ── */
-.prompt-cat { margin-bottom: 20px; }
 .prompt-cat-title { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-.prompt-item { background: var(--bg); border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--r); padding: 10px 14px; margin-bottom: 8px; }
-.prompt-text { font-style: italic; color: var(--text); margin-bottom: 4px; font-size: 13px; }
+.prompt-item { background: var(--bg); border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--r); padding: 10px 14px; margin-bottom: 8px; position: relative; }
+.prompt-text { font-style: italic; color: var(--text); margin-bottom: 4px; font-size: 13px; padding-right: 30px; }
 .prompt-basis { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.copy-btn { position: absolute; top: 8px; right: 8px; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: pointer; padding: 3px 7px; border-radius: 4px; font-family: var(--mono); font-size: 9px; transition: all .15s; letter-spacing: 1px; }
+.copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+.copy-btn.copied { color: var(--green); border-color: var(--green); }
 
 /* ── QW TABLE ── */
 .qw-score { font-family: var(--mono); font-size: 13px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
@@ -143,6 +152,7 @@ tbody tr:last-child td { border-bottom: none; }
 /* ── HINT / ERROR ── */
 .hint { background: #00c9a710; border: 1px solid #00c9a725; border-radius: var(--r); padding: 10px 14px; font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 14px; }
 .error-box { background: #ef444412; border: 1px solid #ef444430; border-radius: var(--r); padding: 10px 14px; font-size: 12px; color: var(--red); margin-bottom: 14px; }
+.warn-box { background: #f0a50012; border: 1px solid #f0a50030; border-radius: var(--r); padding: 10px 14px; font-size: 12px; color: var(--amber); margin-bottom: 14px; }
 .empty-state { text-align: center; padding: 48px 20px; }
 .empty-state .icon { font-size: 36px; margin-bottom: 12px; }
 .empty-state p { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
@@ -154,18 +164,64 @@ tbody tr:last-child td { border-bottom: none; }
 /* ── MINI PREVIEW ── */
 .preview-info { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-bottom: 10px; }
 
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--s1); border: 1px solid var(--accent); border-left-width: 3px; color: var(--text); padding: 10px 16px; border-radius: var(--r); font-family: var(--mono); font-size: 11px; z-index: 100; opacity: 0; transform: translateY(10px); transition: all .25s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── MODAL ── */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: center; justify-content: center; z-index: 99; padding: 20px; }
+.modal-bg.show { display: flex; }
+.modal { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rl); padding: 24px; max-width: 700px; width: 100%; max-height: 80vh; overflow-y: auto; }
+.modal h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+.modal textarea { min-height: 280px; }
+.modal-close { float: right; background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 18px; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  background: var(--s1);
+  padding: 18px 24px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: border-color .15s, color .15s;
+}
+footer a:hover {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+footer .heart {
+  color: var(--red);
+  font-size: 12px;
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 700px) {
   .grid2, .grid4, .grid6 { grid-template-columns: 1fr 1fr; }
   .grid3 { grid-template-columns: 1fr; }
   header { padding: 0 14px; }
-  .tabs { padding: 0 12px; }
+  .tabs { padding: 0 12px; overflow-x: auto; }
   .tab-content { padding: 16px; }
+  .toast { left: 14px; right: 14px; bottom: 14px; }
 }
 </style>
 </head>
 <body>
 <div class="app">
+<main>
 
 <!-- HEADER -->
 <header>
@@ -180,10 +236,10 @@ tbody tr:last-child td { border-bottom: none; }
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab active" onclick="showTab('setup')">01 Setup</button>
-  <button class="tab" onclick="showTab('daten')">02 Daten</button>
-  <button class="tab" onclick="showTab('analyse')">03 Analyse</button>
-  <button class="tab" onclick="showTab('prompts')">04 Prompts</button>
+  <button class="tab active" data-tab="setup">01 Setup<span class="tab-check" id="check-setup" style="display:none">✓</span></button>
+  <button class="tab" data-tab="daten">02 Daten<span class="tab-check" id="check-daten" style="display:none">✓</span></button>
+  <button class="tab" data-tab="analyse">03 Analyse<span class="tab-check" id="check-analyse" style="display:none">✓</span></button>
+  <button class="tab" data-tab="prompts">04 Prompts<span class="tab-check" id="check-prompts" style="display:none">✓</span></button>
 </div>
 
 <!-- ══════════════════════════════════════════════════════ -->
@@ -196,15 +252,15 @@ tbody tr:last-child td { border-bottom: none; }
     <div class="grid3">
       <div class="form-group">
         <label>Domain / Unternehmen</label>
-        <input type="text" id="inp-domain" placeholder="z.B. meinefirma.at">
+        <input type="text" id="inp-domain" data-persist placeholder="z.B. meinefirma.at">
       </div>
       <div class="form-group">
         <label>Branche</label>
-        <input type="text" id="inp-branche" placeholder="z.B. Installateur, Anwalt, Agentur">
+        <input type="text" id="inp-branche" data-persist placeholder="z.B. Installateur, Anwalt, Agentur">
       </div>
       <div class="form-group">
         <label>Region</label>
-        <input type="text" id="inp-region" value="Wien" placeholder="z.B. Wien, DACH">
+        <input type="text" id="inp-region" data-persist value="Wien" placeholder="z.B. Wien, DACH">
       </div>
     </div>
   </div>
@@ -214,7 +270,7 @@ tbody tr:last-child td { border-bottom: none; }
     <div class="grid2" style="margin-bottom:12px">
       <div class="form-group">
         <label>Methode</label>
-        <select id="inp-auth" onchange="toggleAuthValue()">
+        <select id="inp-auth" data-persist>
           <option value="none">Kein Auth</option>
           <option value="bearer">Bearer Token (Authorization Header)</option>
           <option value="apikey">API Key (X-API-Key Header)</option>
@@ -227,7 +283,11 @@ tbody tr:last-child td { border-bottom: none; }
       </div>
     </div>
     <div class="hint">ⓘ Auth-Methode unbekannt? Alle Varianten testen. CORS-Fehler → Tab "02 Daten" → JSON Paste nutzen.</div>
-    <button class="btn btn-primary" onclick="showTab('daten')">Weiter → Daten laden →</button>
+    <div class="btn-row">
+      <button class="btn btn-primary" data-goto="daten">Weiter → Daten laden →</button>
+      <button class="btn btn-ghost" id="btn-demo">🎲 Demo-Daten laden</button>
+      <button class="btn btn-ghost" id="btn-reset">↺ Alles zurücksetzen</button>
+    </div>
   </div>
 
 </div>
@@ -240,23 +300,23 @@ tbody tr:last-child td { border-bottom: none; }
   <div id="error-daten" class="error-box" style="display:none"></div>
 
   <div class="mode-toggle">
-    <button class="mode-btn active" id="mode-api" onclick="setMode('api')">API-Fetch</button>
-    <button class="mode-btn" id="mode-json" onclick="setMode('json')">JSON Paste</button>
+    <button class="mode-btn active" id="mode-api" data-mode="api">API-Fetch</button>
+    <button class="mode-btn" id="mode-json" data-mode="json">JSON Paste</button>
   </div>
 
   <!-- GA4 -->
   <div class="card">
     <div class="card-title">
-      <span style="color:#4ade80">▲</span> GA4 — Landingpages
+      <span style="color:var(--green)">▲</span> GA4 — Landingpages
       <span id="ga4-loaded-badge" style="margin-left:auto;display:none" class="badge badge-accent"></span>
     </div>
 
     <div id="ga4-api-wrap">
       <div class="form-row">
         <label>API Endpoint URL</label>
-        <input type="url" id="inp-ga4-url" placeholder="https://dein-dashboard.at/api/ga4/landingpages">
+        <input type="url" id="inp-ga4-url" data-persist placeholder="https://dein-dashboard.at/api/ga4/landingpages">
       </div>
-      <button class="btn btn-primary" onclick="fetchData('ga4')">
+      <button class="btn btn-primary" data-fetch="ga4">
         <span id="ga4-spinner" style="display:none" class="spinner"></span>
         GA4 Fetch
       </button>
@@ -267,7 +327,7 @@ tbody tr:last-child td { border-bottom: none; }
         <label>GA4 JSON einfügen</label>
         <textarea id="inp-ga4-json" placeholder='[{"page":"/leistungen","sessions":1200,"conversions":45,"engagementRate":0.68}]' rows="6"></textarea>
       </div>
-      <button class="btn btn-primary" onclick="loadJson('ga4')">GA4 laden</button>
+      <button class="btn btn-primary" data-loadjson="ga4">GA4 laden</button>
     </div>
 
     <div id="ga4-preview" style="display:none">
@@ -284,16 +344,16 @@ tbody tr:last-child td { border-bottom: none; }
   <!-- GSC -->
   <div class="card">
     <div class="card-title">
-      <span style="color:#4f9cf9">◈</span> GSC — Suchanfragen
+      <span style="color:var(--blue)">◈</span> GSC — Suchanfragen
       <span id="gsc-loaded-badge" style="margin-left:auto;display:none" class="badge badge-blue"></span>
     </div>
 
     <div id="gsc-api-wrap">
       <div class="form-row">
         <label>API Endpoint URL</label>
-        <input type="url" id="inp-gsc-url" placeholder="https://dein-dashboard.at/api/gsc/queries">
+        <input type="url" id="inp-gsc-url" data-persist placeholder="https://dein-dashboard.at/api/gsc/queries">
       </div>
-      <button class="btn btn-primary" onclick="fetchData('gsc')">
+      <button class="btn btn-primary" data-fetch="gsc">
         <span id="gsc-spinner" style="display:none" class="spinner"></span>
         GSC Fetch
       </button>
@@ -304,7 +364,7 @@ tbody tr:last-child td { border-bottom: none; }
         <label>GSC JSON einfügen</label>
         <textarea id="inp-gsc-json" placeholder='[{"query":"installateur wien","clicks":320,"impressions":4200,"ctr":7.6,"position":3.2}]' rows="6"></textarea>
       </div>
-      <button class="btn btn-primary" onclick="loadJson('gsc')">GSC laden</button>
+      <button class="btn btn-primary" data-loadjson="gsc">GSC laden</button>
     </div>
 
     <div id="gsc-preview" style="display:none">
@@ -319,7 +379,7 @@ tbody tr:last-child td { border-bottom: none; }
   </div>
 
   <div id="analyse-btn-wrap" style="display:none">
-    <button class="btn btn-primary" style="padding:11px 24px;font-size:12px" onclick="runAnalysis()">▶ Analyse starten →</button>
+    <button class="btn btn-primary" style="padding:11px 24px;font-size:12px" id="btn-run-analysis">▶ Analyse starten →</button>
   </div>
 
 </div>
@@ -332,7 +392,7 @@ tbody tr:last-child td { border-bottom: none; }
   <div id="analyse-empty" class="empty-state">
     <div class="icon">◈</div>
     <p>Noch keine Analyse — zuerst GA4 + GSC in Tab 02 laden.</p>
-    <button class="btn btn-ghost" onclick="showTab('daten')">→ Zu Daten</button>
+    <button class="btn btn-ghost" data-goto="daten">→ Zu Daten</button>
   </div>
 
   <div id="analyse-content" style="display:none">
@@ -345,6 +405,7 @@ tbody tr:last-child td { border-bottom: none; }
       <div class="card-title">
         <span class="badge badge-accent" style="font-size:10px">Quick Win</span>
         GSC — Position 5–20 (Sofortpotenzial)
+        <button class="btn btn-ghost btn-tiny" style="margin-left:auto" id="btn-export-qw">⤓ CSV</button>
       </div>
       <div class="tbl-wrap">
         <table>
@@ -371,21 +432,23 @@ tbody tr:last-child td { border-bottom: none; }
     <!-- Low Eng + No Conv -->
     <div class="grid2">
       <div class="card" id="noconv-card">
-        <div class="card-title"><span class="badge" style="background:#ef444415;border:1px solid #ef444430;color:var(--red)">0 Conv</span> Traffic ohne Abschluss</div>
+        <div class="card-title"><span class="badge badge-red">0 Conv</span> Traffic ohne Abschluss</div>
         <div id="noconv-list"></div>
       </div>
       <div class="card" id="loweng-card">
-        <div class="card-title"><span class="badge" style="background:#f0a50015;border:1px solid #f0a50030;color:var(--amber)">Niedrig</span> Geringe Engagement-Rate</div>
+        <div class="card-title"><span class="badge badge-amber">Niedrig</span> Geringe Engagement-Rate</div>
         <div id="loweng-list"></div>
       </div>
     </div>
 
-    <div style="margin-top:8px">
-      <button class="btn btn-amber" style="padding:11px 24px;font-size:12px" onclick="generatePrompts()" id="gen-btn">
+    <div style="margin-top:8px" class="btn-row">
+      <button class="btn btn-amber" style="padding:11px 24px;font-size:12px" id="gen-btn">
         <span id="gen-spinner" style="display:none" class="spinner"></span>
         ⚡ Decision-Prompts generieren →
       </button>
+      <button class="btn btn-ghost" id="btn-copy-context">📋 Prompt-Kontext kopieren</button>
     </div>
+    <div id="error-prompts" class="error-box" style="display:none;margin-top:12px"></div>
   </div>
 </div>
 
@@ -397,17 +460,20 @@ tbody tr:last-child td { border-bottom: none; }
   <div id="prompts-empty" class="empty-state">
     <div class="icon">⚡</div>
     <p>Noch keine Prompts — erst Analyse in Tab 03 ausführen und "Prompts generieren" klicken.</p>
-    <button class="btn btn-ghost" onclick="showTab('analyse')">→ Zu Analyse</button>
+    <button class="btn btn-ghost" data-goto="analyse">→ Zu Analyse</button>
   </div>
 
   <div id="prompts-content" style="display:none">
 
     <!-- Quick Win Ranking -->
     <div class="card">
-      <div class="card-title"><span class="badge" style="background:#f0a50015;border:1px solid #f0a50030;color:var(--amber)">Quick Win</span> Top Prompts — Score-Ranking</div>
+      <div class="card-title">
+        <span class="badge badge-amber">Quick Win</span> Top Prompts — Score-Ranking
+        <button class="btn btn-ghost btn-tiny" style="margin-left:auto" id="btn-export-prompts">⤓ CSV</button>
+      </div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Score</th><th>KI-Prompt</th><th>Kategorie</th><th>GSC-Basis</th><th>Maßnahme</th></tr></thead>
+          <thead><tr><th>Score</th><th>KI-Prompt</th><th>Kategorie</th><th>GSC-Basis</th><th>Maßnahme</th><th></th></tr></thead>
           <tbody id="qw-prompts-body"></tbody>
         </table>
       </div>
@@ -420,19 +486,187 @@ tbody tr:last-child td { border-bottom: none; }
   </div>
 </div>
 
+</main>
+
+<!-- FOOTER -->
+<footer>
+  Developed with <span class="heart">❤</span> by
+  <a href="https://designare.at" target="_blank" rel="noopener">Michael Kanda</a>
+</footer>
+
 </div><!-- /app -->
 
-<script>
-// ── STATE ──────────────────────────────────────────────────────────────────
-let GA4 = null, GSC = null, ANALYSIS = null;
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-// ── NAVIGATION ─────────────────────────────────────────────────────────────
+<!-- MODAL FÜR MANUELLEN PROMPT -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">×</button>
+    <h3>Prompt-Kontext für KI</h3>
+    <p style="font-size:12px;color:var(--dim);margin-bottom:12px">
+      Kopiere diesen Text in ChatGPT, Claude oder Perplexity. Die KI liefert dann die strukturierten Decision-Prompts.
+    </p>
+    <textarea id="modal-textarea" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-modal-copy">📋 Kopieren</button>
+      <button class="btn btn-ghost" id="btn-modal-close-2">Schließen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════════════════════════════════
+// CONFIG — alle Schwellwerte zentral
+// ══════════════════════════════════════════════════════════════════════════
+const CONFIG = {
+  QW_POS_MIN: 5,
+  QW_POS_MAX: 20,
+  QW_MIN_IMPRESSIONS: 30,
+  QW_MAX_RESULTS: 25,
+  NOCONV_MIN_SESSIONS: 30,
+  NOCONV_MAX_RESULTS: 8,
+  LOWENG_MIN_SESSIONS: 20,
+  LOWENG_MAX_RATE: 0.45,
+  LOWENG_MAX_RESULTS: 8,
+  BUY_INTENT_REGEX: /kauf|preis|kosten|anfrag|termin|kontakt|beste|empfehl|vergleich|buchen|bestell|günstig|angebot/i,
+  BUY_INTENT_MAX_RESULTS: 15,
+  GSC_TOP_FOR_PROMPT: 40,
+  QW_FOR_PROMPT: 12,
+  API_MODEL: 'claude-sonnet-4-20250514',
+  API_MAX_TOKENS: 8000,
+  STORAGE_KEY: 'seo-geo-tool-v2',
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════════
+let GA4 = null, GSC = null, ANALYSIS = null, PROMPTS = null;
+
+// ══════════════════════════════════════════════════════════════════════════
+// HELPERS — Escaping, Format, Storage
+// ══════════════════════════════════════════════════════════════════════════
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function fmt(n) {
+  if (n === undefined || n === null || isNaN(n)) return '–';
+  return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(Math.round(n));
+}
+
+// CTR ist intern IMMER als Dezimalwert (0.076 = 7.6%) gespeichert
+function fmtPct(decimal) {
+  if (decimal === null || decimal === undefined || isNaN(decimal)) return '–';
+  return (decimal * 100).toFixed(1) + '%';
+}
+
+function trunc(s, n = 50) {
+  return s && s.length > n ? s.slice(0, n) + '…' : (s || '');
+}
+
+function toast(msg, type = 'accent') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderLeftColor = type === 'error' ? 'var(--red)' : type === 'warn' ? 'var(--amber)' : 'var(--accent)';
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = '⚠ ' + msg;
+  el.style.display = 'block';
+}
+
+function hideErr(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function posBadge(pos) {
+  const cls = pos <= 3 ? 'pos-top' : pos <= 10 ? 'pos-good' : pos <= 20 ? 'pos-qw' : 'pos-low';
+  return `<span class="pos ${cls}">${Math.round(pos * 10) / 10}</span>`;
+}
+
+function scoreBadge(s) {
+  const bg = s > 70 ? '#22c55e18' : s > 40 ? '#f0a50018' : '#4f9cf915';
+  const col = s > 70 ? 'var(--green)' : s > 40 ? 'var(--amber)' : 'var(--blue)';
+  return `<span class="qw-score" style="background:${bg};color:${col}">${escapeHtml(s)}</span>`;
+}
+
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    // Fallback für ältere Browser
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); document.body.removeChild(ta); return true; }
+    catch { document.body.removeChild(ta); return false; }
+  }
+}
+
+// ── localStorage Persistierung ──────────────────────────────────────────
+function loadPersistedState() {
+  try {
+    const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    document.querySelectorAll('[data-persist]').forEach(el => {
+      if (data[el.id] !== undefined) el.value = data[el.id];
+    });
+  } catch (e) {
+    console.warn('Persist-Load fehlgeschlagen:', e);
+  }
+}
+
+function savePersistedState() {
+  try {
+    const data = {};
+    document.querySelectorAll('[data-persist]').forEach(el => { data[el.id] = el.value; });
+    localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn('Persist-Save fehlgeschlagen:', e);
+  }
+}
+
+function clearPersistedState() {
+  try { localStorage.removeItem(CONFIG.STORAGE_KEY); } catch {}
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════════════════════
 function showTab(id) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
-  const idx = ['setup','daten','analyse','prompts'].indexOf(id);
-  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const setupDone = !!(document.getElementById('inp-domain').value || document.getElementById('inp-branche').value);
+  document.getElementById('check-setup').style.display = setupDone ? '' : 'none';
+  document.getElementById('check-daten').style.display = (GA4 && GSC) ? '' : 'none';
+  document.getElementById('check-analyse').style.display = ANALYSIS ? '' : 'none';
+  document.getElementById('check-prompts').style.display = PROMPTS ? '' : 'none';
 }
 
 function toggleAuthValue() {
@@ -443,44 +677,15 @@ function toggleAuthValue() {
 function setMode(mode) {
   document.getElementById('mode-api').classList.toggle('active', mode === 'api');
   document.getElementById('mode-json').classList.toggle('active', mode === 'json');
-  ['ga4','gsc'].forEach(t => {
-    document.getElementById(t+'-api-wrap').style.display  = mode === 'api'  ? '' : 'none';
-    document.getElementById(t+'-json-wrap').style.display = mode === 'json' ? '' : 'none';
+  ['ga4', 'gsc'].forEach(t => {
+    document.getElementById(t + '-api-wrap').style.display  = mode === 'api'  ? '' : 'none';
+    document.getElementById(t + '-json-wrap').style.display = mode === 'json' ? '' : 'none';
   });
 }
 
-// ── HELPERS ────────────────────────────────────────────────────────────────
-function fmt(n) {
-  if (n === undefined || n === null || isNaN(n)) return '–';
-  return n >= 1000 ? (n/1000).toFixed(1)+'k' : String(Math.round(n));
-}
-function fmtPct(n) {
-  if (!n && n !== 0) return '–';
-  const v = parseFloat(n);
-  return (v > 1 ? v : v * 100).toFixed(1) + '%';
-}
-function trunc(s, n=50) { return s && s.length > n ? s.slice(0,n)+'…' : (s||''); }
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = '⚠ ' + msg;
-  el.style.display = 'block';
-}
-function hideErr(id) {
-  const el = document.getElementById(id);
-  if (el) el.style.display = 'none';
-}
-function posBadge(pos) {
-  const cls = pos <= 3 ? 'pos-top' : pos <= 10 ? 'pos-good' : pos <= 20 ? 'pos-qw' : 'pos-low';
-  return `<span class="pos ${cls}">${Math.round(pos*10)/10}</span>`;
-}
-function scoreBadge(s) {
-  const bg = s > 70 ? '#22c55e18' : s > 40 ? '#f0a50018' : '#4f9cf915';
-  const col = s > 70 ? '#22c55e' : s > 40 ? 'var(--amber)' : 'var(--blue)';
-  return `<span class="qw-score" style="background:${bg};color:${col}">${s}</span>`;
-}
-
-// ── AUTH HEADERS ───────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════════════════════════
 function buildHeaders() {
   const method = document.getElementById('inp-auth').value;
   const val = document.getElementById('inp-auth-value')?.value || '';
@@ -489,30 +694,60 @@ function buildHeaders() {
   if (method === 'apikey') h['X-API-Key'] = val;
   return h;
 }
+
 function buildUrl(base) {
   const method = document.getElementById('inp-auth').value;
   const val = document.getElementById('inp-auth-value')?.value || '';
-  if (method === 'queryparam' && val) return base + (base.includes('?') ? '&' : '?') + 'api_key=' + val;
+  if (method === 'queryparam' && val) {
+    return base + (base.includes('?') ? '&' : '?') + 'api_key=' + encodeURIComponent(val);
+  }
   return base;
 }
 
-// ── DATA PARSING ───────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════
+// DATA PARSING — CTR wird IMMER als Dezimalwert (0–1) normalisiert
+// ══════════════════════════════════════════════════════════════════════════
+function normalizeCtr(raw) {
+  if (raw === null || raw === undefined || raw === '') return 0;
+  const v = parseFloat(raw);
+  if (isNaN(v)) return 0;
+  // Heuristik: Werte > 1 sind in % (z.B. 7.6 → 0.076), Werte ≤ 1 sind schon Dezimal
+  return v > 1 ? v / 100 : v;
+}
+
+function normalizeEngagementRate(raw) {
+  if (raw === null || raw === undefined || raw === '') return 0;
+  const v = parseFloat(raw);
+  if (isNaN(v)) return 0;
+  return v > 1 ? v / 100 : v;
+}
+
 function parseGA4(raw) {
   let rows = Array.isArray(raw) ? raw : raw.rows || raw.data || raw.landingPages || raw.result || [];
   return rows.map(r => {
+    // Google API Native Format
     if (r.dimensionValues && r.metricValues) {
       const d = r.dimensionValues.map(x => x.value);
       const m = r.metricValues.map(x => parseFloat(x.value) || 0);
-      return { page:d[0]||'', sessions:m[0], users:m[1], engagementRate:m[2], avgEngTime:m[3], conversions:m[4], convRate:m[5] };
+      return {
+        page: d[0] || '',
+        sessions: m[0] || 0,
+        users: m[1] || 0,
+        engagementRate: normalizeEngagementRate(m[2]),
+        avgEngTime: m[3] || 0,
+        conversions: m[4] || 0,
+        convRate: normalizeEngagementRate(m[5]),
+      };
     }
+    // Flaches Format
     return {
-      page: r.page||r.landingPage||r.pagePath||r.url||r.landing_page||'',
-      sessions: +( r.sessions||0 ),
-      users: +( r.users||r.activeUsers||0 ),
-      engagementRate: +( r.engagementRate||r.engagement_rate||0 ),
-      avgEngTime: +( r.avgEngagementTime||r.averageEngagementTime||r.avg_engagement_time||0 ),
-      conversions: +( r.conversions||r.keyEvents||r.key_events||r.goals||0 ),
-      convRate: +( r.conversionRate||r.sessionConversionRate||r.conversion_rate||0 ),
+      page: r.page || r.landingPage || r.pagePath || r.url || r.landing_page || '',
+      sessions: +(r.sessions || 0),
+      users: +(r.users || r.activeUsers || 0),
+      engagementRate: normalizeEngagementRate(r.engagementRate || r.engagement_rate || 0),
+      avgEngTime: +(r.avgEngagementTime || r.averageEngagementTime || r.avg_engagement_time || 0),
+      conversions: +(r.conversions || r.keyEvents || r.key_events || r.goals || 0),
+      convRate: normalizeEngagementRate(r.conversionRate || r.sessionConversionRate || r.conversion_rate || 0),
     };
   }).filter(r => r.page && r.page !== '(not set)');
 }
@@ -520,44 +755,70 @@ function parseGA4(raw) {
 function parseGSC(raw) {
   let rows = Array.isArray(raw) ? raw : raw.rows || raw.data || raw.queries || raw.result || [];
   return rows.map(r => {
-    if (r.keys) return {
-      query: r.keys[0]||'', page: r.keys[1]||'',
-      clicks: +r.clicks||0, impressions: +r.impressions||0,
-      ctr: parseFloat(r.ctr||0) * (parseFloat(r.ctr) < 1 ? 100 : 1),
-      position: +r.position||0
-    };
+    // Google API Native Format
+    if (r.keys) {
+      return {
+        query: r.keys[0] || '',
+        page: r.keys[1] || '',
+        clicks: +r.clicks || 0,
+        impressions: +r.impressions || 0,
+        ctr: normalizeCtr(r.ctr),
+        position: +r.position || 0,
+      };
+    }
+    // Flaches Format
     return {
-      query: r.query||r.keyword||'', page: r.page||r.url||'',
-      clicks: +( r.clicks||0 ), impressions: +( r.impressions||0 ),
-      ctr: +( r.ctr||r.click_through_rate||0 ),
-      position: +( r.position||r.avgPosition||r.avg_position||0 ),
+      query: r.query || r.keyword || '',
+      page: r.page || r.url || '',
+      clicks: +(r.clicks || 0),
+      impressions: +(r.impressions || 0),
+      ctr: normalizeCtr(r.ctr || r.click_through_rate || 0),
+      position: +(r.position || r.avgPosition || r.avg_position || 0),
     };
   }).filter(r => r.query && r.query !== '(not set)');
 }
 
-// ── FETCH / LOAD ───────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════
+// FETCH / LOAD
+// ══════════════════════════════════════════════════════════════════════════
 async function fetchData(type) {
   const urlEl = document.getElementById('inp-' + type + '-url');
-  if (!urlEl.value) { showErr('error-daten', 'Bitte API-URL eingeben.'); return; }
+  if (!urlEl.value) {
+    showErr('error-daten', 'Bitte API-URL eingeben.');
+    return;
+  }
   hideErr('error-daten');
   document.getElementById(type + '-spinner').style.display = 'inline-block';
   try {
     const res = await fetch(buildUrl(urlEl.value), { headers: buildHeaders() });
     if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + res.statusText);
     const data = await res.json();
-    storeData(type, type === 'ga4' ? parseGA4(data) : parseGSC(data));
-  } catch(e) {
+    const parsed = type === 'ga4' ? parseGA4(data) : parseGSC(data);
+    if (parsed.length === 0) {
+      showErr('error-daten', type.toUpperCase() + ': Keine verwertbaren Zeilen in der Response gefunden. Format prüfen.');
+      return;
+    }
+    storeData(type, parsed);
+    toast(type.toUpperCase() + ' geladen: ' + parsed.length + ' Zeilen');
+  } catch (e) {
     showErr('error-daten', type.toUpperCase() + ': ' + e.message + ' — CORS? → JSON Paste nutzen.');
+  } finally {
+    document.getElementById(type + '-spinner').style.display = 'none';
   }
-  document.getElementById(type + '-spinner').style.display = 'none';
 }
 
 function loadJson(type) {
   hideErr('error-daten');
   try {
     const raw = JSON.parse(document.getElementById('inp-' + type + '-json').value);
-    storeData(type, type === 'ga4' ? parseGA4(raw) : parseGSC(raw));
-  } catch(e) {
+    const parsed = type === 'ga4' ? parseGA4(raw) : parseGSC(raw);
+    if (parsed.length === 0) {
+      showErr('error-daten', type.toUpperCase() + ': Keine verwertbaren Zeilen im JSON gefunden.');
+      return;
+    }
+    storeData(type, parsed);
+    toast(type.toUpperCase() + ' geladen: ' + parsed.length + ' Zeilen');
+  } catch (e) {
     showErr('error-daten', 'JSON-Fehler (' + type.toUpperCase() + '): ' + e.message);
   }
 }
@@ -565,20 +826,24 @@ function loadJson(type) {
 function storeData(type, rows) {
   if (type === 'ga4') {
     GA4 = rows;
-    document.getElementById('badge-ga4').textContent = 'GA4 ✓ ' + rows.length;
-    document.getElementById('badge-ga4').className = 'badge badge-accent';
-    document.getElementById('ga4-loaded-badge').textContent = '✓ ' + rows.length + ' Rows';
-    document.getElementById('ga4-loaded-badge').style.display = '';
-    renderPreview('ga4', rows);
+    const b = document.getElementById('badge-ga4');
+    b.textContent = 'GA4 ✓ ' + rows.length;
+    b.className = 'badge badge-accent';
+    const lb = document.getElementById('ga4-loaded-badge');
+    lb.textContent = '✓ ' + rows.length + ' Rows';
+    lb.style.display = '';
   } else {
     GSC = rows;
-    document.getElementById('badge-gsc').textContent = 'GSC ✓ ' + rows.length;
-    document.getElementById('badge-gsc').className = 'badge badge-blue';
-    document.getElementById('gsc-loaded-badge').textContent = '✓ ' + rows.length + ' Rows';
-    document.getElementById('gsc-loaded-badge').style.display = '';
-    renderPreview('gsc', rows);
+    const b = document.getElementById('badge-gsc');
+    b.textContent = 'GSC ✓ ' + rows.length;
+    b.className = 'badge badge-blue';
+    const lb = document.getElementById('gsc-loaded-badge');
+    lb.textContent = '✓ ' + rows.length + ' Rows';
+    lb.style.display = '';
   }
+  renderPreview(type, rows);
   if (GA4 && GSC) document.getElementById('analyse-btn-wrap').style.display = '';
+  updateProgress();
 }
 
 function renderPreview(type, rows) {
@@ -588,116 +853,140 @@ function renderPreview(type, rows) {
   wrap.style.display = '';
   info.textContent = rows.length + ' Zeilen geladen — Vorschau: erste 6';
   body.innerHTML = '';
-  rows.slice(0,6).forEach((r,i) => {
+  rows.slice(0, 6).forEach(r => {
     const tr = document.createElement('tr');
     if (type === 'ga4') {
-      tr.innerHTML = `<td title="${r.page}">${trunc(r.page,55)}</td><td>${fmt(r.sessions)}</td><td>${fmtPct(r.engagementRate)}</td><td>${r.conversions > 0 ? '<span class="badge badge-accent">'+r.conversions+'</span>' : '<span style="color:var(--muted)">0</span>'}</td>`;
+      tr.innerHTML =
+        `<td title="${escapeHtml(r.page)}">${escapeHtml(trunc(r.page, 55))}</td>` +
+        `<td>${fmt(r.sessions)}</td>` +
+        `<td>${fmtPct(r.engagementRate)}</td>` +
+        `<td>${r.conversions > 0 ? '<span class="badge badge-accent">' + escapeHtml(r.conversions) + '</span>' : '<span style="color:var(--muted)">0</span>'}</td>`;
     } else {
-      tr.innerHTML = `<td title="${r.query}">${trunc(r.query,55)}</td><td>${fmt(r.clicks)}</td><td>${fmt(r.impressions)}</td><td>${fmtPct(r.ctr > 1 ? r.ctr/100 : r.ctr)}</td><td>${posBadge(r.position)}</td>`;
+      tr.innerHTML =
+        `<td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query, 55))}</td>` +
+        `<td>${fmt(r.clicks)}</td>` +
+        `<td>${fmt(r.impressions)}</td>` +
+        `<td>${fmtPct(r.ctr)}</td>` +
+        `<td>${posBadge(r.position)}</td>`;
     }
     body.appendChild(tr);
   });
 }
 
-// ── ANALYSIS ───────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════
+// ANALYSE
+// ══════════════════════════════════════════════════════════════════════════
 function runAnalysis() {
   if (!GA4 || !GSC) return;
 
-  const quickWins = GSC.filter(r => r.position >= 5 && r.position <= 20 && r.impressions >= 30)
-    .sort((a,b) => b.impressions - a.impressions).slice(0,25);
+  const quickWins = GSC
+    .filter(r => r.position >= CONFIG.QW_POS_MIN && r.position <= CONFIG.QW_POS_MAX && r.impressions >= CONFIG.QW_MIN_IMPRESSIONS)
+    .sort((a, b) => b.impressions - a.impressions)
+    .slice(0, CONFIG.QW_MAX_RESULTS);
 
-  const topPages = [...GA4].sort((a,b) => b.sessions - a.sessions).slice(0,15);
+  const topPages = [...GA4].sort((a, b) => b.sessions - a.sessions).slice(0, 15);
 
-  const noConv = GA4.filter(r => r.sessions > 30 && r.conversions === 0)
-    .sort((a,b) => b.sessions - a.sessions).slice(0,8);
+  const noConv = GA4
+    .filter(r => r.sessions > CONFIG.NOCONV_MIN_SESSIONS && r.conversions === 0)
+    .sort((a, b) => b.sessions - a.sessions)
+    .slice(0, CONFIG.NOCONV_MAX_RESULTS);
 
-  const lowEng = GA4.filter(r => r.sessions > 20 && r.engagementRate > 0 && r.engagementRate < 0.45)
-    .sort((a,b) => b.sessions - a.sessions).slice(0,8);
+  const lowEng = GA4
+    .filter(r => r.sessions > CONFIG.LOWENG_MIN_SESSIONS && r.engagementRate > 0 && r.engagementRate < CONFIG.LOWENG_MAX_RATE)
+    .sort((a, b) => b.sessions - a.sessions)
+    .slice(0, CONFIG.LOWENG_MAX_RESULTS);
 
-  const buyIntent = GSC.filter(r =>
-    /kauf|preis|kosten|anfrag|termin|kontakt|beste|empfehl|vergleich|buchen|bestell|günstig|angebot/i.test(r.query)
-  ).sort((a,b) => b.clicks - a.clicks).slice(0,15);
+  const buyIntent = GSC
+    .filter(r => CONFIG.BUY_INTENT_REGEX.test(r.query))
+    .sort((a, b) => b.clicks - a.clicks)
+    .slice(0, CONFIG.BUY_INTENT_MAX_RESULTS);
 
   ANALYSIS = { quickWins, topPages, noConv, lowEng, buyIntent };
+  renderAnalysis();
+  showTab('analyse');
+  updateProgress();
+}
+
+function renderAnalysis() {
+  const { quickWins, noConv, lowEng, buyIntent } = ANALYSIS;
 
   // Stats
   document.getElementById('analyse-stats').innerHTML = [
-    { n: GA4.length,          l: 'GA4 Seiten' },
-    { n: GSC.length,          l: 'GSC Queries' },
-    { n: quickWins.length,    l: 'Quick Wins' },
-    { n: buyIntent.length,    l: 'Buy-Intent' },
-    { n: noConv.length,       l: '0 Conversions' },
-    { n: lowEng.length,       l: 'Niedrig Eng.' },
-  ].map(s => `<div class="stat"><div class="stat-n">${s.n}</div><div class="stat-l">${s.l}</div></div>`).join('');
+    { n: GA4.length,        l: 'GA4 Seiten' },
+    { n: GSC.length,        l: 'GSC Queries' },
+    { n: quickWins.length,  l: 'Quick Wins' },
+    { n: buyIntent.length,  l: 'Buy-Intent' },
+    { n: noConv.length,     l: '0 Conversions' },
+    { n: lowEng.length,     l: 'Niedrig Eng.' },
+  ].map(s => `<div class="stat"><div class="stat-n">${escapeHtml(s.n)}</div><div class="stat-l">${escapeHtml(s.l)}</div></div>`).join('');
 
-  // Quick Wins table
+  // Quick Wins
   const maxImp = quickWins[0]?.impressions || 1;
-  document.getElementById('qw-body').innerHTML = quickWins.map((r,i) => `
+  document.getElementById('qw-body').innerHTML = quickWins.map((r, i) => `
     <tr>
-      <td style="color:var(--muted)">${i+1}</td>
-      <td title="${r.query}">${trunc(r.query,50)}</td>
+      <td style="color:var(--muted)">${i + 1}</td>
+      <td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query, 50))}</td>
       <td>${posBadge(r.position)}</td>
       <td>${fmt(r.impressions)}</td>
       <td>${fmt(r.clicks)}</td>
-      <td>${fmtPct(r.ctr > 1 ? r.ctr/100 : r.ctr)}</td>
-      <td><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((r.impressions/maxImp)*100)}%"></div></div></td>
+      <td>${fmtPct(r.ctr)}</td>
+      <td><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((r.impressions / maxImp) * 100)}%"></div></div></td>
     </tr>`).join('');
 
   // Buy Intent
   document.getElementById('buy-body').innerHTML = buyIntent.map(r => `
     <tr>
-      <td title="${r.query}">${trunc(r.query,55)}</td>
+      <td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query, 55))}</td>
       <td>${fmt(r.clicks)}</td>
       <td>${posBadge(r.position)}</td>
-      <td>${fmtPct(r.ctr > 1 ? r.ctr/100 : r.ctr)}</td>
+      <td>${fmtPct(r.ctr)}</td>
     </tr>`).join('');
   document.getElementById('buy-card').style.display = buyIntent.length ? '' : 'none';
 
-  // No Conv list
+  // No Conv
   document.getElementById('noconv-list').innerHTML = noConv.map(r => `
     <div style="padding:6px 0;border-bottom:1px solid #1e22310d;font-size:11px">
-      <div style="color:var(--dim);margin-bottom:2px">${trunc(r.page,48)}</div>
+      <div style="color:var(--dim);margin-bottom:2px">${escapeHtml(trunc(r.page, 48))}</div>
       <div style="color:var(--muted)">${fmt(r.sessions)} Sessions · CTA fehlt?</div>
     </div>`).join('') || '<span style="color:var(--muted);font-size:12px">Keine gefunden</span>';
 
-  // Low Eng list
+  // Low Eng
   document.getElementById('loweng-list').innerHTML = lowEng.map(r => `
     <div style="padding:6px 0;border-bottom:1px solid #1e22310d;font-size:11px">
-      <div style="color:var(--dim);margin-bottom:2px">${trunc(r.page,48)}</div>
+      <div style="color:var(--dim);margin-bottom:2px">${escapeHtml(trunc(r.page, 48))}</div>
       <div style="color:var(--muted)">${fmtPct(r.engagementRate)} Eng. · ${fmt(r.sessions)} Sessions</div>
     </div>`).join('') || '<span style="color:var(--muted);font-size:12px">Keine gefunden</span>';
 
   document.getElementById('analyse-empty').style.display = 'none';
   document.getElementById('analyse-content').style.display = '';
-  showTab('analyse');
 }
 
-// ── PROMPT GENERATION ──────────────────────────────────────────────────────
-async function generatePrompts() {
-  if (!ANALYSIS) return;
-  const btn = document.getElementById('gen-btn');
-  const spinner = document.getElementById('gen-spinner');
-  btn.disabled = true;
-  spinner.style.display = 'inline-block';
-
+// ══════════════════════════════════════════════════════════════════════════
+// PROMPT-GENERIERUNG
+// ══════════════════════════════════════════════════════════════════════════
+function buildPromptText() {
   const domain  = document.getElementById('inp-domain').value  || 'unbekannt';
   const branche = document.getElementById('inp-branche').value || 'unbekannt';
   const region  = document.getElementById('inp-region').value  || 'Österreich';
 
-  const topQ = (GSC||[]).slice(0,40).map(r => `${r.query} (${r.clicks} Klicks, Pos.${Math.round(r.position*10)/10})`).join('\n');
-  const qwList = ANALYSIS.quickWins.slice(0,12).map(r => `${r.query} (Pos.${Math.round(r.position*10)/10}, ${r.impressions} Imp.)`).join('\n');
+  const topQ = (GSC || []).slice(0, CONFIG.GSC_TOP_FOR_PROMPT)
+    .map(r => `${r.query} (${r.clicks} Klicks, Pos.${Math.round(r.position * 10) / 10})`)
+    .join('\n');
+  const qwList = ANALYSIS.quickWins.slice(0, CONFIG.QW_FOR_PROMPT)
+    .map(r => `${r.query} (Pos.${Math.round(r.position * 10) / 10}, ${r.impressions} Imp.)`)
+    .join('\n');
   const buyList = ANALYSIS.buyIntent.map(r => r.query).join(', ') || 'keine erkannt';
 
-  const userPrompt = `Du bist ein SEO & GEO Experte für den DACH-Raum.
+  return `Du bist ein SEO & GEO Experte für den DACH-Raum.
 
 **Domain:** ${domain}
 **Branche:** ${branche}
 **Region:** ${region}
 
-**Reale GSC-Suchanfragen (Top 40):**
+**Reale GSC-Suchanfragen (Top ${CONFIG.GSC_TOP_FOR_PROMPT}):**
 ${topQ}
 
-**Quick-Win-Kandidaten Pos. 5–20:**
+**Quick-Win-Kandidaten Pos. ${CONFIG.QW_POS_MIN}–${CONFIG.QW_POS_MAX}:**
 ${qwList}
 
 **Kaufintent-Queries:**
@@ -715,69 +1004,340 @@ Antworte NUR als valides JSON ohne Markdown-Backticks:
   "quickWinPrompts": [{"prompt":"...","kategorie":"...","gscQuery":"...","massnahme":"...","score":0}]
 }
 Jeweils 3–4 Prompts pro Kategorie. quickWinPrompts: Top 8 sortiert nach score (0–100).`;
+}
+
+async function generatePrompts() {
+  if (!ANALYSIS) return;
+  const btn = document.getElementById('gen-btn');
+  const spinner = document.getElementById('gen-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'inline-block';
+  hideErr('error-prompts');
+
+  const userPrompt = buildPromptText();
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        model: CONFIG.API_MODEL,
+        max_tokens: CONFIG.API_MAX_TOKENS,
         system: 'Du bist SEO & GEO Experte. Antworte ausschließlich als valides JSON, kein Text davor oder danach, keine Markdown-Backticks.',
-        messages: [{ role: 'user', content: userPrompt }]
-      })
+        messages: [{ role: 'user', content: userPrompt }],
+      }),
     });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error('API-Fehler ' + res.status + ': ' + (errText.slice(0, 200) || res.statusText));
+    }
+
     const data = await res.json();
-    const text = (data.content||[]).map(c => c.text||'').join('');
-    const clean = text.replace(/```json|```/g,'').trim();
-    renderPrompts(JSON.parse(clean));
+    const text = (data.content || []).map(c => c.text || '').join('');
+    if (!text) throw new Error('Leere API-Antwort');
+    const clean = text.replace(/```json|```/g, '').trim();
+
+    let parsed;
+    try {
+      parsed = JSON.parse(clean);
+    } catch (jsonErr) {
+      throw new Error('Ungültiges JSON in API-Antwort: ' + jsonErr.message + ' (evtl. abgeschnitten — max_tokens erhöhen)');
+    }
+
+    PROMPTS = parsed;
+    renderPrompts(parsed);
     showTab('prompts');
-  } catch(e) {
-    alert('Fehler: ' + e.message);
+    updateProgress();
+    toast('Prompts generiert ✓');
+  } catch (e) {
+    showErr('error-prompts', 'Generierung fehlgeschlagen: ' + e.message + ' — Tipp: "Prompt-Kontext kopieren" und manuell in ChatGPT/Claude einfügen.');
+  } finally {
+    btn.disabled = false;
+    spinner.style.display = 'none';
   }
-  btn.disabled = false;
-  spinner.style.display = 'none';
 }
 
 function renderPrompts(data) {
   const catColors = ['var(--accent)', 'var(--blue)', '#8b5cf6', 'var(--amber)', '#ec4899'];
   const catMeta = [
-    { key:'anbieterVergleich', label:'Anbieter-Vergleich', icon:'⚖' },
-    { key:'validierung',       label:'Validierung',        icon:'✓' },
-    { key:'spezifikation',     label:'Spezifikation',      icon:'◈' },
-    { key:'preis',             label:'Preis / Kosten',     icon:'€' },
-    { key:'action',            label:'Action / Kontakt',   icon:'→' },
+    { key: 'anbieterVergleich', label: 'Anbieter-Vergleich', icon: '⚖' },
+    { key: 'validierung',       label: 'Validierung',        icon: '✓' },
+    { key: 'spezifikation',     label: 'Spezifikation',      icon: '◈' },
+    { key: 'preis',             label: 'Preis / Kosten',     icon: '€' },
+    { key: 'action',            label: 'Action / Kontakt',   icon: '→' },
   ];
 
-  // Quick Win table
-  const qwSorted = [...(data.quickWinPrompts||[])].sort((a,b)=>b.score-a.score);
-  document.getElementById('qw-prompts-body').innerHTML = qwSorted.map(r => `
+  // Quick Win Tabelle
+  const qwSorted = [...(data.quickWinPrompts || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
+  document.getElementById('qw-prompts-body').innerHTML = qwSorted.map((r, i) => `
     <tr>
-      <td>${scoreBadge(r.score)}</td>
-      <td style="font-style:italic;color:var(--text)" title="${r.prompt}">„${trunc(r.prompt,55)}"</td>
-      <td><span class="badge badge-accent" style="font-size:10px">${r.kategorie||'–'}</span></td>
-      <td style="color:var(--muted)" title="${r.gscQuery}">${trunc(r.gscQuery,35)}</td>
-      <td style="color:var(--dim)" title="${r.massnahme}">${trunc(r.massnahme,45)}</td>
+      <td>${scoreBadge(r.score || 0)}</td>
+      <td style="font-style:italic;color:var(--text)" title="${escapeHtml(r.prompt)}">„${escapeHtml(trunc(r.prompt, 55))}"</td>
+      <td><span class="badge badge-accent" style="font-size:10px">${escapeHtml(r.kategorie || '–')}</span></td>
+      <td style="color:var(--muted)" title="${escapeHtml(r.gscQuery)}">${escapeHtml(trunc(r.gscQuery, 35))}</td>
+      <td style="color:var(--dim)" title="${escapeHtml(r.massnahme)}">${escapeHtml(trunc(r.massnahme, 45))}</td>
+      <td><button class="copy-btn" data-copy-row="${i}">COPY</button></td>
     </tr>`).join('');
 
-  // 5 categories grid
+  // Copy-Handler für Quick-Win-Tabelle
+  document.querySelectorAll('#qw-prompts-body [data-copy-row]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const idx = +btn.dataset.copyRow;
+      const ok = await copyToClipboard(qwSorted[idx].prompt);
+      if (ok) {
+        btn.textContent = 'COPIED';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
+      }
+    });
+  });
+
+  // 5 Kategorien
   document.getElementById('cats-grid').innerHTML = catMeta.map((cat, ci) => {
     const items = data[cat.key] || [];
-    const cards = items.map(item => `
-      <div class="prompt-item" style="border-left-color:${catColors[ci]}">
-        <div class="prompt-text">„${item.prompt||item}"</div>
-        ${item.basis ? `<div class="prompt-basis">↳ Basis: ${item.basis}</div>` : ''}
-      </div>`).join('');
+    const cards = items.map((item, idx) => {
+      const promptText = item.prompt || item;
+      const basis = item.basis || '';
+      return `
+        <div class="prompt-item" style="border-left-color:${catColors[ci]}">
+          <button class="copy-btn" data-copy-cat="${cat.key}" data-copy-idx="${idx}">COPY</button>
+          <div class="prompt-text">„${escapeHtml(promptText)}"</div>
+          ${basis ? `<div class="prompt-basis">↳ Basis: ${escapeHtml(basis)}</div>` : ''}
+        </div>`;
+    }).join('');
     return `
       <div class="card" style="border-top:2px solid ${catColors[ci]}">
-        <div class="prompt-cat-title" style="color:${catColors[ci]}">${cat.icon} ${cat.label}</div>
-        ${cards}
+        <div class="prompt-cat-title" style="color:${catColors[ci]}">${cat.icon} ${escapeHtml(cat.label)}</div>
+        ${cards || '<span style="color:var(--muted);font-size:12px">Keine Prompts</span>'}
       </div>`;
   }).join('');
+
+  // Copy-Handler für Kategorien
+  document.querySelectorAll('[data-copy-cat]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const cat = btn.dataset.copyCat;
+      const idx = +btn.dataset.copyIdx;
+      const item = (data[cat] || [])[idx];
+      const text = (item && (item.prompt || item)) || '';
+      const ok = await copyToClipboard(text);
+      if (ok) {
+        btn.textContent = 'COPIED';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
+      }
+    });
+  });
 
   document.getElementById('prompts-empty').style.display = 'none';
   document.getElementById('prompts-content').style.display = '';
 }
+
+// ══════════════════════════════════════════════════════════════════════════
+// CSV EXPORT
+// ══════════════════════════════════════════════════════════════════════════
+function csvEscape(v) {
+  if (v === null || v === undefined) return '';
+  const s = String(v);
+  return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function downloadCsv(filename, rows) {
+  const csv = rows.map(r => r.map(csvEscape).join(';')).join('\n');
+  // BOM für Excel-Kompatibilität bei Umlauten
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 500);
+}
+
+function exportQuickWinsCsv() {
+  if (!ANALYSIS) return;
+  const rows = [['#', 'Query', 'Position', 'Impressionen', 'Klicks', 'CTR']];
+  ANALYSIS.quickWins.forEach((r, i) => {
+    rows.push([i + 1, r.query, (Math.round(r.position * 10) / 10), r.impressions, r.clicks, (r.ctr * 100).toFixed(2) + '%']);
+  });
+  downloadCsv('quick-wins.csv', rows);
+  toast('Quick-Wins als CSV exportiert');
+}
+
+function exportPromptsCsv() {
+  if (!PROMPTS) return;
+  const rows = [['Score', 'Prompt', 'Kategorie', 'GSC-Query', 'Maßnahme']];
+  (PROMPTS.quickWinPrompts || []).forEach(p => {
+    rows.push([p.score || 0, p.prompt || '', p.kategorie || '', p.gscQuery || '', p.massnahme || '']);
+  });
+  ['anbieterVergleich', 'validierung', 'spezifikation', 'preis', 'action'].forEach(cat => {
+    (PROMPTS[cat] || []).forEach(p => {
+      rows.push(['', p.prompt || '', cat, '', p.basis || '']);
+    });
+  });
+  downloadCsv('decision-prompts.csv', rows);
+  toast('Prompts als CSV exportiert');
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// DEMO-DATEN
+// ══════════════════════════════════════════════════════════════════════════
+const DEMO_GA4 = [
+  { page: '/leistungen/heizung-tausch', sessions: 1240, users: 1100, engagementRate: 0.72, conversions: 48 },
+  { page: '/notdienst-installateur-wien', sessions: 980, users: 920, engagementRate: 0.81, conversions: 35 },
+  { page: '/preise', sessions: 720, users: 680, engagementRate: 0.55, conversions: 12 },
+  { page: '/leistungen/wasserrohrbruch', sessions: 580, users: 540, engagementRate: 0.68, conversions: 22 },
+  { page: '/ueber-uns', sessions: 410, users: 380, engagementRate: 0.42, conversions: 0 },
+  { page: '/blog/heizung-warten', sessions: 380, users: 360, engagementRate: 0.61, conversions: 0 },
+  { page: '/kontakt', sessions: 320, users: 300, engagementRate: 0.85, conversions: 28 },
+  { page: '/leistungen/badsanierung', sessions: 290, users: 270, engagementRate: 0.58, conversions: 8 },
+  { page: '/standorte/wien-1010', sessions: 210, users: 200, engagementRate: 0.38, conversions: 0 },
+  { page: '/foerderungen-heizung', sessions: 180, users: 170, engagementRate: 0.32, conversions: 0 },
+];
+
+const DEMO_GSC = [
+  { query: 'installateur wien', clicks: 320, impressions: 4200, ctr: 0.076, position: 3.2 },
+  { query: 'notdienst installateur wien', clicks: 280, impressions: 1800, ctr: 0.155, position: 2.1 },
+  { query: 'heizung tausch kosten', clicks: 95, impressions: 2400, ctr: 0.039, position: 7.8 },
+  { query: 'wasserrohrbruch was tun', clicks: 88, impressions: 3100, ctr: 0.028, position: 9.2 },
+  { query: 'installateur 1010 wien preis', clicks: 62, impressions: 1200, ctr: 0.051, position: 5.5 },
+  { query: 'beste installateur firma wien', clicks: 45, impressions: 980, ctr: 0.045, position: 8.3 },
+  { query: 'gasleitung verlegen kosten österreich', clicks: 38, impressions: 1500, ctr: 0.025, position: 11.2 },
+  { query: 'heizung förderung 2026 wien', clicks: 32, impressions: 2200, ctr: 0.014, position: 14.5 },
+  { query: 'badsanierung wien angebot', clicks: 28, impressions: 850, ctr: 0.033, position: 6.8 },
+  { query: 'installateur empfehlung wien', clicks: 22, impressions: 720, ctr: 0.030, position: 7.2 },
+  { query: 'wärmepumpe vs gasheizung vergleich', clicks: 18, impressions: 1900, ctr: 0.009, position: 17.3 },
+  { query: 'rohrreinigung wien preis', clicks: 15, impressions: 480, ctr: 0.031, position: 6.5 },
+  { query: 'installateur termin vereinbaren wien', clicks: 12, impressions: 380, ctr: 0.031, position: 5.8 },
+  { query: 'günstiger installateur wien empfehlung', clicks: 10, impressions: 420, ctr: 0.024, position: 9.1 },
+  { query: 'durchlauferhitzer wechseln kosten', clicks: 8, impressions: 650, ctr: 0.012, position: 13.4 },
+  { query: 'wie oft heizung warten lassen', clicks: 6, impressions: 1100, ctr: 0.005, position: 18.2 },
+];
+
+function loadDemoData() {
+  document.getElementById('inp-domain').value = 'installateur-musterfirma.at';
+  document.getElementById('inp-branche').value = 'Installateur / Heizungs- und Sanitärtechnik';
+  document.getElementById('inp-region').value = 'Wien';
+  savePersistedState();
+  storeData('ga4', parseGA4(DEMO_GA4));
+  storeData('gsc', parseGSC(DEMO_GSC));
+  toast('Demo-Daten geladen ✓');
+  showTab('daten');
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// RESET
+// ══════════════════════════════════════════════════════════════════════════
+function resetAll() {
+  if (!confirm('Alle Daten und Eingaben löschen?')) return;
+  clearPersistedState();
+  GA4 = GSC = ANALYSIS = PROMPTS = null;
+  document.querySelectorAll('[data-persist]').forEach(el => {
+    if (el.id === 'inp-region') el.value = 'Wien';
+    else if (el.id === 'inp-auth') el.value = 'none';
+    else el.value = '';
+  });
+  document.getElementById('inp-auth-value').value = '';
+  ['inp-ga4-json', 'inp-gsc-json'].forEach(id => document.getElementById(id).value = '');
+  ['ga4-preview', 'gsc-preview', 'ga4-loaded-badge', 'gsc-loaded-badge', 'analyse-btn-wrap'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('badge-ga4').textContent = 'GA4 –';
+  document.getElementById('badge-ga4').className = 'badge badge-muted';
+  document.getElementById('badge-gsc').textContent = 'GSC –';
+  document.getElementById('badge-gsc').className = 'badge badge-muted';
+  document.getElementById('analyse-content').style.display = 'none';
+  document.getElementById('analyse-empty').style.display = '';
+  document.getElementById('prompts-content').style.display = 'none';
+  document.getElementById('prompts-empty').style.display = '';
+  toggleAuthValue();
+  updateProgress();
+  showTab('setup');
+  toast('Alles zurückgesetzt');
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// MODAL — Prompt-Kontext kopieren
+// ══════════════════════════════════════════════════════════════════════════
+function openContextModal() {
+  if (!ANALYSIS) return;
+  const text = buildPromptText();
+  document.getElementById('modal-textarea').value = text;
+  document.getElementById('modal-bg').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('show');
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// INIT — Event-Listener (statt inline onclick)
+// ══════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadPersistedState();
+  toggleAuthValue();
+  updateProgress();
+
+  // Tab-Navigation
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+  });
+  document.querySelectorAll('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.goto));
+  });
+
+  // Auth-Toggle
+  document.getElementById('inp-auth').addEventListener('change', toggleAuthValue);
+
+  // Mode-Toggle
+  document.querySelectorAll('[data-mode]').forEach(btn => {
+    btn.addEventListener('click', () => setMode(btn.dataset.mode));
+  });
+
+  // Fetch / Load JSON
+  document.querySelectorAll('[data-fetch]').forEach(btn => {
+    btn.addEventListener('click', () => fetchData(btn.dataset.fetch));
+  });
+  document.querySelectorAll('[data-loadjson]').forEach(btn => {
+    btn.addEventListener('click', () => loadJson(btn.dataset.loadjson));
+  });
+
+  // Analyse + Prompts
+  document.getElementById('btn-run-analysis').addEventListener('click', runAnalysis);
+  document.getElementById('gen-btn').addEventListener('click', generatePrompts);
+  document.getElementById('btn-copy-context').addEventListener('click', openContextModal);
+
+  // CSV-Exporte
+  document.getElementById('btn-export-qw').addEventListener('click', exportQuickWinsCsv);
+  document.getElementById('btn-export-prompts').addEventListener('click', exportPromptsCsv);
+
+  // Demo / Reset
+  document.getElementById('btn-demo').addEventListener('click', loadDemoData);
+  document.getElementById('btn-reset').addEventListener('click', resetAll);
+
+  // Modal
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('btn-modal-close-2').addEventListener('click', closeModal);
+  document.getElementById('modal-bg').addEventListener('click', e => {
+    if (e.target.id === 'modal-bg') closeModal();
+  });
+  document.getElementById('btn-modal-copy').addEventListener('click', async () => {
+    const ok = await copyToClipboard(document.getElementById('modal-textarea').value);
+    toast(ok ? 'Kopiert ✓' : 'Kopieren fehlgeschlagen', ok ? 'accent' : 'error');
+  });
+
+  // Persist bei jeder Änderung
+  document.querySelectorAll('[data-persist]').forEach(el => {
+    el.addEventListener('input', () => { savePersistedState(); updateProgress(); });
+    el.addEventListener('change', () => { savePersistedState(); updateProgress(); });
+  });
+
+  // ESC schließt Modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+});
 </script>
 </body>
 </html>
