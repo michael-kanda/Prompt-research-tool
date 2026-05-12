@@ -7,7 +7,6 @@ const SYSTEM_PROMPT =
   'kein Text davor oder danach, keine Markdown-Backticks.';
 
 export default async function handler(req, res) {
-  // CORS — same-origin reicht in Production, aber für lokale Tests freigeben
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-app-password');
@@ -15,8 +14,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Optionaler Password-Schutz: APP_PASSWORD env var setzen, dann muss
-  // der Browser den x-app-password Header mitsenden.
+  // Optionaler Password-Schutz
   if (process.env.APP_PASSWORD) {
     const provided = req.headers['x-app-password'];
     if (provided !== process.env.APP_PASSWORD) {
@@ -54,6 +52,15 @@ async function callGemini(prompt) {
   if (!apiKey) throw new Error('GEMINI_API_KEY not configured on server');
 
   const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+
+  // Token-Konfiguration als ENV vars überschreibbar
+  const maxOutputTokens = parseInt(process.env.GEMINI_MAX_TOKENS || '16000', 10);
+
+  // thinkingBudget: 0 = kein Thinking (mehr Tokens für die Antwort, schneller, billiger)
+  // -1 = automatisch (Modell entscheidet, kann viel verbrauchen)
+  // > 0 = explizites Budget. Für reines JSON-Output: 0 ist optimal.
+  const thinkingBudget = parseInt(process.env.GEMINI_THINKING_BUDGET || '0', 10);
+
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
   const body = {
@@ -61,8 +68,12 @@ async function callGemini(prompt) {
     systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
     generationConfig: {
       responseMimeType: 'application/json',
-      maxOutputTokens: 8000,
+      maxOutputTokens,
       temperature: 0.7,
+      // Thinking-Budget setzen — verhindert, dass Gemini 2.5 das Token-Limit
+      // mit internen "Gedanken" aufbraucht, bevor die Antwort kommt.
+      // Wird von älteren Modellen ignoriert.
+      thinkingConfig: { thinkingBudget },
     },
   };
 
@@ -84,11 +95,29 @@ async function callGemini(prompt) {
 
   const data = await r.json();
   const candidate = data.candidates?.[0];
-  if (!candidate) throw new Error('Empty Gemini response');
-  if (candidate.finishReason === 'MAX_TOKENS') {
-    throw new Error('Gemini output truncated by maxOutputTokens');
+  if (!candidate) {
+    if (data.promptFeedback?.blockReason) {
+      throw new Error(`Gemini blocked the prompt: ${data.promptFeedback.blockReason}`);
+    }
+    throw new Error('Empty Gemini response');
   }
+
   const text = candidate.content?.parts?.map(p => p.text || '').join('') || '';
+
+  if (candidate.finishReason === 'MAX_TOKENS') {
+    const usage = data.usageMetadata || {};
+    const detail = ` (input: ${usage.promptTokenCount ?? '?'}, thoughts: ${usage.thoughtsTokenCount ?? 0}, output: ${usage.candidatesTokenCount ?? '?'} / max: ${maxOutputTokens})`;
+
+    if (!text || text.length < 50) {
+      throw new Error(
+        'Gemini-Antwort durch maxOutputTokens abgeschnitten' + detail +
+        '. Fix: GEMINI_THINKING_BUDGET=0 setzen oder GEMINI_MAX_TOKENS erhöhen.'
+      );
+    }
+    // Partial text vorhanden — Frontend versucht zu parsen
+    console.warn('[gemini] MAX_TOKENS hit, returning partial text' + detail);
+  }
+
   if (!text) throw new Error('Gemini response contains no text');
   return text;
 }
@@ -99,6 +128,7 @@ async function callAnthropic(prompt) {
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY not configured on server');
 
   const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+  const maxTokens = parseInt(process.env.ANTHROPIC_MAX_TOKENS || '8000', 10);
 
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -109,7 +139,7 @@ async function callAnthropic(prompt) {
     },
     body: JSON.stringify({
       model,
-      max_tokens: 8000,
+      max_tokens: maxTokens,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: prompt }],
     }),
@@ -129,7 +159,7 @@ async function callAnthropic(prompt) {
   const text = (data.content || []).map(c => c.text || '').join('');
   if (!text) throw new Error('Anthropic response contains no text');
   if (data.stop_reason === 'max_tokens') {
-    throw new Error('Anthropic output truncated by max_tokens');
+    throw new Error('Anthropic output truncated by max_tokens — ANTHROPIC_MAX_TOKENS erhöhen');
   }
   return text;
 }
