@@ -307,7 +307,10 @@ npm install react anthropic
 Anthropic API calls run client-side via `/v1/messages`. For production use outside Claude.ai, a server-side proxy is recommended to protect the API key.
 
 ---
-
 ### License
 
 MIT — free to use, modify, and redistribute with attribution.
+---
+Developed with ❤️ by Michael Kanda
+https://designare.at
+
