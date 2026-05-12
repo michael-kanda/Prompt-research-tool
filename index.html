@@ -20,6 +20,8 @@
   --blue:    #4f9cf9;
   --red:     #ef4444;
   --green:   #22c55e;
+  --purple:  #8b5cf6;
+  --pink:    #ec4899;
   --text:    #e8eaf0;
   --dim:     #8892a4;
   --muted:   #4e5566;
@@ -50,13 +52,12 @@ header {
 .badge-blue { background: #4f9cf915; border: 1px solid #4f9cf930; color: var(--blue); }
 .badge-amber { background: #f0a50015; border: 1px solid #f0a50030; color: var(--amber); }
 .badge-red { background: #ef444415; border: 1px solid #ef444430; color: var(--red); }
+.badge-purple { background: #8b5cf615; border: 1px solid #8b5cf630; color: var(--purple); }
+.badge-pink { background: #ec489915; border: 1px solid #ec489930; color: var(--pink); }
 .badge-muted { background: var(--s2); border: 1px solid var(--border); color: var(--muted); }
 
 /* ── TABS ── */
-.tabs {
-  background: var(--s1); border-bottom: 1px solid var(--border);
-  padding: 0 24px; display: flex; gap: 2px;
-}
+.tabs { background: var(--s1); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 2px; }
 .tab {
   font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
   padding: 10px 16px; border: 1px solid transparent;
@@ -140,29 +141,47 @@ tbody tr:last-child td { border-bottom: none; }
 /* ── PROMPT CARDS ── */
 .prompt-cat-title { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 .prompt-item { background: var(--bg); border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--r); padding: 10px 14px; margin-bottom: 8px; position: relative; }
-.prompt-text { font-style: italic; color: var(--text); margin-bottom: 4px; font-size: 13px; padding-right: 30px; }
+.prompt-text { font-style: italic; color: var(--text); margin-bottom: 4px; font-size: 13px; padding-right: 60px; }
 .prompt-basis { font-family: var(--mono); font-size: 10px; color: var(--muted); }
 .copy-btn { position: absolute; top: 8px; right: 8px; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: pointer; padding: 3px 7px; border-radius: 4px; font-family: var(--mono); font-size: 9px; transition: all .15s; letter-spacing: 1px; }
 .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
 .copy-btn.copied { color: var(--green); border-color: var(--green); }
 
-/* ── QW TABLE ── */
+/* ── QW SCORE ── */
 .qw-score { font-family: var(--mono); font-size: 13px; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+
+/* ── INTENT TAG ── */
+.intent-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; }
+.intent-transactional { background: #ef444418; color: var(--red); border: 1px solid #ef444430; }
+.intent-commercial    { background: #f0a50018; color: var(--amber); border: 1px solid #f0a50030; }
+.intent-informational { background: #4f9cf918; color: var(--blue); border: 1px solid #4f9cf930; }
+.intent-navigational  { background: #8b5cf618; color: var(--purple); border: 1px solid #8b5cf630; }
+.intent-other         { background: var(--s2); color: var(--muted); border: 1px solid var(--border); }
+
+/* ── CLUSTER ── */
+.cluster-card { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--r); padding: 12px 14px; margin-bottom: 10px; }
+.cluster-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 12px; }
+.cluster-title { font-size: 13px; color: var(--text); font-weight: 600; }
+.cluster-meta { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+.cluster-tokens { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-bottom: 6px; }
+.cluster-members { font-family: var(--mono); font-size: 11px; color: var(--dim); line-height: 1.7; }
+.cluster-members .m { display: inline-block; background: var(--s2); padding: 1px 7px; border-radius: 3px; margin: 2px 3px 2px 0; }
 
 /* ── HINT / ERROR ── */
 .hint { background: #00c9a710; border: 1px solid #00c9a725; border-radius: var(--r); padding: 10px 14px; font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 14px; }
 .error-box { background: #ef444412; border: 1px solid #ef444430; border-radius: var(--r); padding: 10px 14px; font-size: 12px; color: var(--red); margin-bottom: 14px; }
 .warn-box { background: #f0a50012; border: 1px solid #f0a50030; border-radius: var(--r); padding: 10px 14px; font-size: 12px; color: var(--amber); margin-bottom: 14px; }
 .empty-state { text-align: center; padding: 48px 20px; }
-.empty-state .icon { font-size: 36px; margin-bottom: 12px; }
+.empty-state .icon { font-size: 36px; margin-bottom: 12px; color: var(--accent); }
 .empty-state p { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
 
 /* ── LOADING SPINNER ── */
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { width: 14px; height: 14px; border: 2px solid #0b0d12; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
 
-/* ── MINI PREVIEW ── */
+/* ── PREVIEW SPACING ── */
 .preview-info { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+#ga4-preview, #gsc-preview { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); }
 
 /* ── TOAST ── */
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--s1); border: 1px solid var(--accent); border-left-width: 3px; color: var(--text); padding: 10px 16px; border-radius: var(--r); font-family: var(--mono); font-size: 11px; z-index: 100; opacity: 0; transform: translateY(10px); transition: all .25s; pointer-events: none; }
@@ -176,6 +195,8 @@ tbody tr:last-child td { border-bottom: none; }
 .modal textarea { min-height: 280px; }
 .modal-close { float: right; background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 18px; }
 
+.inline-help { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 4px; }
+
 /* ── FOOTER ── */
 footer {
   border-top: 1px solid var(--border);
@@ -187,26 +208,9 @@ footer {
   letter-spacing: 1px;
   color: var(--muted);
 }
-footer a {
-  color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px dashed transparent;
-  transition: border-color .15s, color .15s;
-}
-footer a:hover {
-  color: var(--text);
-  border-bottom-color: var(--accent);
-}
-footer .heart {
-  color: var(--red);
-  font-size: 12px;
-  animation: pulse 2s ease-in-out infinite;
-  display: inline-block;
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.18); }
-}
+footer a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed transparent; transition: border-color .15s, color .15s; }
+footer a:hover { color: var(--text); border-bottom-color: var(--accent); }
+footer .heart { color: var(--red); font-family: var(--sans); font-size: 13px; display: inline-block; transform: translateY(1px); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 700px) {
@@ -263,10 +267,32 @@ footer .heart {
         <input type="text" id="inp-region" data-persist value="Wien" placeholder="z.B. Wien, DACH">
       </div>
     </div>
+    <div class="form-row" style="margin-top:14px">
+      <label>Brand-Name (für Branded-Query-Filter)</label>
+      <input type="text" id="inp-brand" data-persist placeholder="wird aus Domain automatisch erkannt — manuell überschreibbar">
+      <div class="inline-help">Queries, die diesen Begriff enthalten, gelten als „branded" und werden aus Quick Wins ausgeschlossen.</div>
+    </div>
   </div>
 
   <div class="card">
-    <div class="card-title">⚙ Authentifizierung</div>
+    <div class="card-title">▶ KI-Provider für Prompt-Generierung</div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Provider</label>
+      <select id="inp-provider" data-persist>
+        <option value="gemini">Google Gemini</option>
+        <option value="anthropic">Anthropic Claude</option>
+        <option value="manual">Manuell (Prompt kopieren)</option>
+      </select>
+    </div>
+    <div class="hint" id="api-status">ⓘ API-Keys werden serverseitig über Vercel Environment Variables verwaltet. Konfiguration: <span style="font-family:var(--mono)">GEMINI_API_KEY</span> · <span style="font-family:var(--mono)">ANTHROPIC_API_KEY</span></div>
+    <div class="form-group" id="password-wrap" style="display:none">
+      <label>App-Password (falls in APP_PASSWORD gesetzt)</label>
+      <input type="password" id="inp-app-password" data-persist placeholder="Nur nötig wenn der Endpoint passwortgeschützt ist">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙ Daten-Authentifizierung (GA4 / GSC API)</div>
     <div class="grid2" style="margin-bottom:12px">
       <div class="form-group">
         <label>Methode</label>
@@ -282,11 +308,11 @@ footer .heart {
         <input type="password" id="inp-auth-value" placeholder="Dein Token oder Key">
       </div>
     </div>
-    <div class="hint">ⓘ Auth-Methode unbekannt? Alle Varianten testen. CORS-Fehler → Tab "02 Daten" → JSON Paste nutzen.</div>
+    <div class="hint">ⓘ CORS-Fehler beim Fetch? Tab "02 Daten" → JSON Paste nutzen.</div>
     <div class="btn-row">
-      <button class="btn btn-primary" data-goto="daten">Weiter → Daten laden →</button>
-      <button class="btn btn-ghost" id="btn-demo">🎲 Demo-Daten laden</button>
-      <button class="btn btn-ghost" id="btn-reset">↺ Alles zurücksetzen</button>
+      <button class="btn btn-primary" data-goto="daten">Weiter → Daten laden</button>
+      <button class="btn btn-ghost" id="btn-demo">Demo-Daten laden</button>
+      <button class="btn btn-ghost" id="btn-reset">Alles zurücksetzen</button>
     </div>
   </div>
 
@@ -304,13 +330,11 @@ footer .heart {
     <button class="mode-btn" id="mode-json" data-mode="json">JSON Paste</button>
   </div>
 
-  <!-- GA4 -->
   <div class="card">
     <div class="card-title">
       <span style="color:var(--green)">▲</span> GA4 — Landingpages
       <span id="ga4-loaded-badge" style="margin-left:auto;display:none" class="badge badge-accent"></span>
     </div>
-
     <div id="ga4-api-wrap">
       <div class="form-row">
         <label>API Endpoint URL</label>
@@ -321,7 +345,6 @@ footer .heart {
         GA4 Fetch
       </button>
     </div>
-
     <div id="ga4-json-wrap" style="display:none">
       <div class="form-row">
         <label>GA4 JSON einfügen</label>
@@ -329,7 +352,6 @@ footer .heart {
       </div>
       <button class="btn btn-primary" data-loadjson="ga4">GA4 laden</button>
     </div>
-
     <div id="ga4-preview" style="display:none">
       <p class="preview-info" id="ga4-preview-info"></p>
       <div class="tbl-wrap">
@@ -341,13 +363,11 @@ footer .heart {
     </div>
   </div>
 
-  <!-- GSC -->
   <div class="card">
     <div class="card-title">
       <span style="color:var(--blue)">◈</span> GSC — Suchanfragen
       <span id="gsc-loaded-badge" style="margin-left:auto;display:none" class="badge badge-blue"></span>
     </div>
-
     <div id="gsc-api-wrap">
       <div class="form-row">
         <label>API Endpoint URL</label>
@@ -358,7 +378,6 @@ footer .heart {
         GSC Fetch
       </button>
     </div>
-
     <div id="gsc-json-wrap" style="display:none">
       <div class="form-row">
         <label>GSC JSON einfügen</label>
@@ -366,12 +385,11 @@ footer .heart {
       </div>
       <button class="btn btn-primary" data-loadjson="gsc">GSC laden</button>
     </div>
-
     <div id="gsc-preview" style="display:none">
       <p class="preview-info" id="gsc-preview-info"></p>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Query</th><th>Klicks</th><th>Impressionen</th><th>CTR</th><th>Position</th></tr></thead>
+          <thead><tr><th>Query</th><th>Klicks</th><th>Impressionen</th><th>CTR</th><th>Position</th><th>Intent</th></tr></thead>
           <tbody id="gsc-preview-body"></tbody>
         </table>
       </div>
@@ -388,37 +406,39 @@ footer .heart {
 <!-- TAB 03: ANALYSE -->
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="tab-analyse" class="tab-content">
-
   <div id="analyse-empty" class="empty-state">
     <div class="icon">◈</div>
     <p>Noch keine Analyse — zuerst GA4 + GSC in Tab 02 laden.</p>
     <button class="btn btn-ghost" data-goto="daten">→ Zu Daten</button>
   </div>
-
   <div id="analyse-content" style="display:none">
-
-    <!-- Stats -->
     <div class="grid6" id="analyse-stats"></div>
-
-    <!-- Quick Wins -->
+    <div class="card">
+      <div class="card-title">◈ Intent-Verteilung</div>
+      <div class="grid4" id="intent-grid"></div>
+    </div>
     <div class="card">
       <div class="card-title">
-        <span class="badge badge-accent" style="font-size:10px">Quick Win</span>
-        GSC — Position 5–20 (Sofortpotenzial)
+        <span class="badge badge-accent">Cluster</span> Topic-Cluster (semantisch gruppierte Queries)
+      </div>
+      <div id="cluster-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <span class="badge badge-accent">Quick Win</span>
+        GSC — Position 5–20 (Sofortpotenzial, ohne Branded)
         <button class="btn btn-ghost btn-tiny" style="margin-left:auto" id="btn-export-qw">⤓ CSV</button>
       </div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>#</th><th>Query</th><th>Position</th><th>Impressionen</th><th>Klicks</th><th>CTR</th><th>Potenzial</th></tr></thead>
+          <thead><tr><th>#</th><th>Query</th><th>Intent</th><th>Position</th><th>Impressionen</th><th>Klicks</th><th>CTR</th><th>Potenzial</th></tr></thead>
           <tbody id="qw-body"></tbody>
         </table>
       </div>
     </div>
-
-    <!-- Buy Intent -->
     <div class="card" id="buy-card">
       <div class="card-title">
-        <span class="badge badge-accent" style="font-size:10px">Kaufintent</span>
+        <span class="badge badge-red">Transactional</span>
         Queries mit Kaufabsicht
       </div>
       <div class="tbl-wrap">
@@ -428,8 +448,6 @@ footer .heart {
         </table>
       </div>
     </div>
-
-    <!-- Low Eng + No Conv -->
     <div class="grid2">
       <div class="card" id="noconv-card">
         <div class="card-title"><span class="badge badge-red">0 Conv</span> Traffic ohne Abschluss</div>
@@ -440,13 +458,12 @@ footer .heart {
         <div id="loweng-list"></div>
       </div>
     </div>
-
     <div style="margin-top:8px" class="btn-row">
       <button class="btn btn-amber" style="padding:11px 24px;font-size:12px" id="gen-btn">
         <span id="gen-spinner" style="display:none" class="spinner"></span>
-        ⚡ Decision-Prompts generieren →
+        ▶ Decision-Prompts generieren
       </button>
-      <button class="btn btn-ghost" id="btn-copy-context">📋 Prompt-Kontext kopieren</button>
+      <button class="btn btn-ghost" id="btn-copy-context">Prompt-Kontext kopieren</button>
     </div>
     <div id="error-prompts" class="error-box" style="display:none;margin-top:12px"></div>
   </div>
@@ -456,16 +473,12 @@ footer .heart {
 <!-- TAB 04: PROMPTS -->
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="tab-prompts" class="tab-content">
-
   <div id="prompts-empty" class="empty-state">
-    <div class="icon">⚡</div>
-    <p>Noch keine Prompts — erst Analyse in Tab 03 ausführen und "Prompts generieren" klicken.</p>
+    <div class="icon">▶</div>
+    <p>Noch keine Prompts — erst Analyse in Tab 03 ausführen und „Prompts generieren" klicken.</p>
     <button class="btn btn-ghost" data-goto="analyse">→ Zu Analyse</button>
   </div>
-
   <div id="prompts-content" style="display:none">
-
-    <!-- Quick Win Ranking -->
     <div class="card">
       <div class="card-title">
         <span class="badge badge-amber">Quick Win</span> Top Prompts — Score-Ranking
@@ -478,10 +491,7 @@ footer .heart {
         </table>
       </div>
     </div>
-
-    <!-- 5 Kategorien -->
     <div class="grid2" id="cats-grid"></div>
-
     <div class="hint">ⓘ Nächster Schritt: Prompts in ChatGPT / Perplexity / Gemini testen und Baseline dokumentieren.</div>
   </div>
 </div>
@@ -490,26 +500,24 @@ footer .heart {
 
 <!-- FOOTER -->
 <footer>
-  Developed with <span class="heart">❤</span> by
+  Developed with <span class="heart">♥</span> by
   <a href="https://designare.at" target="_blank" rel="noopener">Michael Kanda</a>
 </footer>
 
 </div><!-- /app -->
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- MODAL FÜR MANUELLEN PROMPT -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
     <button class="modal-close" id="modal-close">×</button>
     <h3>Prompt-Kontext für KI</h3>
     <p style="font-size:12px;color:var(--dim);margin-bottom:12px">
-      Kopiere diesen Text in ChatGPT, Claude oder Perplexity. Die KI liefert dann die strukturierten Decision-Prompts.
+      Kopiere diesen Text in ChatGPT, Claude oder Perplexity. Die KI liefert dann die strukturierten Decision-Prompts als JSON.
     </p>
     <textarea id="modal-textarea" readonly></textarea>
     <div class="btn-row">
-      <button class="btn btn-primary" id="btn-modal-copy">📋 Kopieren</button>
+      <button class="btn btn-primary" id="btn-modal-copy">Kopieren</button>
       <button class="btn btn-ghost" id="btn-modal-close-2">Schließen</button>
     </div>
   </div>
@@ -519,9 +527,11 @@ footer .heart {
 'use strict';
 
 // ══════════════════════════════════════════════════════════════════════════
-// CONFIG — alle Schwellwerte zentral
+// CONFIG
 // ══════════════════════════════════════════════════════════════════════════
 const CONFIG = {
+  // Eigener Server-Endpoint — relative URL, läuft auf dem selben Vercel-Deployment
+  API_ENDPOINT: '/api/generate',
   QW_POS_MIN: 5,
   QW_POS_MAX: 20,
   QW_MIN_IMPRESSIONS: 30,
@@ -531,98 +541,74 @@ const CONFIG = {
   LOWENG_MIN_SESSIONS: 20,
   LOWENG_MAX_RATE: 0.45,
   LOWENG_MAX_RESULTS: 8,
-  BUY_INTENT_REGEX: /kauf|preis|kosten|anfrag|termin|kontakt|beste|empfehl|vergleich|buchen|bestell|günstig|angebot/i,
   BUY_INTENT_MAX_RESULTS: 15,
   GSC_TOP_FOR_PROMPT: 40,
   QW_FOR_PROMPT: 12,
-  API_MODEL: 'claude-sonnet-4-20250514',
-  API_MAX_TOKENS: 8000,
-  STORAGE_KEY: 'seo-geo-tool-v2',
+  CLUSTER_MIN_SIM: 0.30,
+  CLUSTER_MIN_SHARED_TOKENS: 2,
+  CLUSTER_MIN_MEMBERS: 2,
+  CLUSTER_MAX_RESULTS: 8,
+  STORAGE_KEY: 'seo-geo-tool-vercel-v1',
 };
 
-// ══════════════════════════════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════════════════════════════
+const INTENT_PATTERNS = {
+  transactional: /kauf|preis|kosten|anfrag|termin|kontakt|buchen|bestell|günstig|gunstig|angebot|miete|tarif|abo|reserv|liefer|versand/i,
+  commercial:    /vergleich|test\b|beste|besten|empfehl|alternative|review|bewertung|erfahrung|\bvs\b|oder\s+\w+|top\s*\d/i,
+  informational: /\bwas\s+ist\b|\bwie\b|\bwarum\b|\bwann\b|\bwer\b|\bwo\b|anleitung|tipp|tutorial|erklär|bedeut|definition|guide|ratgeber|unterschied/i,
+};
+
+const STOP_WORDS = new Set([
+  'die','der','das','und','oder','zu','in','an','auf','mit','für','fur','von','bei','aus','im','am','ein','eine','einen','einem','einer','eines','dem','den','des',
+  'ist','sind','war','waren','wird','werden','wurde','hat','haben','kann','können','konnen','muss','müssen','mussen','soll','sollen',
+  'wie','was','wann','wer','wo','warum','welche','welcher','welches','dass','wenn','aber',
+  'auch','noch','schon','nur','sehr','mehr','viel','gut','nicht','kein','keine','keinen',
+  'wien','österreich','osterreich','deutschland','schweiz','dach','europa',
+  'gmbh','ag','kg','co','com','at','de','net','org','www','http','https'
+]);
+
 let GA4 = null, GSC = null, ANALYSIS = null, PROMPTS = null;
 
 // ══════════════════════════════════════════════════════════════════════════
-// HELPERS — Escaping, Format, Storage
+// HELPERS
 // ══════════════════════════════════════════════════════════════════════════
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
-
-function fmt(n) {
-  if (n === undefined || n === null || isNaN(n)) return '–';
-  return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(Math.round(n));
-}
-
-// CTR ist intern IMMER als Dezimalwert (0.076 = 7.6%) gespeichert
-function fmtPct(decimal) {
-  if (decimal === null || decimal === undefined || isNaN(decimal)) return '–';
-  return (decimal * 100).toFixed(1) + '%';
-}
-
-function trunc(s, n = 50) {
-  return s && s.length > n ? s.slice(0, n) + '…' : (s || '');
-}
-
-function toast(msg, type = 'accent') {
+function fmt(n) { if (n===undefined||n===null||isNaN(n)) return '–'; return n>=1000 ? (n/1000).toFixed(1)+'k' : String(Math.round(n)); }
+function fmtPct(d) { if (d===null||d===undefined||isNaN(d)) return '–'; return (d*100).toFixed(1)+'%'; }
+function trunc(s,n=50) { return s && s.length>n ? s.slice(0,n)+'…' : (s||''); }
+function toast(msg, type='accent') {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.style.borderLeftColor = type === 'error' ? 'var(--red)' : type === 'warn' ? 'var(--amber)' : 'var(--accent)';
+  t.style.borderLeftColor = type==='error'?'var(--red)':type==='warn'?'var(--amber)':'var(--accent)';
   t.classList.add('show');
   clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+  t._timer = setTimeout(()=>t.classList.remove('show'),2200);
 }
-
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = '⚠ ' + msg;
-  el.style.display = 'block';
-}
-
-function hideErr(id) {
-  const el = document.getElementById(id);
-  if (el) el.style.display = 'none';
-}
-
-function posBadge(pos) {
-  const cls = pos <= 3 ? 'pos-top' : pos <= 10 ? 'pos-good' : pos <= 20 ? 'pos-qw' : 'pos-low';
-  return `<span class="pos ${cls}">${Math.round(pos * 10) / 10}</span>`;
-}
-
+function showErr(id, msg) { const el = document.getElementById(id); if (!el) return; el.textContent = '⚠ '+msg; el.style.display = 'block'; }
+function hideErr(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+function posBadge(p) { const c = p<=3?'pos-top':p<=10?'pos-good':p<=20?'pos-qw':'pos-low'; return `<span class="pos ${c}">${Math.round(p*10)/10}</span>`; }
 function scoreBadge(s) {
-  const bg = s > 70 ? '#22c55e18' : s > 40 ? '#f0a50018' : '#4f9cf915';
-  const col = s > 70 ? 'var(--green)' : s > 40 ? 'var(--amber)' : 'var(--blue)';
+  const bg = s>70?'#22c55e18':s>40?'#f0a50018':'#4f9cf915';
+  const col = s>70?'var(--green)':s>40?'var(--amber)':'var(--blue)';
   return `<span class="qw-score" style="background:${bg};color:${col}">${escapeHtml(s)}</span>`;
 }
-
+function intentBadge(i) {
+  const l = {transactional:'Transactional',commercial:'Commercial',informational:'Informational',navigational:'Navigational',other:'Other'};
+  return `<span class="intent-tag intent-${i}">${l[i]||i}</span>`;
+}
 async function copyToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    // Fallback für ältere Browser
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch {
     const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
     try { document.execCommand('copy'); document.body.removeChild(ta); return true; }
     catch { document.body.removeChild(ta); return false; }
   }
 }
 
-// ── localStorage Persistierung ──────────────────────────────────────────
 function loadPersistedState() {
   try {
     const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
@@ -631,243 +617,261 @@ function loadPersistedState() {
     document.querySelectorAll('[data-persist]').forEach(el => {
       if (data[el.id] !== undefined) el.value = data[el.id];
     });
-  } catch (e) {
-    console.warn('Persist-Load fehlgeschlagen:', e);
-  }
+  } catch (e) { console.warn('Persist-Load fehlgeschlagen:', e); }
 }
-
 function savePersistedState() {
   try {
     const data = {};
     document.querySelectorAll('[data-persist]').forEach(el => { data[el.id] = el.value; });
     localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(data));
-  } catch (e) {
-    console.warn('Persist-Save fehlgeschlagen:', e);
-  }
+  } catch (e) { console.warn('Persist-Save fehlgeschlagen:', e); }
+}
+function clearPersistedState() { try { localStorage.removeItem(CONFIG.STORAGE_KEY); } catch {} }
+
+// ══════════════════════════════════════════════════════════════════════════
+// BRAND + INTENT
+// ══════════════════════════════════════════════════════════════════════════
+function extractBrandFromDomain(domain) {
+  if (!domain) return '';
+  return domain.replace(/^https?:\/\//,'').replace(/^www\./,'').split('.')[0].toLowerCase().trim();
+}
+function getBrand() {
+  const manual = document.getElementById('inp-brand').value.trim().toLowerCase();
+  if (manual) return manual;
+  return extractBrandFromDomain(document.getElementById('inp-domain').value);
+}
+function classifyIntent(query, brand) {
+  const q = String(query||'').toLowerCase();
+  if (brand && q.includes(brand)) return 'navigational';
+  if (INTENT_PATTERNS.transactional.test(q)) return 'transactional';
+  if (INTENT_PATTERNS.commercial.test(q))    return 'commercial';
+  if (INTENT_PATTERNS.informational.test(q)) return 'informational';
+  return 'other';
+}
+function isBranded(query, brand) {
+  if (!brand) return false;
+  return String(query||'').toLowerCase().includes(brand);
 }
 
-function clearPersistedState() {
-  try { localStorage.removeItem(CONFIG.STORAGE_KEY); } catch {}
+// ══════════════════════════════════════════════════════════════════════════
+// CLUSTERING
+// ══════════════════════════════════════════════════════════════════════════
+function tokenize(text) {
+  return String(text||'').toLowerCase().replace(/[^\w\säöüß]/g,' ').split(/\s+/).filter(w => w.length>=3 && !STOP_WORDS.has(w));
+}
+function jaccard(a, b) {
+  if (!a.size || !b.size) return 0;
+  let inter = 0;
+  a.forEach(t => { if (b.has(t)) inter++; });
+  const union = a.size + b.size - inter;
+  return union ? inter/union : 0;
+}
+function clusterQueries(queries) {
+  const sorted = [...queries].sort((a,b)=>b.impressions-a.impressions);
+  const tokenSets = sorted.map(q => new Set(tokenize(q.query)));
+  const used = new Array(sorted.length).fill(false);
+  const clusters = [];
+  for (let i = 0; i < sorted.length; i++) {
+    if (used[i] || tokenSets[i].size === 0) continue;
+    const cluster = { seed: sorted[i].query, tokens: [...tokenSets[i]], members: [sorted[i]], totalImpressions: sorted[i].impressions, totalClicks: sorted[i].clicks };
+    used[i] = true;
+    for (let j = i+1; j < sorted.length; j++) {
+      if (used[j] || tokenSets[j].size === 0) continue;
+      let shared = 0;
+      tokenSets[i].forEach(t => { if (tokenSets[j].has(t)) shared++; });
+      const sim = jaccard(tokenSets[i], tokenSets[j]);
+      if (sim >= CONFIG.CLUSTER_MIN_SIM || shared >= CONFIG.CLUSTER_MIN_SHARED_TOKENS) {
+        cluster.members.push(sorted[j]);
+        cluster.totalImpressions += sorted[j].impressions;
+        cluster.totalClicks += sorted[j].clicks;
+        used[j] = true;
+      }
+    }
+    if (cluster.members.length >= CONFIG.CLUSTER_MIN_MEMBERS) clusters.push(cluster);
+  }
+  return clusters.sort((a,b)=>b.totalImpressions-a.totalImpressions).slice(0, CONFIG.CLUSTER_MAX_RESULTS);
 }
 
 // ══════════════════════════════════════════════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════════════════════════════════════════════
 function showTab(id) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
   document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
 function updateProgress() {
   const setupDone = !!(document.getElementById('inp-domain').value || document.getElementById('inp-branche').value);
-  document.getElementById('check-setup').style.display = setupDone ? '' : 'none';
-  document.getElementById('check-daten').style.display = (GA4 && GSC) ? '' : 'none';
-  document.getElementById('check-analyse').style.display = ANALYSIS ? '' : 'none';
-  document.getElementById('check-prompts').style.display = PROMPTS ? '' : 'none';
+  document.getElementById('check-setup').style.display = setupDone?'':'none';
+  document.getElementById('check-daten').style.display = (GA4&&GSC)?'':'none';
+  document.getElementById('check-analyse').style.display = ANALYSIS?'':'none';
+  document.getElementById('check-prompts').style.display = PROMPTS?'':'none';
 }
-
 function toggleAuthValue() {
   const m = document.getElementById('inp-auth').value;
-  document.getElementById('auth-value-wrap').style.display = m === 'none' ? 'none' : 'block';
+  document.getElementById('auth-value-wrap').style.display = m==='none' ? 'none':'block';
 }
-
+function toggleProviderUI() {
+  const p = document.getElementById('inp-provider').value;
+  // Password-Feld nur zeigen wenn nicht "manual" (für die API-Calls)
+  document.getElementById('password-wrap').style.display = p === 'manual' ? 'none' : '';
+  document.getElementById('api-status').style.display = p === 'manual' ? 'none' : '';
+}
 function setMode(mode) {
-  document.getElementById('mode-api').classList.toggle('active', mode === 'api');
-  document.getElementById('mode-json').classList.toggle('active', mode === 'json');
-  ['ga4', 'gsc'].forEach(t => {
-    document.getElementById(t + '-api-wrap').style.display  = mode === 'api'  ? '' : 'none';
-    document.getElementById(t + '-json-wrap').style.display = mode === 'json' ? '' : 'none';
+  document.getElementById('mode-api').classList.toggle('active', mode==='api');
+  document.getElementById('mode-json').classList.toggle('active', mode==='json');
+  ['ga4','gsc'].forEach(t => {
+    document.getElementById(t+'-api-wrap').style.display  = mode==='api'?'':'none';
+    document.getElementById(t+'-json-wrap').style.display = mode==='json'?'':'none';
   });
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// AUTH
+// GA4/GSC AUTH
 // ══════════════════════════════════════════════════════════════════════════
 function buildHeaders() {
   const method = document.getElementById('inp-auth').value;
   const val = document.getElementById('inp-auth-value')?.value || '';
-  const h = { 'Content-Type': 'application/json' };
-  if (method === 'bearer') h['Authorization'] = 'Bearer ' + val;
-  if (method === 'apikey') h['X-API-Key'] = val;
+  const h = { 'Content-Type':'application/json' };
+  if (method==='bearer') h['Authorization'] = 'Bearer '+val;
+  if (method==='apikey') h['X-API-Key'] = val;
   return h;
 }
-
 function buildUrl(base) {
   const method = document.getElementById('inp-auth').value;
   const val = document.getElementById('inp-auth-value')?.value || '';
-  if (method === 'queryparam' && val) {
-    return base + (base.includes('?') ? '&' : '?') + 'api_key=' + encodeURIComponent(val);
-  }
+  if (method==='queryparam' && val) return base + (base.includes('?')?'&':'?') + 'api_key=' + encodeURIComponent(val);
   return base;
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// DATA PARSING — CTR wird IMMER als Dezimalwert (0–1) normalisiert
+// DATA PARSING
 // ══════════════════════════════════════════════════════════════════════════
-function normalizeCtr(raw) {
-  if (raw === null || raw === undefined || raw === '') return 0;
+function normalizeRate(raw) {
+  if (raw===null||raw===undefined||raw==='') return 0;
   const v = parseFloat(raw);
   if (isNaN(v)) return 0;
-  // Heuristik: Werte > 1 sind in % (z.B. 7.6 → 0.076), Werte ≤ 1 sind schon Dezimal
-  return v > 1 ? v / 100 : v;
+  return v > 1 ? v/100 : v;
 }
-
-function normalizeEngagementRate(raw) {
-  if (raw === null || raw === undefined || raw === '') return 0;
-  const v = parseFloat(raw);
-  if (isNaN(v)) return 0;
-  return v > 1 ? v / 100 : v;
-}
-
 function parseGA4(raw) {
   let rows = Array.isArray(raw) ? raw : raw.rows || raw.data || raw.landingPages || raw.result || [];
   return rows.map(r => {
-    // Google API Native Format
     if (r.dimensionValues && r.metricValues) {
-      const d = r.dimensionValues.map(x => x.value);
-      const m = r.metricValues.map(x => parseFloat(x.value) || 0);
-      return {
-        page: d[0] || '',
-        sessions: m[0] || 0,
-        users: m[1] || 0,
-        engagementRate: normalizeEngagementRate(m[2]),
-        avgEngTime: m[3] || 0,
-        conversions: m[4] || 0,
-        convRate: normalizeEngagementRate(m[5]),
-      };
+      const d = r.dimensionValues.map(x=>x.value);
+      const m = r.metricValues.map(x=>parseFloat(x.value)||0);
+      return { page:d[0]||'', sessions:m[0]||0, users:m[1]||0, engagementRate:normalizeRate(m[2]), avgEngTime:m[3]||0, conversions:m[4]||0, convRate:normalizeRate(m[5]) };
     }
-    // Flaches Format
     return {
-      page: r.page || r.landingPage || r.pagePath || r.url || r.landing_page || '',
-      sessions: +(r.sessions || 0),
-      users: +(r.users || r.activeUsers || 0),
-      engagementRate: normalizeEngagementRate(r.engagementRate || r.engagement_rate || 0),
-      avgEngTime: +(r.avgEngagementTime || r.averageEngagementTime || r.avg_engagement_time || 0),
-      conversions: +(r.conversions || r.keyEvents || r.key_events || r.goals || 0),
-      convRate: normalizeEngagementRate(r.conversionRate || r.sessionConversionRate || r.conversion_rate || 0),
+      page: r.page||r.landingPage||r.pagePath||r.url||r.landing_page||'',
+      sessions: +(r.sessions||0),
+      users: +(r.users||r.activeUsers||0),
+      engagementRate: normalizeRate(r.engagementRate||r.engagement_rate||0),
+      avgEngTime: +(r.avgEngagementTime||r.averageEngagementTime||r.avg_engagement_time||0),
+      conversions: +(r.conversions||r.keyEvents||r.key_events||r.goals||0),
+      convRate: normalizeRate(r.conversionRate||r.sessionConversionRate||r.conversion_rate||0),
     };
   }).filter(r => r.page && r.page !== '(not set)');
 }
-
 function parseGSC(raw) {
   let rows = Array.isArray(raw) ? raw : raw.rows || raw.data || raw.queries || raw.result || [];
+  const brand = getBrand();
   return rows.map(r => {
-    // Google API Native Format
+    let row;
     if (r.keys) {
-      return {
-        query: r.keys[0] || '',
-        page: r.keys[1] || '',
-        clicks: +r.clicks || 0,
-        impressions: +r.impressions || 0,
-        ctr: normalizeCtr(r.ctr),
-        position: +r.position || 0,
+      row = { query:r.keys[0]||'', page:r.keys[1]||'', clicks:+r.clicks||0, impressions:+r.impressions||0, ctr:normalizeRate(r.ctr), position:+r.position||0 };
+    } else {
+      row = {
+        query: r.query||r.keyword||'',
+        page: r.page||r.url||'',
+        clicks: +(r.clicks||0),
+        impressions: +(r.impressions||0),
+        ctr: normalizeRate(r.ctr||r.click_through_rate||0),
+        position: +(r.position||r.avgPosition||r.avg_position||0),
       };
     }
-    // Flaches Format
-    return {
-      query: r.query || r.keyword || '',
-      page: r.page || r.url || '',
-      clicks: +(r.clicks || 0),
-      impressions: +(r.impressions || 0),
-      ctr: normalizeCtr(r.ctr || r.click_through_rate || 0),
-      position: +(r.position || r.avgPosition || r.avg_position || 0),
-    };
+    row.intent = classifyIntent(row.query, brand);
+    row.branded = isBranded(row.query, brand);
+    return row;
   }).filter(r => r.query && r.query !== '(not set)');
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// FETCH / LOAD
+// FETCH/LOAD
 // ══════════════════════════════════════════════════════════════════════════
 async function fetchData(type) {
-  const urlEl = document.getElementById('inp-' + type + '-url');
-  if (!urlEl.value) {
-    showErr('error-daten', 'Bitte API-URL eingeben.');
-    return;
-  }
+  const urlEl = document.getElementById('inp-'+type+'-url');
+  if (!urlEl.value) { showErr('error-daten','Bitte API-URL eingeben.'); return; }
   hideErr('error-daten');
-  document.getElementById(type + '-spinner').style.display = 'inline-block';
+  document.getElementById(type+'-spinner').style.display = 'inline-block';
   try {
     const res = await fetch(buildUrl(urlEl.value), { headers: buildHeaders() });
-    if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + res.statusText);
+    if (!res.ok) throw new Error('HTTP '+res.status+': '+res.statusText);
     const data = await res.json();
-    const parsed = type === 'ga4' ? parseGA4(data) : parseGSC(data);
-    if (parsed.length === 0) {
-      showErr('error-daten', type.toUpperCase() + ': Keine verwertbaren Zeilen in der Response gefunden. Format prüfen.');
-      return;
-    }
+    const parsed = type==='ga4' ? parseGA4(data) : parseGSC(data);
+    if (parsed.length === 0) { showErr('error-daten', type.toUpperCase()+': Keine verwertbaren Zeilen.'); return; }
     storeData(type, parsed);
-    toast(type.toUpperCase() + ' geladen: ' + parsed.length + ' Zeilen');
+    toast(type.toUpperCase()+' geladen: '+parsed.length+' Zeilen');
   } catch (e) {
-    showErr('error-daten', type.toUpperCase() + ': ' + e.message + ' — CORS? → JSON Paste nutzen.');
+    showErr('error-daten', type.toUpperCase()+': '+e.message+' — CORS? → JSON Paste nutzen.');
   } finally {
-    document.getElementById(type + '-spinner').style.display = 'none';
+    document.getElementById(type+'-spinner').style.display = 'none';
   }
 }
-
 function loadJson(type) {
   hideErr('error-daten');
   try {
-    const raw = JSON.parse(document.getElementById('inp-' + type + '-json').value);
-    const parsed = type === 'ga4' ? parseGA4(raw) : parseGSC(raw);
-    if (parsed.length === 0) {
-      showErr('error-daten', type.toUpperCase() + ': Keine verwertbaren Zeilen im JSON gefunden.');
-      return;
-    }
+    const raw = JSON.parse(document.getElementById('inp-'+type+'-json').value);
+    const parsed = type==='ga4' ? parseGA4(raw) : parseGSC(raw);
+    if (parsed.length === 0) { showErr('error-daten', type.toUpperCase()+': Keine verwertbaren Zeilen.'); return; }
     storeData(type, parsed);
-    toast(type.toUpperCase() + ' geladen: ' + parsed.length + ' Zeilen');
+    toast(type.toUpperCase()+' geladen: '+parsed.length+' Zeilen');
   } catch (e) {
-    showErr('error-daten', 'JSON-Fehler (' + type.toUpperCase() + '): ' + e.message);
+    showErr('error-daten', 'JSON-Fehler ('+type.toUpperCase()+'): '+e.message);
   }
 }
-
 function storeData(type, rows) {
-  if (type === 'ga4') {
+  if (type==='ga4') {
     GA4 = rows;
     const b = document.getElementById('badge-ga4');
-    b.textContent = 'GA4 ✓ ' + rows.length;
-    b.className = 'badge badge-accent';
+    b.textContent = 'GA4 ✓ '+rows.length; b.className = 'badge badge-accent';
     const lb = document.getElementById('ga4-loaded-badge');
-    lb.textContent = '✓ ' + rows.length + ' Rows';
-    lb.style.display = '';
+    lb.textContent = '✓ '+rows.length+' Rows'; lb.style.display = '';
   } else {
     GSC = rows;
     const b = document.getElementById('badge-gsc');
-    b.textContent = 'GSC ✓ ' + rows.length;
-    b.className = 'badge badge-blue';
+    b.textContent = 'GSC ✓ '+rows.length; b.className = 'badge badge-blue';
     const lb = document.getElementById('gsc-loaded-badge');
-    lb.textContent = '✓ ' + rows.length + ' Rows';
-    lb.style.display = '';
+    lb.textContent = '✓ '+rows.length+' Rows'; lb.style.display = '';
   }
   renderPreview(type, rows);
   if (GA4 && GSC) document.getElementById('analyse-btn-wrap').style.display = '';
   updateProgress();
 }
-
 function renderPreview(type, rows) {
-  const wrap = document.getElementById(type + '-preview');
-  const info = document.getElementById(type + '-preview-info');
-  const body = document.getElementById(type + '-preview-body');
+  const wrap = document.getElementById(type+'-preview');
+  const info = document.getElementById(type+'-preview-info');
+  const body = document.getElementById(type+'-preview-body');
   wrap.style.display = '';
-  info.textContent = rows.length + ' Zeilen geladen — Vorschau: erste 6';
+  info.textContent = rows.length+' Zeilen geladen — Vorschau: erste 6';
   body.innerHTML = '';
-  rows.slice(0, 6).forEach(r => {
+  rows.slice(0,6).forEach(r => {
     const tr = document.createElement('tr');
-    if (type === 'ga4') {
+    if (type==='ga4') {
       tr.innerHTML =
-        `<td title="${escapeHtml(r.page)}">${escapeHtml(trunc(r.page, 55))}</td>` +
-        `<td>${fmt(r.sessions)}</td>` +
-        `<td>${fmtPct(r.engagementRate)}</td>` +
-        `<td>${r.conversions > 0 ? '<span class="badge badge-accent">' + escapeHtml(r.conversions) + '</span>' : '<span style="color:var(--muted)">0</span>'}</td>`;
+        `<td title="${escapeHtml(r.page)}">${escapeHtml(trunc(r.page,55))}</td>`+
+        `<td>${fmt(r.sessions)}</td>`+
+        `<td>${fmtPct(r.engagementRate)}</td>`+
+        `<td>${r.conversions>0 ? '<span class="badge badge-accent">'+escapeHtml(r.conversions)+'</span>' : '<span style="color:var(--muted)">0</span>'}</td>`;
     } else {
       tr.innerHTML =
-        `<td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query, 55))}</td>` +
-        `<td>${fmt(r.clicks)}</td>` +
-        `<td>${fmt(r.impressions)}</td>` +
-        `<td>${fmtPct(r.ctr)}</td>` +
-        `<td>${posBadge(r.position)}</td>`;
+        `<td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query,45))}${r.branded ? ' <span class="badge badge-purple" style="font-size:9px">B</span>' : ''}</td>`+
+        `<td>${fmt(r.clicks)}</td>`+
+        `<td>${fmt(r.impressions)}</td>`+
+        `<td>${fmtPct(r.ctr)}</td>`+
+        `<td>${posBadge(r.position)}</td>`+
+        `<td>${intentBadge(r.intent)}</td>`;
     }
     body.appendChild(tr);
   });
@@ -878,123 +882,121 @@ function renderPreview(type, rows) {
 // ══════════════════════════════════════════════════════════════════════════
 function runAnalysis() {
   if (!GA4 || !GSC) return;
-
-  const quickWins = GSC
-    .filter(r => r.position >= CONFIG.QW_POS_MIN && r.position <= CONFIG.QW_POS_MAX && r.impressions >= CONFIG.QW_MIN_IMPRESSIONS)
-    .sort((a, b) => b.impressions - a.impressions)
-    .slice(0, CONFIG.QW_MAX_RESULTS);
-
-  const topPages = [...GA4].sort((a, b) => b.sessions - a.sessions).slice(0, 15);
-
-  const noConv = GA4
-    .filter(r => r.sessions > CONFIG.NOCONV_MIN_SESSIONS && r.conversions === 0)
-    .sort((a, b) => b.sessions - a.sessions)
-    .slice(0, CONFIG.NOCONV_MAX_RESULTS);
-
-  const lowEng = GA4
-    .filter(r => r.sessions > CONFIG.LOWENG_MIN_SESSIONS && r.engagementRate > 0 && r.engagementRate < CONFIG.LOWENG_MAX_RATE)
-    .sort((a, b) => b.sessions - a.sessions)
-    .slice(0, CONFIG.LOWENG_MAX_RESULTS);
-
-  const buyIntent = GSC
-    .filter(r => CONFIG.BUY_INTENT_REGEX.test(r.query))
-    .sort((a, b) => b.clicks - a.clicks)
-    .slice(0, CONFIG.BUY_INTENT_MAX_RESULTS);
-
-  ANALYSIS = { quickWins, topPages, noConv, lowEng, buyIntent };
+  const brand = getBrand();
+  GSC.forEach(r => { r.intent = classifyIntent(r.query, brand); r.branded = isBranded(r.query, brand); });
+  const nonBranded = GSC.filter(r => !r.branded);
+  const branded    = GSC.filter(r => r.branded);
+  const intentCounts = { transactional:0, commercial:0, informational:0, navigational:0, other:0 };
+  GSC.forEach(r => { intentCounts[r.intent] = (intentCounts[r.intent]||0) + 1; });
+  const quickWins = nonBranded.filter(r => r.position>=CONFIG.QW_POS_MIN && r.position<=CONFIG.QW_POS_MAX && r.impressions>=CONFIG.QW_MIN_IMPRESSIONS).sort((a,b)=>b.impressions-a.impressions).slice(0, CONFIG.QW_MAX_RESULTS);
+  const topPages = [...GA4].sort((a,b)=>b.sessions-a.sessions).slice(0,15);
+  const noConv = GA4.filter(r => r.sessions>CONFIG.NOCONV_MIN_SESSIONS && r.conversions===0).sort((a,b)=>b.sessions-a.sessions).slice(0, CONFIG.NOCONV_MAX_RESULTS);
+  const lowEng = GA4.filter(r => r.sessions>CONFIG.LOWENG_MIN_SESSIONS && r.engagementRate>0 && r.engagementRate<CONFIG.LOWENG_MAX_RATE).sort((a,b)=>b.sessions-a.sessions).slice(0, CONFIG.LOWENG_MAX_RESULTS);
+  const buyIntent = nonBranded.filter(r => r.intent==='transactional').sort((a,b)=>b.clicks-a.clicks).slice(0, CONFIG.BUY_INTENT_MAX_RESULTS);
+  const clusters = clusterQueries(nonBranded);
+  ANALYSIS = { quickWins, topPages, noConv, lowEng, buyIntent, clusters, intentCounts, brandedCount: branded.length, nonBrandedCount: nonBranded.length };
   renderAnalysis();
   showTab('analyse');
   updateProgress();
 }
 
 function renderAnalysis() {
-  const { quickWins, noConv, lowEng, buyIntent } = ANALYSIS;
-
-  // Stats
+  const { quickWins, noConv, lowEng, buyIntent, clusters, intentCounts, brandedCount } = ANALYSIS;
   document.getElementById('analyse-stats').innerHTML = [
-    { n: GA4.length,        l: 'GA4 Seiten' },
-    { n: GSC.length,        l: 'GSC Queries' },
-    { n: quickWins.length,  l: 'Quick Wins' },
-    { n: buyIntent.length,  l: 'Buy-Intent' },
-    { n: noConv.length,     l: '0 Conversions' },
-    { n: lowEng.length,     l: 'Niedrig Eng.' },
+    {n:GA4.length,l:'GA4 Seiten'},{n:GSC.length,l:'GSC Queries'},{n:brandedCount,l:'Branded'},
+    {n:clusters.length,l:'Cluster'},{n:quickWins.length,l:'Quick Wins'},{n:buyIntent.length,l:'Transactional'},
   ].map(s => `<div class="stat"><div class="stat-n">${escapeHtml(s.n)}</div><div class="stat-l">${escapeHtml(s.l)}</div></div>`).join('');
-
-  // Quick Wins
+  const intentMeta = [
+    {key:'transactional',label:'Transactional',cls:'badge-red'},
+    {key:'commercial',label:'Commercial',cls:'badge-amber'},
+    {key:'informational',label:'Informational',cls:'badge-blue'},
+    {key:'navigational',label:'Navigational',cls:'badge-purple'},
+  ];
+  document.getElementById('intent-grid').innerHTML = intentMeta.map(m => `
+    <div class="stat">
+      <div class="stat-n">${escapeHtml(intentCounts[m.key]||0)}</div>
+      <div class="stat-l"><span class="badge ${m.cls}">${m.label}</span></div>
+    </div>`).join('');
+  const clusterColors = ['var(--accent)','var(--blue)','var(--purple)','var(--amber)','var(--pink)','var(--green)','#06b6d4','#f97316'];
+  document.getElementById('cluster-list').innerHTML = clusters.length ? clusters.map((c,i) => `
+    <div class="cluster-card" style="border-left-color:${clusterColors[i % clusterColors.length]}">
+      <div class="cluster-head">
+        <div class="cluster-title">${escapeHtml(c.seed)}</div>
+        <div class="cluster-meta">${c.members.length} Queries · ${fmt(c.totalImpressions)} Imp · ${fmt(c.totalClicks)} Klicks</div>
+      </div>
+      <div class="cluster-tokens">↳ Topic-Tokens: ${escapeHtml(c.tokens.slice(0,6).join(', '))}</div>
+      <div class="cluster-members">
+        ${c.members.slice(0,8).map(m => `<span class="m" title="${escapeHtml(m.query)} · Pos.${Math.round(m.position*10)/10}">${escapeHtml(trunc(m.query,40))}</span>`).join('')}
+        ${c.members.length>8 ? `<span style="color:var(--muted)">+${c.members.length-8} weitere</span>` : ''}
+      </div>
+    </div>`).join('') : '<span style="color:var(--muted);font-size:12px">Zu wenig Daten für Clustering.</span>';
   const maxImp = quickWins[0]?.impressions || 1;
-  document.getElementById('qw-body').innerHTML = quickWins.map((r, i) => `
+  document.getElementById('qw-body').innerHTML = quickWins.map((r,i) => `
     <tr>
-      <td style="color:var(--muted)">${i + 1}</td>
-      <td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query, 50))}</td>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query,45))}</td>
+      <td>${intentBadge(r.intent)}</td>
       <td>${posBadge(r.position)}</td>
       <td>${fmt(r.impressions)}</td>
       <td>${fmt(r.clicks)}</td>
       <td>${fmtPct(r.ctr)}</td>
-      <td><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((r.impressions / maxImp) * 100)}%"></div></div></td>
+      <td><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((r.impressions/maxImp)*100)}%"></div></div></td>
     </tr>`).join('');
-
-  // Buy Intent
   document.getElementById('buy-body').innerHTML = buyIntent.map(r => `
     <tr>
-      <td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query, 55))}</td>
+      <td title="${escapeHtml(r.query)}">${escapeHtml(trunc(r.query,55))}</td>
       <td>${fmt(r.clicks)}</td>
       <td>${posBadge(r.position)}</td>
       <td>${fmtPct(r.ctr)}</td>
     </tr>`).join('');
   document.getElementById('buy-card').style.display = buyIntent.length ? '' : 'none';
-
-  // No Conv
   document.getElementById('noconv-list').innerHTML = noConv.map(r => `
     <div style="padding:6px 0;border-bottom:1px solid #1e22310d;font-size:11px">
-      <div style="color:var(--dim);margin-bottom:2px">${escapeHtml(trunc(r.page, 48))}</div>
+      <div style="color:var(--dim);margin-bottom:2px">${escapeHtml(trunc(r.page,48))}</div>
       <div style="color:var(--muted)">${fmt(r.sessions)} Sessions · CTA fehlt?</div>
     </div>`).join('') || '<span style="color:var(--muted);font-size:12px">Keine gefunden</span>';
-
-  // Low Eng
   document.getElementById('loweng-list').innerHTML = lowEng.map(r => `
     <div style="padding:6px 0;border-bottom:1px solid #1e22310d;font-size:11px">
-      <div style="color:var(--dim);margin-bottom:2px">${escapeHtml(trunc(r.page, 48))}</div>
+      <div style="color:var(--dim);margin-bottom:2px">${escapeHtml(trunc(r.page,48))}</div>
       <div style="color:var(--muted)">${fmtPct(r.engagementRate)} Eng. · ${fmt(r.sessions)} Sessions</div>
     </div>`).join('') || '<span style="color:var(--muted);font-size:12px">Keine gefunden</span>';
-
   document.getElementById('analyse-empty').style.display = 'none';
   document.getElementById('analyse-content').style.display = '';
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// PROMPT-GENERIERUNG
+// PROMPT-GENERIERUNG via Server-Endpoint
 // ══════════════════════════════════════════════════════════════════════════
 function buildPromptText() {
   const domain  = document.getElementById('inp-domain').value  || 'unbekannt';
   const branche = document.getElementById('inp-branche').value || 'unbekannt';
   const region  = document.getElementById('inp-region').value  || 'Österreich';
-
-  const topQ = (GSC || []).slice(0, CONFIG.GSC_TOP_FOR_PROMPT)
-    .map(r => `${r.query} (${r.clicks} Klicks, Pos.${Math.round(r.position * 10) / 10})`)
-    .join('\n');
-  const qwList = ANALYSIS.quickWins.slice(0, CONFIG.QW_FOR_PROMPT)
-    .map(r => `${r.query} (Pos.${Math.round(r.position * 10) / 10}, ${r.impressions} Imp.)`)
-    .join('\n');
+  const nonBranded = (GSC||[]).filter(r => !r.branded);
+  const topQ = nonBranded.slice(0, CONFIG.GSC_TOP_FOR_PROMPT).map(r => `${r.query} (${r.clicks} Klicks, Pos.${Math.round(r.position*10)/10}, Intent: ${r.intent})`).join('\n');
+  const qwList = ANALYSIS.quickWins.slice(0, CONFIG.QW_FOR_PROMPT).map(r => `${r.query} (Pos.${Math.round(r.position*10)/10}, ${r.impressions} Imp., Intent: ${r.intent})`).join('\n');
   const buyList = ANALYSIS.buyIntent.map(r => r.query).join(', ') || 'keine erkannt';
-
+  const clusterList = ANALYSIS.clusters.slice(0,5).map(c => `• ${c.seed} (Topic-Tokens: ${c.tokens.slice(0,5).join(', ')}, ${c.members.length} Queries)`).join('\n') || 'keine erkannt';
   return `Du bist ein SEO & GEO Experte für den DACH-Raum.
 
 **Domain:** ${domain}
 **Branche:** ${branche}
 **Region:** ${region}
 
-**Reale GSC-Suchanfragen (Top ${CONFIG.GSC_TOP_FOR_PROMPT}):**
+**Reale GSC-Suchanfragen (Top ${CONFIG.GSC_TOP_FOR_PROMPT}, ohne Branded):**
 ${topQ}
 
 **Quick-Win-Kandidaten Pos. ${CONFIG.QW_POS_MIN}–${CONFIG.QW_POS_MAX}:**
 ${qwList}
 
-**Kaufintent-Queries:**
+**Identifizierte Topic-Cluster:**
+${clusterList}
+
+**Transactional-Queries:**
 ${buyList}
 
-Generiere Decision-Prompts basierend auf ECHTEN GSC-Daten. Formuliere wie echte Nutzer in KI-Systemen schreiben.
+Generiere Decision-Prompts basierend auf ECHTEN GSC-Daten. Formuliere wie echte Nutzer in KI-Systemen (ChatGPT, Perplexity, Gemini) schreiben — vollständige Fragesätze, nicht nur Keywords.
 
-Antworte NUR als valides JSON ohne Markdown-Backticks:
+Antworte ausschließlich als valides JSON ohne Markdown-Backticks, mit dieser exakten Struktur:
 {
   "anbieterVergleich": [{"prompt":"...","basis":"..."}],
   "validierung": [{"prompt":"...","basis":"..."}],
@@ -1003,55 +1005,55 @@ Antworte NUR als valides JSON ohne Markdown-Backticks:
   "action": [{"prompt":"...","basis":"..."}],
   "quickWinPrompts": [{"prompt":"...","kategorie":"...","gscQuery":"...","massnahme":"...","score":0}]
 }
-Jeweils 3–4 Prompts pro Kategorie. quickWinPrompts: Top 8 sortiert nach score (0–100).`;
+Jeweils 3–4 Prompts pro Kategorie. quickWinPrompts: Top 8 sortiert nach score (0–100, höher = besser).`;
+}
+
+async function callServerEndpoint(provider, prompt) {
+  const headers = { 'Content-Type':'application/json' };
+  const password = document.getElementById('inp-app-password').value.trim();
+  if (password) headers['x-app-password'] = password;
+
+  const res = await fetch(CONFIG.API_ENDPOINT, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ provider, prompt }),
+  });
+
+  if (!res.ok) {
+    let errMsg = `Server ${res.status}: ${res.statusText}`;
+    try { const j = await res.json(); if (j.error) errMsg = j.error; } catch {}
+    throw new Error(errMsg);
+  }
+
+  const data = await res.json();
+  if (!data.text) throw new Error('Server-Antwort enthält keinen Text');
+  return data.text;
 }
 
 async function generatePrompts() {
   if (!ANALYSIS) return;
+  const provider = document.getElementById('inp-provider').value;
+  if (provider === 'manual') { openContextModal(); return; }
+
   const btn = document.getElementById('gen-btn');
   const spinner = document.getElementById('gen-spinner');
   btn.disabled = true;
   spinner.style.display = 'inline-block';
   hideErr('error-prompts');
 
-  const userPrompt = buildPromptText();
-
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: CONFIG.API_MODEL,
-        max_tokens: CONFIG.API_MAX_TOKENS,
-        system: 'Du bist SEO & GEO Experte. Antworte ausschließlich als valides JSON, kein Text davor oder danach, keine Markdown-Backticks.',
-        messages: [{ role: 'user', content: userPrompt }],
-      }),
-    });
-
-    if (!res.ok) {
-      const errText = await res.text().catch(() => '');
-      throw new Error('API-Fehler ' + res.status + ': ' + (errText.slice(0, 200) || res.statusText));
-    }
-
-    const data = await res.json();
-    const text = (data.content || []).map(c => c.text || '').join('');
-    if (!text) throw new Error('Leere API-Antwort');
-    const clean = text.replace(/```json|```/g, '').trim();
-
+    const text = await callServerEndpoint(provider, buildPromptText());
+    const clean = text.replace(/```json|```/g,'').trim();
     let parsed;
-    try {
-      parsed = JSON.parse(clean);
-    } catch (jsonErr) {
-      throw new Error('Ungültiges JSON in API-Antwort: ' + jsonErr.message + ' (evtl. abgeschnitten — max_tokens erhöhen)');
-    }
-
+    try { parsed = JSON.parse(clean); }
+    catch (e) { throw new Error('Ungültiges JSON in API-Antwort: '+e.message+' (evtl. abgeschnitten)'); }
     PROMPTS = parsed;
     renderPrompts(parsed);
     showTab('prompts');
     updateProgress();
     toast('Prompts generiert ✓');
   } catch (e) {
-    showErr('error-prompts', 'Generierung fehlgeschlagen: ' + e.message + ' — Tipp: "Prompt-Kontext kopieren" und manuell in ChatGPT/Claude einfügen.');
+    showErr('error-prompts', 'Generierung fehlgeschlagen: '+e.message+' — Tipp: "Prompt-Kontext kopieren" und manuell verwenden.');
   } finally {
     btn.disabled = false;
     spinner.style.display = 'none';
@@ -1059,166 +1061,141 @@ async function generatePrompts() {
 }
 
 function renderPrompts(data) {
-  const catColors = ['var(--accent)', 'var(--blue)', '#8b5cf6', 'var(--amber)', '#ec4899'];
+  const catColors = ['var(--accent)','var(--blue)','var(--purple)','var(--amber)','var(--pink)'];
   const catMeta = [
-    { key: 'anbieterVergleich', label: 'Anbieter-Vergleich', icon: '⚖' },
-    { key: 'validierung',       label: 'Validierung',        icon: '✓' },
-    { key: 'spezifikation',     label: 'Spezifikation',      icon: '◈' },
-    { key: 'preis',             label: 'Preis / Kosten',     icon: '€' },
-    { key: 'action',            label: 'Action / Kontakt',   icon: '→' },
+    {key:'anbieterVergleich',label:'Anbieter-Vergleich',icon:'⚖'},
+    {key:'validierung',label:'Validierung',icon:'✓'},
+    {key:'spezifikation',label:'Spezifikation',icon:'◈'},
+    {key:'preis',label:'Preis / Kosten',icon:'€'},
+    {key:'action',label:'Action / Kontakt',icon:'→'},
   ];
-
-  // Quick Win Tabelle
-  const qwSorted = [...(data.quickWinPrompts || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
-  document.getElementById('qw-prompts-body').innerHTML = qwSorted.map((r, i) => `
+  const qwSorted = [...(data.quickWinPrompts||[])].sort((a,b)=>(b.score||0)-(a.score||0));
+  document.getElementById('qw-prompts-body').innerHTML = qwSorted.map((r,i) => `
     <tr>
-      <td>${scoreBadge(r.score || 0)}</td>
-      <td style="font-style:italic;color:var(--text)" title="${escapeHtml(r.prompt)}">„${escapeHtml(trunc(r.prompt, 55))}"</td>
-      <td><span class="badge badge-accent" style="font-size:10px">${escapeHtml(r.kategorie || '–')}</span></td>
-      <td style="color:var(--muted)" title="${escapeHtml(r.gscQuery)}">${escapeHtml(trunc(r.gscQuery, 35))}</td>
-      <td style="color:var(--dim)" title="${escapeHtml(r.massnahme)}">${escapeHtml(trunc(r.massnahme, 45))}</td>
+      <td>${scoreBadge(r.score||0)}</td>
+      <td style="font-style:italic;color:var(--text)" title="${escapeHtml(r.prompt)}">„${escapeHtml(trunc(r.prompt,55))}"</td>
+      <td><span class="badge badge-accent" style="font-size:10px">${escapeHtml(r.kategorie||'–')}</span></td>
+      <td style="color:var(--muted)" title="${escapeHtml(r.gscQuery)}">${escapeHtml(trunc(r.gscQuery,35))}</td>
+      <td style="color:var(--dim)" title="${escapeHtml(r.massnahme)}">${escapeHtml(trunc(r.massnahme,45))}</td>
       <td><button class="copy-btn" data-copy-row="${i}">COPY</button></td>
     </tr>`).join('');
-
-  // Copy-Handler für Quick-Win-Tabelle
   document.querySelectorAll('#qw-prompts-body [data-copy-row]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const idx = +btn.dataset.copyRow;
       const ok = await copyToClipboard(qwSorted[idx].prompt);
-      if (ok) {
-        btn.textContent = 'COPIED';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
-      }
+      if (ok) { btn.textContent='COPIED'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='COPY'; btn.classList.remove('copied');}, 1500); }
     });
   });
-
-  // 5 Kategorien
-  document.getElementById('cats-grid').innerHTML = catMeta.map((cat, ci) => {
+  document.getElementById('cats-grid').innerHTML = catMeta.map((cat,ci) => {
     const items = data[cat.key] || [];
-    const cards = items.map((item, idx) => {
+    const cards = items.map((item,idx) => {
       const promptText = item.prompt || item;
       const basis = item.basis || '';
-      return `
-        <div class="prompt-item" style="border-left-color:${catColors[ci]}">
-          <button class="copy-btn" data-copy-cat="${cat.key}" data-copy-idx="${idx}">COPY</button>
-          <div class="prompt-text">„${escapeHtml(promptText)}"</div>
-          ${basis ? `<div class="prompt-basis">↳ Basis: ${escapeHtml(basis)}</div>` : ''}
-        </div>`;
-    }).join('');
-    return `
-      <div class="card" style="border-top:2px solid ${catColors[ci]}">
-        <div class="prompt-cat-title" style="color:${catColors[ci]}">${cat.icon} ${escapeHtml(cat.label)}</div>
-        ${cards || '<span style="color:var(--muted);font-size:12px">Keine Prompts</span>'}
+      return `<div class="prompt-item" style="border-left-color:${catColors[ci]}">
+        <button class="copy-btn" data-copy-cat="${cat.key}" data-copy-idx="${idx}">COPY</button>
+        <div class="prompt-text">„${escapeHtml(promptText)}"</div>
+        ${basis ? `<div class="prompt-basis">↳ Basis: ${escapeHtml(basis)}</div>` : ''}
       </div>`;
+    }).join('');
+    return `<div class="card" style="border-top:2px solid ${catColors[ci]}">
+      <div class="prompt-cat-title" style="color:${catColors[ci]}">${cat.icon} ${escapeHtml(cat.label)}</div>
+      ${cards || '<span style="color:var(--muted);font-size:12px">Keine Prompts</span>'}
+    </div>`;
   }).join('');
-
-  // Copy-Handler für Kategorien
   document.querySelectorAll('[data-copy-cat]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const cat = btn.dataset.copyCat;
       const idx = +btn.dataset.copyIdx;
-      const item = (data[cat] || [])[idx];
+      const item = (data[cat]||[])[idx];
       const text = (item && (item.prompt || item)) || '';
       const ok = await copyToClipboard(text);
-      if (ok) {
-        btn.textContent = 'COPIED';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
-      }
+      if (ok) { btn.textContent='COPIED'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='COPY'; btn.classList.remove('copied');}, 1500); }
     });
   });
-
   document.getElementById('prompts-empty').style.display = 'none';
   document.getElementById('prompts-content').style.display = '';
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// CSV EXPORT
+// CSV
 // ══════════════════════════════════════════════════════════════════════════
 function csvEscape(v) {
-  if (v === null || v === undefined) return '';
+  if (v===null||v===undefined) return '';
   const s = String(v);
-  return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  return /[",\n;]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s;
 }
-
 function downloadCsv(filename, rows) {
   const csv = rows.map(r => r.map(csvEscape).join(';')).join('\n');
-  // BOM für Excel-Kompatibilität bei Umlauten
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(a.href), 500);
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(a.href), 500);
 }
-
 function exportQuickWinsCsv() {
   if (!ANALYSIS) return;
-  const rows = [['#', 'Query', 'Position', 'Impressionen', 'Klicks', 'CTR']];
-  ANALYSIS.quickWins.forEach((r, i) => {
-    rows.push([i + 1, r.query, (Math.round(r.position * 10) / 10), r.impressions, r.clicks, (r.ctr * 100).toFixed(2) + '%']);
+  const rows = [['#','Query','Intent','Position','Impressionen','Klicks','CTR']];
+  ANALYSIS.quickWins.forEach((r,i) => {
+    rows.push([i+1, r.query, r.intent, (Math.round(r.position*10)/10), r.impressions, r.clicks, (r.ctr*100).toFixed(2)+'%']);
   });
   downloadCsv('quick-wins.csv', rows);
   toast('Quick-Wins als CSV exportiert');
 }
-
 function exportPromptsCsv() {
   if (!PROMPTS) return;
-  const rows = [['Score', 'Prompt', 'Kategorie', 'GSC-Query', 'Maßnahme']];
-  (PROMPTS.quickWinPrompts || []).forEach(p => {
-    rows.push([p.score || 0, p.prompt || '', p.kategorie || '', p.gscQuery || '', p.massnahme || '']);
+  const rows = [['Score','Prompt','Kategorie','GSC-Query','Maßnahme']];
+  (PROMPTS.quickWinPrompts||[]).forEach(p => {
+    rows.push([p.score||0, p.prompt||'', p.kategorie||'', p.gscQuery||'', p.massnahme||'']);
   });
-  ['anbieterVergleich', 'validierung', 'spezifikation', 'preis', 'action'].forEach(cat => {
-    (PROMPTS[cat] || []).forEach(p => {
-      rows.push(['', p.prompt || '', cat, '', p.basis || '']);
-    });
+  ['anbieterVergleich','validierung','spezifikation','preis','action'].forEach(cat => {
+    (PROMPTS[cat]||[]).forEach(p => { rows.push(['', p.prompt||'', cat, '', p.basis||'']); });
   });
   downloadCsv('decision-prompts.csv', rows);
   toast('Prompts als CSV exportiert');
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// DEMO-DATEN
+// DEMO
 // ══════════════════════════════════════════════════════════════════════════
 const DEMO_GA4 = [
-  { page: '/leistungen/heizung-tausch', sessions: 1240, users: 1100, engagementRate: 0.72, conversions: 48 },
-  { page: '/notdienst-installateur-wien', sessions: 980, users: 920, engagementRate: 0.81, conversions: 35 },
-  { page: '/preise', sessions: 720, users: 680, engagementRate: 0.55, conversions: 12 },
-  { page: '/leistungen/wasserrohrbruch', sessions: 580, users: 540, engagementRate: 0.68, conversions: 22 },
-  { page: '/ueber-uns', sessions: 410, users: 380, engagementRate: 0.42, conversions: 0 },
-  { page: '/blog/heizung-warten', sessions: 380, users: 360, engagementRate: 0.61, conversions: 0 },
-  { page: '/kontakt', sessions: 320, users: 300, engagementRate: 0.85, conversions: 28 },
-  { page: '/leistungen/badsanierung', sessions: 290, users: 270, engagementRate: 0.58, conversions: 8 },
-  { page: '/standorte/wien-1010', sessions: 210, users: 200, engagementRate: 0.38, conversions: 0 },
-  { page: '/foerderungen-heizung', sessions: 180, users: 170, engagementRate: 0.32, conversions: 0 },
+  {page:'/leistungen/heizung-tausch',sessions:1240,users:1100,engagementRate:0.72,conversions:48},
+  {page:'/notdienst-installateur-wien',sessions:980,users:920,engagementRate:0.81,conversions:35},
+  {page:'/preise',sessions:720,users:680,engagementRate:0.55,conversions:12},
+  {page:'/leistungen/wasserrohrbruch',sessions:580,users:540,engagementRate:0.68,conversions:22},
+  {page:'/ueber-uns',sessions:410,users:380,engagementRate:0.42,conversions:0},
+  {page:'/blog/heizung-warten',sessions:380,users:360,engagementRate:0.61,conversions:0},
+  {page:'/kontakt',sessions:320,users:300,engagementRate:0.85,conversions:28},
+  {page:'/leistungen/badsanierung',sessions:290,users:270,engagementRate:0.58,conversions:8},
+  {page:'/standorte/wien-1010',sessions:210,users:200,engagementRate:0.38,conversions:0},
+  {page:'/foerderungen-heizung',sessions:180,users:170,engagementRate:0.32,conversions:0},
 ];
-
 const DEMO_GSC = [
-  { query: 'installateur wien', clicks: 320, impressions: 4200, ctr: 0.076, position: 3.2 },
-  { query: 'notdienst installateur wien', clicks: 280, impressions: 1800, ctr: 0.155, position: 2.1 },
-  { query: 'heizung tausch kosten', clicks: 95, impressions: 2400, ctr: 0.039, position: 7.8 },
-  { query: 'wasserrohrbruch was tun', clicks: 88, impressions: 3100, ctr: 0.028, position: 9.2 },
-  { query: 'installateur 1010 wien preis', clicks: 62, impressions: 1200, ctr: 0.051, position: 5.5 },
-  { query: 'beste installateur firma wien', clicks: 45, impressions: 980, ctr: 0.045, position: 8.3 },
-  { query: 'gasleitung verlegen kosten österreich', clicks: 38, impressions: 1500, ctr: 0.025, position: 11.2 },
-  { query: 'heizung förderung 2026 wien', clicks: 32, impressions: 2200, ctr: 0.014, position: 14.5 },
-  { query: 'badsanierung wien angebot', clicks: 28, impressions: 850, ctr: 0.033, position: 6.8 },
-  { query: 'installateur empfehlung wien', clicks: 22, impressions: 720, ctr: 0.030, position: 7.2 },
-  { query: 'wärmepumpe vs gasheizung vergleich', clicks: 18, impressions: 1900, ctr: 0.009, position: 17.3 },
-  { query: 'rohrreinigung wien preis', clicks: 15, impressions: 480, ctr: 0.031, position: 6.5 },
-  { query: 'installateur termin vereinbaren wien', clicks: 12, impressions: 380, ctr: 0.031, position: 5.8 },
-  { query: 'günstiger installateur wien empfehlung', clicks: 10, impressions: 420, ctr: 0.024, position: 9.1 },
-  { query: 'durchlauferhitzer wechseln kosten', clicks: 8, impressions: 650, ctr: 0.012, position: 13.4 },
-  { query: 'wie oft heizung warten lassen', clicks: 6, impressions: 1100, ctr: 0.005, position: 18.2 },
+  {query:'installateur wien',clicks:320,impressions:4200,ctr:0.076,position:3.2},
+  {query:'notdienst installateur wien',clicks:280,impressions:1800,ctr:0.155,position:2.1},
+  {query:'heizung tausch kosten',clicks:95,impressions:2400,ctr:0.039,position:7.8},
+  {query:'wasserrohrbruch was tun',clicks:88,impressions:3100,ctr:0.028,position:9.2},
+  {query:'installateur 1010 wien preis',clicks:62,impressions:1200,ctr:0.051,position:5.5},
+  {query:'beste installateur firma wien',clicks:45,impressions:980,ctr:0.045,position:8.3},
+  {query:'gasleitung verlegen kosten österreich',clicks:38,impressions:1500,ctr:0.025,position:11.2},
+  {query:'heizung förderung 2026 wien',clicks:32,impressions:2200,ctr:0.014,position:14.5},
+  {query:'badsanierung wien angebot',clicks:28,impressions:850,ctr:0.033,position:6.8},
+  {query:'installateur empfehlung wien',clicks:22,impressions:720,ctr:0.030,position:7.2},
+  {query:'wärmepumpe vs gasheizung vergleich',clicks:18,impressions:1900,ctr:0.009,position:17.3},
+  {query:'rohrreinigung wien preis',clicks:15,impressions:480,ctr:0.031,position:6.5},
+  {query:'installateur termin vereinbaren wien',clicks:12,impressions:380,ctr:0.031,position:5.8},
+  {query:'günstiger installateur wien empfehlung',clicks:10,impressions:420,ctr:0.024,position:9.1},
+  {query:'durchlauferhitzer wechseln kosten',clicks:8,impressions:650,ctr:0.012,position:13.4},
+  {query:'wie oft heizung warten lassen',clicks:6,impressions:1100,ctr:0.005,position:18.2},
+  {query:'wärmepumpe förderung wien',clicks:5,impressions:890,ctr:0.006,position:16.4},
+  {query:'was kostet badsanierung 5qm',clicks:4,impressions:340,ctr:0.012,position:12.1},
 ];
 
 function loadDemoData() {
   document.getElementById('inp-domain').value = 'installateur-musterfirma.at';
   document.getElementById('inp-branche').value = 'Installateur / Heizungs- und Sanitärtechnik';
   document.getElementById('inp-region').value = 'Wien';
+  document.getElementById('inp-brand').value = 'musterfirma';
   savePersistedState();
   storeData('ga4', parseGA4(DEMO_GA4));
   storeData('gsc', parseGSC(DEMO_GSC));
@@ -1226,117 +1203,78 @@ function loadDemoData() {
   showTab('daten');
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// RESET
-// ══════════════════════════════════════════════════════════════════════════
 function resetAll() {
   if (!confirm('Alle Daten und Eingaben löschen?')) return;
   clearPersistedState();
   GA4 = GSC = ANALYSIS = PROMPTS = null;
   document.querySelectorAll('[data-persist]').forEach(el => {
-    if (el.id === 'inp-region') el.value = 'Wien';
-    else if (el.id === 'inp-auth') el.value = 'none';
-    else el.value = '';
+    if (el.id==='inp-region') el.value='Wien';
+    else if (el.id==='inp-auth') el.value='none';
+    else if (el.id==='inp-provider') el.value='gemini';
+    else el.value='';
   });
   document.getElementById('inp-auth-value').value = '';
-  ['inp-ga4-json', 'inp-gsc-json'].forEach(id => document.getElementById(id).value = '');
-  ['ga4-preview', 'gsc-preview', 'ga4-loaded-badge', 'gsc-loaded-badge', 'analyse-btn-wrap'].forEach(id => {
+  ['inp-ga4-json','inp-gsc-json'].forEach(id => document.getElementById(id).value='');
+  ['ga4-preview','gsc-preview','ga4-loaded-badge','gsc-loaded-badge','analyse-btn-wrap'].forEach(id => {
     document.getElementById(id).style.display = 'none';
   });
-  document.getElementById('badge-ga4').textContent = 'GA4 –';
-  document.getElementById('badge-ga4').className = 'badge badge-muted';
-  document.getElementById('badge-gsc').textContent = 'GSC –';
-  document.getElementById('badge-gsc').className = 'badge badge-muted';
-  document.getElementById('analyse-content').style.display = 'none';
-  document.getElementById('analyse-empty').style.display = '';
-  document.getElementById('prompts-content').style.display = 'none';
-  document.getElementById('prompts-empty').style.display = '';
-  toggleAuthValue();
-  updateProgress();
+  document.getElementById('badge-ga4').textContent='GA4 –'; document.getElementById('badge-ga4').className='badge badge-muted';
+  document.getElementById('badge-gsc').textContent='GSC –'; document.getElementById('badge-gsc').className='badge badge-muted';
+  document.getElementById('analyse-content').style.display='none'; document.getElementById('analyse-empty').style.display='';
+  document.getElementById('prompts-content').style.display='none'; document.getElementById('prompts-empty').style.display='';
+  toggleAuthValue(); toggleProviderUI(); updateProgress();
   showTab('setup');
   toast('Alles zurückgesetzt');
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// MODAL — Prompt-Kontext kopieren
-// ══════════════════════════════════════════════════════════════════════════
 function openContextModal() {
   if (!ANALYSIS) return;
-  const text = buildPromptText();
-  document.getElementById('modal-textarea').value = text;
+  document.getElementById('modal-textarea').value = buildPromptText();
   document.getElementById('modal-bg').classList.add('show');
 }
-
-function closeModal() {
-  document.getElementById('modal-bg').classList.remove('show');
-}
+function closeModal() { document.getElementById('modal-bg').classList.remove('show'); }
 
 // ══════════════════════════════════════════════════════════════════════════
-// INIT — Event-Listener (statt inline onclick)
+// INIT
 // ══════════════════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   loadPersistedState();
   toggleAuthValue();
+  toggleProviderUI();
   updateProgress();
-
-  // Tab-Navigation
-  document.querySelectorAll('[data-tab]').forEach(btn => {
-    btn.addEventListener('click', () => showTab(btn.dataset.tab));
-  });
-  document.querySelectorAll('[data-goto]').forEach(btn => {
-    btn.addEventListener('click', () => showTab(btn.dataset.goto));
-  });
-
-  // Auth-Toggle
+  document.querySelectorAll('[data-tab]').forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.goto)));
   document.getElementById('inp-auth').addEventListener('change', toggleAuthValue);
-
-  // Mode-Toggle
-  document.querySelectorAll('[data-mode]').forEach(btn => {
-    btn.addEventListener('click', () => setMode(btn.dataset.mode));
-  });
-
-  // Fetch / Load JSON
-  document.querySelectorAll('[data-fetch]').forEach(btn => {
-    btn.addEventListener('click', () => fetchData(btn.dataset.fetch));
-  });
-  document.querySelectorAll('[data-loadjson]').forEach(btn => {
-    btn.addEventListener('click', () => loadJson(btn.dataset.loadjson));
-  });
-
-  // Analyse + Prompts
+  document.getElementById('inp-provider').addEventListener('change', toggleProviderUI);
+  document.querySelectorAll('[data-mode]').forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+  document.querySelectorAll('[data-fetch]').forEach(btn => btn.addEventListener('click', () => fetchData(btn.dataset.fetch)));
+  document.querySelectorAll('[data-loadjson]').forEach(btn => btn.addEventListener('click', () => loadJson(btn.dataset.loadjson)));
   document.getElementById('btn-run-analysis').addEventListener('click', runAnalysis);
   document.getElementById('gen-btn').addEventListener('click', generatePrompts);
   document.getElementById('btn-copy-context').addEventListener('click', openContextModal);
-
-  // CSV-Exporte
   document.getElementById('btn-export-qw').addEventListener('click', exportQuickWinsCsv);
   document.getElementById('btn-export-prompts').addEventListener('click', exportPromptsCsv);
-
-  // Demo / Reset
   document.getElementById('btn-demo').addEventListener('click', loadDemoData);
   document.getElementById('btn-reset').addEventListener('click', resetAll);
-
-  // Modal
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('btn-modal-close-2').addEventListener('click', closeModal);
-  document.getElementById('modal-bg').addEventListener('click', e => {
-    if (e.target.id === 'modal-bg') closeModal();
-  });
+  document.getElementById('modal-bg').addEventListener('click', e => { if (e.target.id==='modal-bg') closeModal(); });
   document.getElementById('btn-modal-copy').addEventListener('click', async () => {
     const ok = await copyToClipboard(document.getElementById('modal-textarea').value);
     toast(ok ? 'Kopiert ✓' : 'Kopieren fehlgeschlagen', ok ? 'accent' : 'error');
   });
-
-  // Persist bei jeder Änderung
+  document.getElementById('inp-domain').addEventListener('blur', () => {
+    const brandEl = document.getElementById('inp-brand');
+    if (!brandEl.value.trim()) {
+      const auto = extractBrandFromDomain(document.getElementById('inp-domain').value);
+      if (auto) { brandEl.value = auto; savePersistedState(); }
+    }
+  });
   document.querySelectorAll('[data-persist]').forEach(el => {
     el.addEventListener('input', () => { savePersistedState(); updateProgress(); });
     el.addEventListener('change', () => { savePersistedState(); updateProgress(); });
   });
-
-  // ESC schließt Modal
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-  });
+  document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 });
 </script>
 </body>

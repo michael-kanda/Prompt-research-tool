@@ -1,0 +1,15 @@
+{
+  "name": "seo-geo-prompt-tool",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GA4 & GSC Daten-Analyzer mit AI-gestützter Decision-Prompt-Generierung für SEO & GEO",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "Michael Kanda <https://designare.at>",
+  "license": "UNLICENSED"
+}
