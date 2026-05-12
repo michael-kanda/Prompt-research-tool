@@ -23,8 +23,8 @@
   --muted:   #7a8294;   /* war #4e5566 — Kontrast 5.7:1 auf var(--bg), WCAG AA */
   --mono:    'DM Mono', monospace;
   --sans:    'Bricolage Grotesque', sans-serif;
-  --r:       9px;
-  --rl:      13px;
+  --r:       10px;
+  --rl:      14px;
 }
 
 html { scroll-behavior: smooth; }
