@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════════════
- * SEO · GEO Prompt Research Tool — Stylesheet
+ * SEO · GEO Prompt Research Tool — Stylesheet (v2)
  * Developed by Michael Kanda · https://designare.at
  * ════════════════════════════════════════════════════════════════════════ */
 
@@ -19,8 +19,8 @@
   --purple:  #8b5cf6;
   --pink:    #ec4899;
   --text:    #e8eaf0;
-  --dim:     #a0aabc;   /* war #8892a4 — etwas heller für mehr Lesbarkeit */
-  --muted:   #7a8294;   /* war #4e5566 — Kontrast 5.7:1 auf var(--bg), WCAG AA */
+  --dim:     #a0aabc;   /* 7.0:1 auf var(--bg) — WCAG AAA Body */
+  --muted:   #7a8294;   /* 5.7:1 auf var(--bg) — WCAG AA Large */
   --mono:    'DM Mono', monospace;
   --sans:    'Bricolage Grotesque', sans-serif;
   --r:       10px;
@@ -29,6 +29,36 @@
 
 html { scroll-behavior: smooth; }
 body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
+
+/* ── A11Y UTILITIES ── */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute; top: -40px; left: 0;
+  background: var(--accent); color: var(--bg);
+  padding: 8px 14px; z-index: 200;
+  text-decoration: none; font-family: var(--mono); font-size: 12px;
+  border-radius: 0 0 var(--r) 0;
+}
+.skip-link:focus { top: 0; }
+
+/* Focus-visible globally — keyboard navigation friendly */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.btn:focus-visible, .tab:focus-visible, .mode-btn:focus-visible {
+  outline-offset: 3px;
+}
 
 /* ── LAYOUT ── */
 .app { display: flex; flex-direction: column; min-height: 100vh; }
@@ -64,11 +94,13 @@ header {
   position: relative; bottom: -1px; transition: all .15s;
   display: flex; align-items: center; gap: 7px;
 }
-.tab.active { background: var(--bg); color: var(--accent); border-color: var(--border); }
+.tab.active, .tab[aria-selected="true"] { background: var(--bg); color: var(--accent); border-color: var(--border); }
 .tab:not(.active):hover { color: var(--text); }
 .tab-check { color: var(--green); font-size: 10px; }
 .tab-content { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; width: 100%; }
 .tab-content.active { display: block; }
+.tab-content[hidden] { display: none !important; }
+.tab-content.active[hidden] { display: block !important; }
 
 /* ── CARDS ── */
 .card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rl); padding: 20px; margin-bottom: 16px; }
@@ -89,9 +121,13 @@ input, select, textarea {
   transition: border-color .15s;
 }
 input:focus, select:focus, textarea:focus { border-color: var(--b2); }
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px;
+}
 input::placeholder, textarea::placeholder { color: var(--muted); }
 textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 select option { background: var(--bg); }
+select option:disabled { color: var(--muted); }
 .form-row { margin-bottom: 14px; }
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 
@@ -111,7 +147,7 @@ select option { background: var(--bg); }
 /* ── MODE TOGGLE ── */
 .mode-toggle { display: flex; gap: 4px; margin-bottom: 16px; }
 .mode-btn { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 6px 14px; background: var(--s2); border: 1px solid var(--border); color: var(--dim); border-radius: var(--r); cursor: pointer; transition: all .15s; }
-.mode-btn.active { background: #00c9a712; border-color: #00c9a740; color: var(--accent); }
+.mode-btn.active, .mode-btn[aria-pressed="true"] { background: #00c9a712; border-color: #00c9a740; color: var(--accent); }
 
 /* ── TABLES ── */
 .tbl-wrap { overflow-x: auto; margin-top: 14px; }
@@ -183,7 +219,7 @@ tbody tr:last-child td { border-bottom: none; }
 #ga4-preview, #gsc-preview { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); }
 
 /* ── TOAST ── */
-.toast { position: fixed; bottom: 24px; right: 24px; background: var(--s1); border: 1px solid var(--accent); border-left-width: 3px; color: var(--text); padding: 10px 16px; border-radius: var(--r); font-family: var(--mono); font-size: 11px; z-index: 100; opacity: 0; transform: translateY(10px); transition: all .25s; pointer-events: none; }
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--s1); border: 1px solid var(--accent); border-left-width: 3px; color: var(--text); padding: 10px 16px; border-radius: var(--r); font-family: var(--mono); font-size: 11px; z-index: 100; opacity: 0; transform: translateY(10px); transition: all .25s; pointer-events: none; max-width: 90vw; }
 .toast.show { opacity: 1; transform: translateY(0); }
 
 /* ── MODAL ── */
@@ -192,7 +228,7 @@ tbody tr:last-child td { border-bottom: none; }
 .modal { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rl); padding: 24px; max-width: 700px; width: 100%; max-height: 80vh; overflow-y: auto; }
 .modal h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
 .modal textarea { min-height: 280px; }
-.modal-close { float: right; background: transparent; border: none; color: var(--dim); cursor: pointer; font-size: 18px; }
+.modal-close { float: right; background: transparent; border: none; color: var(--dim); cursor: pointer; font-size: 18px; padding: 4px 8px; border-radius: 4px; }
 .modal-close:hover { color: var(--text); }
 
 .inline-help { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-top: 4px; }
@@ -220,4 +256,15 @@ footer .heart { color: var(--red); font-family: var(--sans); font-size: 13px; di
   .tabs { padding: 0 12px; overflow-x: auto; }
   .tab-content { padding: 16px; }
   .toast { left: 14px; right: 14px; bottom: 14px; }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .spinner { animation: none; border-top-color: var(--accent); }
 }
