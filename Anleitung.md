@@ -275,10 +275,6 @@ Eine Gruppe von Suchanfragen, die thematisch zusammengehören (z. B. alle Anfrag
 
 ---
 
-Bei Fragen oder Problemen wende dich an die Person, die dir Zugang zum Tool eingerichtet hat.
-
----
-
 *Letzte Aktualisierung: Mai 2026*
 
 Developed with ♥ by [Michael Kanda](https://designare.at)
