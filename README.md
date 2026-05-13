@@ -1,9 +1,40 @@
-# SEO · GEO Prompt Research Tool
+# SEO · GEO Prompt Research Tool (v2)
 
 GA4 & GSC Daten analysieren, Topic-Cluster identifizieren und Decision-Prompts für KI-Suche (ChatGPT, Perplexity, Gemini) generieren — server-side mit verstecktem API-Key.
 
 > **Anwender-Anleitung:** siehe [`ANLEITUNG.md`](./ANLEITUNG.md)
-> **Technische Doku** (dieses Dokument): Setup, Deployment, API-Spec
+
+---
+
+## Was ist neu in v2
+
+**Sicherheit:**
+- Origin-Whitelist via `ALLOWED_ORIGINS` (statt offenem `*`)
+- In-Memory-Rate-Limit pro IP, konfigurierbar via `RATE_LIMIT_PER_MIN`
+- Timing-safe Password-Vergleich (`crypto.timingSafeEqual`)
+- CSP-, X-Content-Type-Options-, Referrer-Policy- und Permissions-Policy-Header
+- App-Password wird **nicht mehr im localStorage** persistiert
+- Prompt-Injection-Defense: GSC-Daten werden als JSON-Block übermittelt, nicht als Freitext
+
+**Analyse:**
+- **Quick-Win-Ranking nach Hebel-Score**: erwarteter Klick-Zuwachs bei Positionsverbesserung statt nur Impressions
+- **GA4↔GSC-Join**: jeder Quick-Win zeigt die zugeordnete Landingpage mit GA4-Metriken
+- **Cluster-Topic-Tokens aggregiert** aus allen Member-Queries (vorher nur Seed)
+- **Verbesserte Intent-Klassifikation** mit weniger False Positives (`vs.` matcht jetzt, `oder` enger gefasst)
+- Token-Min-Länge von 3 auf 2 reduziert (relevant für `5g`, `ki`, `pv` etc.)
+
+**Robustheit:**
+- LLM-Antwort wird gegen JSON-Schema validiert
+- Truncation-Handling für beide Provider vereinheitlicht
+- Token-Usage im Response für Cost-Tracking
+- Strukturiertes Logging mit Request-ID
+
+**A11y:**
+- Skip-Link, `aria-live` für Toast/Errors, `role="dialog"` Modal mit Focus-Trap
+- ARIA-Tabs mit Pfeil-/Home-/End-Tastatur-Navigation
+- Alle Labels via `for=…` korrekt assoziiert
+- `:focus-visible` für Tastatur-Navigation
+- `prefers-reduced-motion` respektiert
 
 ---
 
@@ -11,27 +42,27 @@ GA4 & GSC Daten analysieren, Topic-Cluster identifizieren und Decision-Prompts f
 
 ```
 seo-geo-tool-vercel/
-├── index.html          ← UI-Markup
-├── style.css           ← Styling (WCAG-AA Farbkontrast)
-├── app.js              ← Frontend-Logik
+├── index.html          ← UI-Markup (ARIA, semantic)
+├── style.css           ← Styling (WCAG-AA, focus-visible, reduced-motion)
+├── app.js              ← Frontend-Logik (modular, validiert)
 ├── api/
 │   └── generate.js     ← Serverless Function (Gemini / Anthropic Router)
 ├── images/
 │   └── hexagon.webp    ← Favicon (selbst hinzufügen)
 ├── .env.example        ← Environment Variables Template
 ├── .gitignore
-├── vercel.json         ← Cache-Header für /api/*
+├── vercel.json         ← Cache-/Security-Header
 ├── package.json
-├── README.md           ← dieses Dokument
-└── ANLEITUNG.md        ← Anwender-Anleitung (Endnutzer)
+└── README.md
 ```
 
 **Datenfluss:**
 
 ```
-Browser ──→ /api/generate (eigene Vercel-Domain) ──→ Gemini ODER Anthropic
-                  ↑
-        x-app-password (optional)
+Browser ──→ /api/generate (Vercel-Domain) ──→ Gemini ODER Anthropic
+              ↑ Origin-Check
+              ↑ Rate-Limit (per IP)
+              ↑ x-app-password (timing-safe)
 ```
 
 Der Browser kennt die API-Keys nie — der Server entscheidet anhand des `provider`-Parameters, welcher Key verwendet wird.
@@ -45,50 +76,27 @@ Der Browser kennt die API-Keys nie — der Server entscheidet anhand des `provid
 - **Gemini**: https://aistudio.google.com/apikey (kostenlos, großzügiges Free Tier — empfohlen)
 - **Anthropic** (optional): https://console.anthropic.com/settings/keys
 
-Mindestens einer ist nötig, wenn die KI-Generierung serverseitig laufen soll. Ohne beide funktioniert nur der „Manuell"-Modus (siehe Features).
+Mindestens einer ist nötig für serverseitige KI-Generierung. Ohne beide → nur „Manuell"-Modus.
 
 ### 2. Lokal testen
 
 ```bash
-# Vercel CLI installieren (einmalig)
-npm i -g vercel
-
-# Repo klonen / Files entpacken
+npm i -g vercel               # einmalig
 cd seo-geo-tool-vercel
-
-# .env.local aus Template anlegen
-cp .env.example .env.local
-# → GEMINI_API_KEY eintragen
-
-# Dev-Server starten (mit Hot-Reload + lokaler API-Route)
-vercel dev
+cp .env.example .env.local    # GEMINI_API_KEY eintragen
+vercel dev                    # → http://localhost:3000
 ```
-
-Öffnet auf `http://localhost:3000`. Die Function läuft unter `/api/generate`.
 
 ### 3. Auf Vercel deployen
 
-**Option A — über Vercel CLI:**
-
-```bash
-vercel              # Preview-Deployment
-vercel --prod       # Production-Deployment
-```
-
-Nach dem ersten Deploy ENV vars im Vercel Dashboard hinterlegen.
-
-**Option B — über Git (empfohlen):**
+**Über Git (empfohlen):**
 
 1. Repo nach GitHub / GitLab / Bitbucket pushen
-2. Auf https://vercel.com/new das Repo importieren
-3. **Wichtig:** Im Import-Dialog Environment Variables eintragen:
-   - `GEMINI_API_KEY` = `AIza…`
-   - `ANTHROPIC_API_KEY` = `sk-ant-…` (optional)
-   - `GEMINI_MAX_TOKENS` = `16000`
-   - `APP_PASSWORD` = `…` (optional, siehe unten)
-4. Deploy klicken
+2. https://vercel.com/new → Repo importieren
+3. Environment Variables setzen (siehe Tabelle unten)
+4. Deploy
 
-Bestehendes Projekt? Vercel Dashboard → Project → Settings → Environment Variables. Nach ENV-Änderungen Redeploy auslösen.
+**Nach dem Deploy unbedingt** `ALLOWED_ORIGINS` setzen — sonst ist der Endpoint offen für alle Origins.
 
 ---
 
@@ -98,40 +106,41 @@ Bestehendes Projekt? Vercel Dashboard → Project → Settings → Environment V
 |---|---|---|---|
 | `GEMINI_API_KEY` | * | – | Google Generative Language API Key |
 | `GEMINI_MODEL` | nein | `gemini-2.5-flash` | `gemini-2.5-flash` \| `gemini-2.5-pro` \| `gemini-2.5-flash-lite` |
-| `GEMINI_MAX_TOKENS` | nein | `16000` | Output-Token-Limit. Bei MAX_TOKENS-Fehlern erhöhen. |
-| `GEMINI_THINKING_BUDGET` | nein | `0` | Thinking-Mode bei Gemini 2.5. `0` = deaktiviert (empfohlen für JSON-Output), `-1` = automatisch, `>0` = explizites Budget |
+| `GEMINI_MAX_TOKENS` | nein | `16000` | Output-Token-Limit |
+| `GEMINI_THINKING_BUDGET` | nein | `0` | Thinking-Mode bei Gemini 2.5. `0` = aus (empfohlen für JSON) |
 | `ANTHROPIC_API_KEY` | * | – | Anthropic API Key |
 | `ANTHROPIC_MODEL` | nein | `claude-sonnet-4-6` | Anthropic Model-String |
 | `ANTHROPIC_MAX_TOKENS` | nein | `8000` | Output-Token-Limit für Anthropic |
-| `APP_PASSWORD` | nein | – | Wenn gesetzt: `/api/generate` nur mit korrektem `x-app-password` Header erreichbar |
+| `APP_PASSWORD` | nein | – | Endpoint-Schutz via `x-app-password` Header |
+| `ALLOWED_ORIGINS` | **empfohlen** | – | Komma-separierte Liste erlaubter Origins (`https://app1.at,https://app2.at`). Leer = offen für alle. |
+| `RATE_LIMIT_PER_MIN` | nein | `10` | Max. Requests pro IP pro Minute |
 
-\* Mindestens einer der beiden API-Keys ist nötig — je nachdem welcher Provider im UI gewählt wird.
+\* Mindestens einer der beiden API-Keys ist nötig.
 
-### Hinweis zu `GEMINI_THINKING_BUDGET`
+### Hinweis: Rate-Limit-Persistenz
 
-Gemini 2.5 hat einen internen Reasoning-Mode, der Tokens vor der eigentlichen Antwort verbraucht. Diese „Thinking-Tokens" zählen zum `maxOutputTokens`-Limit. Bei komplexen Prompts kann das gesamte Budget aufgefressen werden, bevor die JSON-Antwort beginnt → Truncation.
-
-Für strukturierte JSON-Outputs (wie hier) ist `0` optimal: schneller, billiger, keine Truncation-Gefahr.
+Das eingebaute Rate-Limit ist **In-Memory** — bei Vercel-Cold-Starts wird der Bucket neu initialisiert. Für hohen Traffic / strenge Garantien: Upstash Redis oder Vercel KV einbauen (drop-in im `checkRateLimit`).
 
 ---
 
-## Optional: Endpoint-Schutz
+## Optional: Endpoint-Schutz im Detail
 
-Standardmäßig ist `/api/generate` öffentlich erreichbar. Wer die URL kennt, kann Requests senden und damit deine API-Kosten verursachen. Drei Schutz-Optionen:
+Standardmäßig ist `/api/generate` öffentlich erreichbar. Drei Schutz-Ebenen:
 
-**1. App-Password (eingebaut, simpel)**
-- `APP_PASSWORD=geheim` in Vercel ENV vars setzen
-- Im Tool unter Tab 01 → „App-Password" eintragen (das Feld erscheint automatisch nur wenn ENV gesetzt)
-- Browser sendet `x-app-password: geheim` mit jedem Request
+**1. Origin-Whitelist (Pflicht in Production)**
+- `ALLOWED_ORIGINS=https://meine-domain.at` in Vercel ENV
+- Browser von anderen Origins werden via CORS geblockt
 
-**2. Vercel Password Protection (Pro-Plan)**
-- Vercel Dashboard → Project → Settings → Deployment Protection
-- Gesamtes Deployment hinter Login
+**2. App-Password**
+- `APP_PASSWORD=geheim` in Vercel ENV
+- Frontend zeigt Password-Feld automatisch (über GET-Status-Check)
+- Vergleich timing-safe via `crypto.timingSafeEqual`
 
-**3. Vercel Authentication (Enterprise/Teams)**
-- SSO via GitHub / Google / SAML
+**3. Rate-Limit**
+- `RATE_LIMIT_PER_MIN=10` (Standard)
+- 429 Retry-After bei Überschreitung
 
-Für ein internes Tool reicht Option 1.
+Alle drei sind kombinierbar und decken die meisten Missbrauchsszenarien ab.
 
 ---
 
@@ -139,42 +148,31 @@ Für ein internes Tool reicht Option 1.
 
 ### `GET /api/generate` — Provider-Status
 
-Liefert, welche API-Keys serverseitig konfiguriert sind. Wird vom Frontend beim Laden aufgerufen, um nicht-verfügbare Provider im Dropdown automatisch zu deaktivieren.
-
-**Response (200):**
-
 ```json
-{
-  "gemini": true,
-  "anthropic": false,
-  "hasAppPassword": true
-}
+{ "gemini": true, "anthropic": false, "hasAppPassword": true }
 ```
-
-Keine Keys werden geleakt — nur Booleans.
 
 ### `POST /api/generate` — Prompt-Ausführung
 
-**Request-Body:**
+**Request:**
 
-```json
-{
-  "provider": "gemini",
-  "prompt": "Du bist ein SEO Experte …"
-}
+```http
+POST /api/generate
+Content-Type: application/json
+x-app-password: …       (optional)
+Origin: https://…       (muss in ALLOWED_ORIGINS sein)
+
+{ "provider": "gemini", "prompt": "Du bist SEO Experte …" }
 ```
-
-**Headers:**
-
-- `Content-Type: application/json`
-- `x-app-password: …` *(nur wenn `APP_PASSWORD` gesetzt)*
 
 **Response (200):**
 
 ```json
 {
   "text": "{\"anbieterVergleich\": [...], ...}",
-  "provider": "gemini"
+  "provider": "gemini",
+  "usage": { "input": 1240, "output": 3120, "thoughts": 0 },
+  "truncated": false
 }
 ```
 
@@ -184,47 +182,64 @@ Keine Keys werden geleakt — nur Booleans.
 { "error": "Beschreibung des Fehlers" }
 ```
 
+Status-Codes:
+- `400` — fehlender / ungültiger Prompt oder Provider
+- `401` — falsches App-Password
+- `405` — Method not allowed
+- `429` — Rate-Limit überschritten (`Retry-After` Header)
+- `500` — Provider-API-Fehler
+
 **Limits:**
-- Prompt maximal 50 000 Zeichen
-- `provider` muss `gemini` oder `anthropic` sein
-- Output-Tokens via ENV vars konfigurierbar
+- Prompt ≤ 50 000 Zeichen
+- `provider` ∈ {`gemini`, `anthropic`}
 
 ---
 
 ## Features
 
-- **Multi-Provider AI**: Gemini 2.5 (Flash/Pro/Flash-Lite) oder Anthropic Claude, server-side
-- **Manueller Fallback-Modus**: Prompt-Kontext zum Kopieren wenn keine API verfügbar oder gewünscht — funktioniert ganz ohne Server-Konfiguration
-- **Dynamisches Provider-Dropdown**: nicht-konfigurierte Provider werden automatisch als „— nicht konfiguriert" deaktiviert (über GET `/api/generate`)
-- **GA4 + GSC Daten-Anbindung**: Direkter Fetch (Bearer / API-Key / Query-Param) oder JSON-Paste
-- **Automatisches Daten-Parsing**: GA4 native Format, GSC native Format, flache Arrays — alles wird erkannt
-- **Intent-Klassifizierung**: Transactional / Commercial / Informational / Navigational (DE-fokussierte Regex-Patterns)
-- **Branded-Filter**: Brand wird aus Domain extrahiert, manuell überschreibbar; Branded-Queries werden aus Quick Wins ausgeschlossen
-- **Topic-Clustering**: Greedy mit Jaccard-Similarity, DE-Stopwords entfernt — gruppiert ähnliche Queries für Content-Hub-Planung
-- **Analyse-Dashboard**: Quick Wins (Pos. 5–20), Buy-Intent, 0-Conversion-Pages, Low-Engagement-Pages, Intent-Verteilung
-- **AI-Prompt-Generierung**: 5 Kategorien (Anbieter-Vergleich, Validierung, Spezifikation, Preis, Action) + Top-8 Score-Ranking
-- **CSV-Export**: Quick Wins und Prompts (mit BOM für Excel-Kompatibilität)
-- **Copy-to-Clipboard**: pro Prompt mit Feedback-State
-- **localStorage-Persistierung**: Form-State (Domain, API-URLs, App-Password, Provider) bleibt nach Reload
-- **Demo-Daten**: Installateur-Szenario zum schnellen Testen ohne eigene Daten
-- **WCAG-AA Kontrast**: Alle Texte mindestens 4.5:1 Kontrastverhältnis
-- **Externe CSS/JS**: separat cachebar, keine inline-Styles
-- **CSP-freundlich**: keine `onclick`-Attribute, alles via `data-*` und `addEventListener`
+- **Multi-Provider AI**: Gemini 2.5 (Flash/Pro/Flash-Lite) oder Anthropic Claude — server-side
+- **Manueller Fallback**: Prompt-Kontext kopieren, funktioniert ohne Server-Konfig
+- **Dynamisches Provider-Dropdown**: nicht-konfigurierte Provider werden deaktiviert
+- **GA4 + GSC**: API-Fetch (Bearer / API-Key / Query-Param) oder JSON-Paste
+- **Auto-Parsing**: GA4 native, GSC native, flache Arrays — alles wird erkannt
+- **Intent-Klassifizierung**: Transactional / Commercial / Informational / Navigational (DE)
+- **Branded-Filter**: aus Domain extrahiert, manuell überschreibbar
+- **Topic-Clustering**: Jaccard-Similarity, DE-Stopwords, aggregierte Topic-Tokens
+- **Quick-Win-Hebel-Score**: erwarteter Klick-Zuwachs bei Positionsverbesserung
+- **GA4↔GSC-Join**: Quick-Win-Query → konkrete Landingpage mit Engagement-Daten
+- **AI-Prompt-Generierung**: 5 Kategorien + Top-8 Score-Ranking, JSON-Schema-validiert
+- **CSV-Export**: Quick Wins (mit Hebel-Score + Landingpage) und Prompts
+- **localStorage-Persistierung**: Form-State (Domain, URLs, Provider) — **nicht** App-Password
+- **Demo-Daten**: Installateur-Szenario zum schnellen Testen
+- **WCAG-AA Kontrast**: alle Texte ≥ 4.5:1
+- **Vollständige A11y**: ARIA-Tabs, Focus-Trap, Skip-Link, `prefers-reduced-motion`
+- **CSP-freundlich**: keine inline-Scripts/onclick, alles via `addEventListener`
 
 ---
 
 ## Stack
 
-- **Frontend**: Vanilla HTML / CSS / JavaScript — keine Build-Tools, keine Dependencies, keine Framework
-- **Backend**: Vercel Serverless Function auf Node.js ≥ 18 (native `fetch`, keine externen Libs)
+- **Frontend**: Vanilla HTML/CSS/JS — keine Build-Tools, keine Dependencies
+- **Backend**: Vercel Serverless Function auf Node.js ≥ 18 (native `fetch` + `crypto`)
 - **AI**: Google Gemini 2.5 (REST) oder Anthropic Claude (Messages API)
 - **Hosting**: Vercel (Hobby-Tier ausreichend)
 
 ---
 
+## Migration v1 → v2
+
+Im Setup:
+1. `ALLOWED_ORIGINS` ENV setzen (sonst öffentlicher Endpoint)
+2. Optional `RATE_LIMIT_PER_MIN` anpassen
+3. localStorage-Key wechselt von `seo-geo-tool-vercel-v1` auf `…-v2` → User müssen ggf. einmal Setup-Felder neu eintragen
+
+Im Frontend gibt es API-kompatible Erweiterungen — bestehende Integrationen brechen nicht.
+
+---
+
 ## Lizenz
 
-Privat / proprietär. Anpassen je nach Use-Case.
+Privat / proprietär.
 
 ---
 
