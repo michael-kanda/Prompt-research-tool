@@ -7,61 +7,64 @@
 <meta name="description" content="GA4 & GSC Daten analysieren und Decision-Prompts für KI-Suche generieren.">
 <link rel="icon" type="image/webp" href="images/hexagon.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Zum Inhalt springen</a>
+
 <div class="app">
-<main>
+<main id="main-content">
 
 <!-- HEADER -->
 <header>
   <span class="logo">SEO · GEO</span>
-  <span class="header-sep">|</span>
+  <span class="header-sep" aria-hidden="true">|</span>
   <span class="header-title">Prompt Research Tool</span>
-  <div class="status-badges">
+  <div class="status-badges" aria-label="Daten-Status">
     <span class="badge badge-muted" id="badge-ga4">GA4 –</span>
     <span class="badge badge-muted" id="badge-gsc">GSC –</span>
   </div>
 </header>
 
 <!-- TABS -->
-<div class="tabs">
-  <button class="tab active" data-tab="setup">01 Setup<span class="tab-check" id="check-setup" style="display:none">✓</span></button>
-  <button class="tab" data-tab="daten">02 Daten<span class="tab-check" id="check-daten" style="display:none">✓</span></button>
-  <button class="tab" data-tab="analyse">03 Analyse<span class="tab-check" id="check-analyse" style="display:none">✓</span></button>
-  <button class="tab" data-tab="prompts">04 Prompts<span class="tab-check" id="check-prompts" style="display:none">✓</span></button>
+<div class="tabs" role="tablist" aria-label="Workflow">
+  <button class="tab active" data-tab="setup"   id="tab-btn-setup"   role="tab" aria-selected="true"  aria-controls="tab-setup"   tabindex="0">01 Setup<span class="tab-check" id="check-setup" style="display:none" aria-hidden="true">✓</span></button>
+  <button class="tab"        data-tab="daten"   id="tab-btn-daten"   role="tab" aria-selected="false" aria-controls="tab-daten"   tabindex="-1">02 Daten<span class="tab-check" id="check-daten" style="display:none" aria-hidden="true">✓</span></button>
+  <button class="tab"        data-tab="analyse" id="tab-btn-analyse" role="tab" aria-selected="false" aria-controls="tab-analyse" tabindex="-1">03 Analyse<span class="tab-check" id="check-analyse" style="display:none" aria-hidden="true">✓</span></button>
+  <button class="tab"        data-tab="prompts" id="tab-btn-prompts" role="tab" aria-selected="false" aria-controls="tab-prompts" tabindex="-1">04 Prompts<span class="tab-check" id="check-prompts" style="display:none" aria-hidden="true">✓</span></button>
 </div>
 
 <!-- TAB 01: SETUP -->
-<div id="tab-setup" class="tab-content active">
+<section id="tab-setup" class="tab-content active" role="tabpanel" aria-labelledby="tab-btn-setup">
   <div class="card">
     <div class="card-title">◈ Projekt-Info</div>
     <div class="grid3">
       <div class="form-group">
-        <label>Domain / Unternehmen</label>
-        <input type="text" id="inp-domain" data-persist placeholder="z.B. meinefirma.at">
+        <label for="inp-domain">Domain / Unternehmen</label>
+        <input type="text" id="inp-domain" data-persist autocomplete="off" placeholder="z.B. meinefirma.at">
       </div>
       <div class="form-group">
-        <label>Branche</label>
-        <input type="text" id="inp-branche" data-persist placeholder="z.B. Installateur, Anwalt, Agentur">
+        <label for="inp-branche">Branche</label>
+        <input type="text" id="inp-branche" data-persist autocomplete="off" placeholder="z.B. Installateur, Anwalt, Agentur">
       </div>
       <div class="form-group">
-        <label>Region</label>
-        <input type="text" id="inp-region" data-persist value="Wien" placeholder="z.B. Wien, DACH">
+        <label for="inp-region">Region</label>
+        <input type="text" id="inp-region" data-persist autocomplete="off" value="Wien" placeholder="z.B. Wien, DACH">
       </div>
     </div>
     <div class="form-row" style="margin-top:14px">
-      <label>Brand-Name (für Branded-Query-Filter)</label>
-      <input type="text" id="inp-brand" data-persist placeholder="wird aus Domain automatisch erkannt — manuell überschreibbar">
-      <div class="inline-help">Queries, die diesen Begriff enthalten, gelten als „branded" und werden aus Quick Wins ausgeschlossen.</div>
+      <label for="inp-brand">Brand-Name (für Branded-Query-Filter)</label>
+      <input type="text" id="inp-brand" data-persist autocomplete="off" placeholder="wird aus Domain automatisch erkannt — manuell überschreibbar">
+      <div class="inline-help" id="brand-help">Queries, die diesen Begriff enthalten, gelten als „branded" und werden aus Quick Wins ausgeschlossen.</div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">▶ KI-Provider für Prompt-Generierung</div>
     <div class="form-group" style="margin-bottom:12px">
-      <label>Provider</label>
+      <label for="inp-provider">Provider</label>
       <select id="inp-provider" data-persist>
         <option value="manual" selected>Manuell (Prompt kopieren)</option>
         <option value="gemini">Google Gemini</option>
@@ -70,8 +73,10 @@
     </div>
     <div class="hint" id="api-status">ⓘ API-Keys werden serverseitig über Vercel Environment Variables verwaltet. Konfiguration: <span style="font-family:var(--mono)">GEMINI_API_KEY</span> · <span style="font-family:var(--mono)">ANTHROPIC_API_KEY</span></div>
     <div class="form-group" id="password-wrap" style="display:none">
-      <label>App-Password (falls in APP_PASSWORD gesetzt)</label>
-      <input type="password" id="inp-app-password" data-persist placeholder="Nur nötig wenn der Endpoint passwortgeschützt ist">
+      <label for="inp-app-password">App-Password (falls in APP_PASSWORD gesetzt)</label>
+      <!-- WICHTIG: KEIN data-persist — Sensitive Daten nicht im localStorage -->
+      <input type="password" id="inp-app-password" autocomplete="off" placeholder="Nur nötig wenn der Endpoint passwortgeschützt ist">
+      <div class="inline-help">Wird nicht im Browser gespeichert. Nach Reload erneut eingeben.</div>
     </div>
   </div>
 
@@ -79,7 +84,7 @@
     <div class="card-title">⚙ Daten-Authentifizierung (GA4 / GSC API)</div>
     <div class="grid2" style="margin-bottom:12px">
       <div class="form-group">
-        <label>Methode</label>
+        <label for="inp-auth">Methode</label>
         <select id="inp-auth" data-persist>
           <option value="none">Kein Auth</option>
           <option value="bearer">Bearer Token (Authorization Header)</option>
@@ -88,101 +93,106 @@
         </select>
       </div>
       <div class="form-group" id="auth-value-wrap" style="display:none">
-        <label>Token / API Key</label>
-        <input type="password" id="inp-auth-value" placeholder="Dein Token oder Key">
+        <label for="inp-auth-value">Token / API Key</label>
+        <input type="password" id="inp-auth-value" autocomplete="off" placeholder="Dein Token oder Key">
       </div>
     </div>
-    <div class="hint">ⓘ CORS-Fehler beim Fetch? Tab "02 Daten" → JSON Paste nutzen.</div>
+    <div class="hint">ⓘ CORS-Fehler beim Fetch? Tab „02 Daten" → JSON Paste nutzen.</div>
     <div class="btn-row">
-      <button class="btn btn-primary" data-goto="daten">Weiter → Daten laden</button>
-      <button class="btn btn-ghost" id="btn-demo">Demo-Daten laden</button>
-      <button class="btn btn-ghost" id="btn-reset">Alles zurücksetzen</button>
+      <button class="btn btn-primary" data-goto="daten" type="button">Weiter → Daten laden</button>
+      <button class="btn btn-ghost" id="btn-demo" type="button">Demo-Daten laden</button>
+      <button class="btn btn-ghost" id="btn-reset" type="button">Alles zurücksetzen</button>
     </div>
   </div>
-</div>
+</section>
 
 <!-- TAB 02: DATEN -->
-<div id="tab-daten" class="tab-content">
-  <div id="error-daten" class="error-box" style="display:none"></div>
-  <div class="mode-toggle">
-    <button class="mode-btn active" id="mode-api" data-mode="api">API-Fetch</button>
-    <button class="mode-btn" id="mode-json" data-mode="json">JSON Paste</button>
+<section id="tab-daten" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-daten" hidden>
+  <div id="error-daten" class="error-box" role="alert" aria-live="assertive" style="display:none"></div>
+  <div class="mode-toggle" role="group" aria-label="Daten-Modus">
+    <button class="mode-btn active" id="mode-api" data-mode="api" type="button" aria-pressed="true">API-Fetch</button>
+    <button class="mode-btn"        id="mode-json" data-mode="json" type="button" aria-pressed="false">JSON Paste</button>
   </div>
+
   <div class="card">
     <div class="card-title">
-      <span style="color:var(--green)">▲</span> GA4 — Landingpages
+      <span style="color:var(--green)" aria-hidden="true">▲</span> GA4 — Landingpages
       <span id="ga4-loaded-badge" style="margin-left:auto;display:none" class="badge badge-accent"></span>
     </div>
     <div id="ga4-api-wrap">
       <div class="form-row">
-        <label>API Endpoint URL</label>
-        <input type="url" id="inp-ga4-url" data-persist placeholder="https://dein-dashboard.at/api/ga4/landingpages">
+        <label for="inp-ga4-url">API Endpoint URL</label>
+        <input type="url" id="inp-ga4-url" data-persist autocomplete="off" placeholder="https://dein-dashboard.at/api/ga4/landingpages">
       </div>
-      <button class="btn btn-primary" data-fetch="ga4">
-        <span id="ga4-spinner" style="display:none" class="spinner"></span>
+      <button class="btn btn-primary" data-fetch="ga4" type="button">
+        <span id="ga4-spinner" style="display:none" class="spinner" aria-hidden="true"></span>
         GA4 Fetch
       </button>
     </div>
     <div id="ga4-json-wrap" style="display:none">
       <div class="form-row">
-        <label>GA4 JSON einfügen</label>
+        <label for="inp-ga4-json">GA4 JSON einfügen</label>
         <textarea id="inp-ga4-json" placeholder='[{"page":"/leistungen","sessions":1200,"conversions":45,"engagementRate":0.68}]' rows="6"></textarea>
       </div>
-      <button class="btn btn-primary" data-loadjson="ga4">GA4 laden</button>
+      <button class="btn btn-primary" data-loadjson="ga4" type="button">GA4 laden</button>
     </div>
     <div id="ga4-preview" style="display:none">
       <p class="preview-info" id="ga4-preview-info"></p>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Seite</th><th>Sessions</th><th>Engagement</th><th>Conversions</th></tr></thead>
+          <caption class="visually-hidden">GA4 Landingpages Vorschau</caption>
+          <thead><tr><th scope="col">Seite</th><th scope="col">Sessions</th><th scope="col">Engagement</th><th scope="col">Conversions</th></tr></thead>
           <tbody id="ga4-preview-body"></tbody>
         </table>
       </div>
     </div>
   </div>
+
   <div class="card">
     <div class="card-title">
-      <span style="color:var(--blue)">◈</span> GSC — Suchanfragen
+      <span style="color:var(--blue)" aria-hidden="true">◈</span> GSC — Suchanfragen
       <span id="gsc-loaded-badge" style="margin-left:auto;display:none" class="badge badge-blue"></span>
     </div>
     <div id="gsc-api-wrap">
       <div class="form-row">
-        <label>API Endpoint URL</label>
-        <input type="url" id="inp-gsc-url" data-persist placeholder="https://dein-dashboard.at/api/gsc/queries">
+        <label for="inp-gsc-url">API Endpoint URL</label>
+        <input type="url" id="inp-gsc-url" data-persist autocomplete="off" placeholder="https://dein-dashboard.at/api/gsc/queries">
       </div>
-      <button class="btn btn-primary" data-fetch="gsc">
-        <span id="gsc-spinner" style="display:none" class="spinner"></span>
+      <button class="btn btn-primary" data-fetch="gsc" type="button">
+        <span id="gsc-spinner" style="display:none" class="spinner" aria-hidden="true"></span>
         GSC Fetch
       </button>
     </div>
     <div id="gsc-json-wrap" style="display:none">
       <div class="form-row">
-        <label>GSC JSON einfügen</label>
+        <label for="inp-gsc-json">GSC JSON einfügen</label>
         <textarea id="inp-gsc-json" placeholder='[{"query":"installateur wien","clicks":320,"impressions":4200,"ctr":7.6,"position":3.2}]' rows="6"></textarea>
       </div>
-      <button class="btn btn-primary" data-loadjson="gsc">GSC laden</button>
+      <button class="btn btn-primary" data-loadjson="gsc" type="button">GSC laden</button>
     </div>
     <div id="gsc-preview" style="display:none">
       <p class="preview-info" id="gsc-preview-info"></p>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Query</th><th>Klicks</th><th>Impressionen</th><th>CTR</th><th>Position</th><th>Intent</th></tr></thead>
+          <caption class="visually-hidden">GSC Suchanfragen Vorschau</caption>
+          <thead><tr><th scope="col">Query</th><th scope="col">Klicks</th><th scope="col">Impressionen</th><th scope="col">CTR</th><th scope="col">Position</th><th scope="col">Intent</th></tr></thead>
           <tbody id="gsc-preview-body"></tbody>
         </table>
       </div>
     </div>
   </div>
+
   <div id="analyse-btn-wrap" style="display:none">
-    <button class="btn btn-primary" style="padding:11px 24px;font-size:12px" id="btn-run-analysis">▶ Analyse starten →</button>
+    <button class="btn btn-primary" style="padding:11px 24px;font-size:12px" id="btn-run-analysis" type="button">▶ Analyse starten →</button>
   </div>
-</div>
+</section>
 
 <!-- TAB 03: ANALYSE -->
-<div id="tab-analyse" class="tab-content">
+<section id="tab-analyse" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-analyse" hidden>
   <div id="analyse-empty" class="empty-state">
-    <div class="icon">◈</div>
+    <div class="icon" aria-hidden="true">◈</div>
     <p>Noch keine Analyse — zuerst GA4 + GSC in Tab 02 laden.</p>
-    <button class="btn btn-ghost" data-goto="daten">→ Zu Daten</button>
+    <button class="btn btn-ghost" data-goto="daten" type="button">→ Zu Daten</button>
   </div>
   <div id="analyse-content" style="display:none">
     <div class="grid6" id="analyse-stats"></div>
@@ -199,12 +209,13 @@
     <div class="card">
       <div class="card-title">
         <span class="badge badge-accent">Quick Win</span>
-        GSC — Position 5–20 (Sofortpotenzial, ohne Branded)
-        <button class="btn btn-ghost btn-tiny" style="margin-left:auto" id="btn-export-qw">⤓ CSV</button>
+        Pos. 5–20 — sortiert nach Hebel-Potenzial (geschätzter Klick-Zuwachs)
+        <button class="btn btn-ghost btn-tiny" style="margin-left:auto" id="btn-export-qw" type="button" aria-label="Quick Wins als CSV exportieren">⤓ CSV</button>
       </div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>#</th><th>Query</th><th>Intent</th><th>Position</th><th>Impressionen</th><th>Klicks</th><th>CTR</th><th>Potenzial</th></tr></thead>
+          <caption class="visually-hidden">Quick-Win-Queries Position 5 bis 20</caption>
+          <thead><tr><th scope="col">#</th><th scope="col">Query</th><th scope="col">Intent</th><th scope="col">Position</th><th scope="col">Impressionen</th><th scope="col">Klicks</th><th scope="col">CTR</th><th scope="col">Hebel</th><th scope="col">Landingpage</th></tr></thead>
           <tbody id="qw-body"></tbody>
         </table>
       </div>
@@ -216,7 +227,8 @@
       </div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Query</th><th>Klicks</th><th>Position</th><th>CTR</th></tr></thead>
+          <caption class="visually-hidden">Transactional Queries</caption>
+          <thead><tr><th scope="col">Query</th><th scope="col">Klicks</th><th scope="col">Position</th><th scope="col">CTR</th></tr></thead>
           <tbody id="buy-body"></tbody>
         </table>
       </div>
@@ -232,32 +244,33 @@
       </div>
     </div>
     <div style="margin-top:8px" class="btn-row">
-      <button class="btn btn-amber" style="padding:11px 24px;font-size:12px" id="gen-btn">
-        <span id="gen-spinner" style="display:none" class="spinner"></span>
+      <button class="btn btn-amber" style="padding:11px 24px;font-size:12px" id="gen-btn" type="button">
+        <span id="gen-spinner" style="display:none" class="spinner" aria-hidden="true"></span>
         ▶ Decision-Prompts generieren
       </button>
-      <button class="btn btn-ghost" id="btn-copy-context">Prompt-Kontext kopieren</button>
+      <button class="btn btn-ghost" id="btn-copy-context" type="button">Prompt-Kontext kopieren</button>
     </div>
-    <div id="error-prompts" class="error-box" style="display:none;margin-top:12px"></div>
+    <div id="error-prompts" class="error-box" role="alert" aria-live="assertive" style="display:none;margin-top:12px"></div>
   </div>
-</div>
+</section>
 
 <!-- TAB 04: PROMPTS -->
-<div id="tab-prompts" class="tab-content">
+<section id="tab-prompts" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-prompts" hidden>
   <div id="prompts-empty" class="empty-state">
-    <div class="icon">▶</div>
+    <div class="icon" aria-hidden="true">▶</div>
     <p>Noch keine Prompts — erst Analyse in Tab 03 ausführen und „Prompts generieren" klicken.</p>
-    <button class="btn btn-ghost" data-goto="analyse">→ Zu Analyse</button>
+    <button class="btn btn-ghost" data-goto="analyse" type="button">→ Zu Analyse</button>
   </div>
   <div id="prompts-content" style="display:none">
     <div class="card">
       <div class="card-title">
         <span class="badge badge-amber">Quick Win</span> Top Prompts — Score-Ranking
-        <button class="btn btn-ghost btn-tiny" style="margin-left:auto" id="btn-export-prompts">⤓ CSV</button>
+        <button class="btn btn-ghost btn-tiny" style="margin-left:auto" id="btn-export-prompts" type="button" aria-label="Prompts als CSV exportieren">⤓ CSV</button>
       </div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Score</th><th>KI-Prompt</th><th>Kategorie</th><th>GSC-Basis</th><th>Maßnahme</th><th></th></tr></thead>
+          <caption class="visually-hidden">Top Decision-Prompts nach Score</caption>
+          <thead><tr><th scope="col">Score</th><th scope="col">KI-Prompt</th><th scope="col">Kategorie</th><th scope="col">GSC-Basis</th><th scope="col">Maßnahme</th><th scope="col"><span class="visually-hidden">Kopieren</span></th></tr></thead>
           <tbody id="qw-prompts-body"></tbody>
         </table>
       </div>
@@ -265,31 +278,34 @@
     <div class="grid2" id="cats-grid"></div>
     <div class="hint">ⓘ Nächster Schritt: Prompts in ChatGPT / Perplexity / Gemini testen und Baseline dokumentieren.</div>
   </div>
-</div>
+</section>
 
 </main>
 
 <!-- FOOTER -->
 <footer>
-  Developed with <span class="heart">♥</span> by
-  <a href="https://designare.at" target="_blank" rel="noopener">Michael Kanda</a>
+  Developed with <span class="heart" aria-hidden="true">♥</span> by
+  <a href="https://designare.at" target="_blank" rel="noopener noreferrer">Michael Kanda</a>
 </footer>
 
 </div><!-- /app -->
 
-<div class="toast" id="toast"></div>
+<!-- TOAST — aria-live for screen readers -->
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-<div class="modal-bg" id="modal-bg">
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
   <div class="modal">
-    <button class="modal-close" id="modal-close">×</button>
-    <h3>Prompt-Kontext für KI</h3>
+    <button class="modal-close" id="modal-close" type="button" aria-label="Schließen">×</button>
+    <h3 id="modal-title">Prompt-Kontext für KI</h3>
     <p style="font-size:12px;color:var(--dim);margin-bottom:12px">
       Kopiere diesen Text in ChatGPT, Claude oder Perplexity. Die KI liefert dann die strukturierten Decision-Prompts als JSON.
     </p>
+    <label for="modal-textarea" class="visually-hidden">Prompt-Kontext</label>
     <textarea id="modal-textarea" readonly></textarea>
     <div class="btn-row">
-      <button class="btn btn-primary" id="btn-modal-copy">Kopieren</button>
-      <button class="btn btn-ghost" id="btn-modal-close-2">Schließen</button>
+      <button class="btn btn-primary" id="btn-modal-copy" type="button">Kopieren</button>
+      <button class="btn btn-ghost" id="btn-modal-close-2" type="button">Schließen</button>
     </div>
   </div>
 </div>
