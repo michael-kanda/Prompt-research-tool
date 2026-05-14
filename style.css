@@ -6,21 +6,21 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:      #0b0d12;
-  --s1:      #111318;
-  --s2:      #181c26;
-  --border:  #1e2231;
-  --b2:      #252b3d;
-  --accent:  #00c9a7;
-  --amber:   #f0a500;
-  --blue:    #4f9cf9;
-  --red:     #ef4444;
-  --green:   #22c55e;
-  --purple:  #8b5cf6;
-  --pink:    #ec4899;
-  --text:    #e8eaf0;
-  --dim:     #a0aabc;   /* 7.0:1 auf var(--bg) — WCAG AAA Body */
-  --muted:   #7a8294;   /* 5.7:1 auf var(--bg) — WCAG AA Large */
+  --bg:      #05070a;
+  --s1:      #151a22;
+  --s2:      #202938;
+  --border:  #465267;
+  --b2:      #5e6d86;
+  --accent:  #00f0c8;
+  --amber:   #ffbf24;
+  --blue:    #73b7ff;
+  --red:     #ff6b6b;
+  --green:   #4ade80;
+  --purple:  #a78bfa;
+  --pink:    #f472b6;
+  --text:    #ffffff;
+  --dim:     #d8dee9;
+  --muted:   #c2cbd8;
   --mono:    'DM Mono', monospace;
   --sans:    'Bricolage Grotesque', sans-serif;
   --r:       10px;
@@ -28,7 +28,7 @@
 }
 
 html { scroll-behavior: smooth; }
-body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 16.8px; min-height: 100vh; }
 
 /* ── A11Y UTILITIES ── */
 .visually-hidden {
